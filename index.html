@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ryder Fine — Design Engineer</title>
+  <title>Ryder Fine, Design Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
@@ -111,23 +111,23 @@
     .hero-portrait {
       position: absolute; right: 0; top: 0; bottom: 0;
       width: clamp(260px, 34vw, 500px);
-      overflow: hidden; z-index: 2;
+      z-index: 2;
+      -webkit-mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,.4) 22%, black 52%);
+      mask-image: linear-gradient(to right,
+        transparent 0%, rgba(0,0,0,.4) 22%, black 52%);
     }
     .hero-portrait img {
       width: 100%; height: 100%;
       object-fit: cover; object-position: center 18%;
       filter: grayscale(8%);
     }
-    /* Feather left edge so it blends into the dark background */
-    .hero-portrait::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to right, var(--dark) 0%, transparent 32%);
-      z-index: 1;
-    }
-    /* Subtle vignette bottom */
+    /* Top + bottom vignette as a dark overlay (not background-match) */
     .hero-portrait::after {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(11,17,32,.55) 0%, transparent 45%);
+      background:
+        linear-gradient(to top,  rgba(11,17,32,.7) 0%, transparent 38%),
+        linear-gradient(to bottom, rgba(11,17,32,.45) 0%, transparent 20%);
       z-index: 1;
     }
     @media (max-width: 900px) { .hero-portrait { display: none; } }
@@ -185,11 +185,7 @@
       0%,100% { width: 40px; opacity: .8; }
       50%      { width: 16px; opacity: .3; }
     }
-    .hero-stats { display: flex; gap: 3rem; }
-    .stat { text-align: right; }
-    .stat-n { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
-    .stat-n em { color: var(--accent); font-style: normal; }
-    .stat-l { font-family: 'Space Mono', monospace; font-size: .62rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted-dark); }
+
 
     /* ─── TICKER ────────────────────────────────────── */
     .ticker-wrap { overflow: hidden; background: var(--accent); padding: .65rem 0; white-space: nowrap; }
@@ -628,7 +624,6 @@
       .exp-layout { grid-template-columns: 1fr; }
       .skill-clusters { grid-template-columns: 1fr; }
       .hero-bottom { position: static; margin-top: 3rem; flex-direction: column; align-items: flex-start; gap: 2rem; }
-      .hero-stats { flex-wrap: wrap; }
       footer { flex-direction: column; gap: .5rem; text-align: center; }
       .phil-slide { left: 1.5rem; right: 1.5rem; }
     }
@@ -662,7 +657,7 @@
       <circle cx="28" cy="32" r="2.2" fill="#E85D04" opacity=".8"/>
       <circle cx="10" cy="32" r="2.2" fill="#E85D04" opacity=".8"/>
       <circle cx="5"  cy="13" r="2.2" fill="#E85D04" opacity=".8"/>
-      <!-- Central hub — largest, full opacity -->
+      <!-- Central hub - largest, full opacity -->
       <circle cx="19" cy="19" r="3.8" fill="#E85D04"/>
     </svg>
     Ryder Fine
@@ -689,14 +684,14 @@
   <div class="hero-content" id="hero-content">
     <div class="eyebrow">
       <span class="eyebrow-line"></span>
-      Design Engineer · Colorado School of Mines
+      Design Engineer
     </div>
     <h1>
       Ryder
       <span class="name-accent">Fine.</span>
     </h1>
     <p class="hero-tagline">
-      I build things that work —
+      I build things that work;
       <strong>and think about why they should.</strong>
       Additive manufacturing, integrated systems,
       and engineering for real-world impact.
@@ -704,6 +699,12 @@
     <div class="cta-row">
       <a href="#projects" class="btn btn-primary">View My Work</a>
       <a href="#contact"  class="btn btn-ghost">Get In Touch</a>
+      <a href="resume.pdf" download class="btn btn-ghost">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Resume
+      </a>
     </div>
   </div>
 
@@ -711,20 +712,6 @@
     <div class="scroll-hint">
       <div class="scroll-line"></div>
       Scroll to explore
-    </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-n">100<em>+</em></div>
-        <div class="stat-l">Parts Designed</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n">37<em>k</em></div>
-        <div class="stat-l">sq ft Lab Launched</div>
-      </div>
-      <div class="stat">
-        <div class="stat-n">3</div>
-        <div class="stat-l">Certifications</div>
-      </div>
     </div>
   </div>
 </section>
@@ -760,31 +747,29 @@
   </div>
   <div class="about-layout">
     <div class="bio reveal">
-      <p><strong>Ryder Fine designs things that exist in the real world — not just on screens.</strong> A Design Engineer at Colorado School of Mines, he moves between 3D-printed replacement parts and planetary rover platforms — thinking from the component level up to the full system.</p>
-      <p>His work spans additive manufacturing, mechanism design, and systems modeling — from a <strong>human-scale hamster wheel that generates electricity</strong> to a <strong>quantitative stock-flow model of PGM mining in South Africa</strong>. A McBride Honors Scholar, he brings international engineering experience from a semester at the University of Nicosia in Cyprus.</p>
-      <p>He believes technically exact and intuitively obvious are rarely at odds — and that the best engineering looks inevitable in hindsight.</p>
+      <p>Ryder Fine is an engineer built for problems that don't fit neatly into one discipline. He brings <strong>physical intuition</strong> to digital concepts, <strong>systems thinking</strong> to component-level decisions, and <strong>user research</strong> to engineering tradeoffs. The result is work that is <strong>technically rigorous and immediately understood</strong> - products built for real hands, systems that hold under real constraints, and solutions that look inevitable once they exist.</p>
       <div class="bio-detail">
         <span class="bio-chip">Golden, Colorado</span>
-        <span class="bio-chip">BSc Engineering Design · 2027</span>
+        <span class="bio-chip">B.S. Engineering Design · 2027</span>
         <span class="bio-chip">Eagle Scout</span>
         <span class="bio-chip">McBride Honors Program</span>
       </div>
     </div>
     <div class="three-f">
       <div class="f-card reveal d1">
-        <div class="f-tag">01 — Prototype</div>
+        <div class="f-tag">01 · Prototype</div>
         <h3>Does it exist?</h3>
-        <p>Every idea has to survive contact with reality. Rendering is hypothesis — prototyping is proof. Designs get built because you can't validate what you can't hold, test, break, and rebuild.</p>
+        <p>Every idea has to survive contact with reality. Rendering is hypothesis. Prototyping is proof. Designs get built because you can't validate what you can't hold, test, break, and rebuild.</p>
       </div>
       <div class="f-card reveal d2">
-        <div class="f-tag">02 — Mechanism</div>
+        <div class="f-tag">02 · Mechanism</div>
         <h3>Does it work?</h3>
-        <p>Mechanism is the logic beneath the surface — it lives in gears and linkages, but also in feedback loops, decision trees, and the invisible rules that make a system behave. Getting mechanisms right separates things that work in theory from things that hold up in the field.</p>
+        <p>Mechanism is the logic beneath the surface: it lives in gears and linkages, but also in feedback loops, decision trees, and the invisible rules that make a system behave. Getting mechanisms right separates things that work in theory from things that hold up in the field.</p>
       </div>
       <div class="f-card reveal d3">
-        <div class="f-tag">03 — System</div>
+        <div class="f-tag">03 · System</div>
         <h3>Does it scale?</h3>
-        <p>No component exists in isolation. Systems thinking means understanding how parts interact, how behavior emerges from structure, and how changes ripple through the whole — from rover platforms to resource models.</p>
+        <p>No component exists in isolation. Systems thinking means understanding how parts interact, how behavior emerges from structure, and how changes ripple through everything, from rover platforms to resource models.</p>
       </div>
     </div>
   </div>
@@ -799,106 +784,119 @@
     <div class="phil-rule-top"></div>
     <div class="phil-rule-bottom"></div>
 
-    <!-- Connection web — expands prototype→mechanism→system -->
+    <!-- Connection web - expands prototype→mechanism→system -->
     <svg class="phil-web" viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <!-- Hub: always visible — offset slightly right of center -->
-      <circle class="web-hub" cx="720" cy="390" r="7"/>
 
-      <!-- Ring 1 edges: appear at MECHANISM (stage 1) — irregular spacing -->
+      <!-- Hub: always visible - offset left of center -->
+      <circle class="web-hub" cx="590" cy="365" r="10"/>
+
+      <!-- Stage 1 edges: appear at MECHANISM -->
       <g class="web-r1-e">
-        <!-- spokes hub → inner nodes -->
-        <line class="web-edge" x1="720" y1="390" x2="730" y2="215"/>
-        <line class="web-edge" x1="720" y1="390" x2="900" y2="300"/>
-        <line class="web-edge" x1="720" y1="390" x2="885" y2="495"/>
-        <line class="web-edge" x1="720" y1="390" x2="695" y2="565"/>
-        <line class="web-edge" x1="720" y1="390" x2="535" y2="488"/>
-        <line class="web-edge" x1="720" y1="390" x2="548" y2="295"/>
-        <!-- inner ring connections -->
-        <line class="web-edge" x1="730" y1="215" x2="900" y2="300"/>
-        <line class="web-edge" x1="900" y1="300" x2="885" y2="495"/>
-        <line class="web-edge" x1="885" y1="495" x2="695" y2="565"/>
-        <line class="web-edge" x1="695" y1="565" x2="535" y2="488"/>
-        <line class="web-edge" x1="535" y1="488" x2="548" y2="295"/>
-        <line class="web-edge" x1="548" y1="295" x2="730" y2="215"/>
-        <!-- one skip-connection for interest -->
-        <line class="web-edge" x1="730" y1="215" x2="885" y2="495"/>
-        <line class="web-edge" x1="900" y1="300" x2="535" y2="488"/>
+        <!-- hub to secondary hubs -->
+        <line class="web-edge" x1="590" y1="365" x2="1090" y2="170"/>
+        <line class="web-edge" x1="590" y1="365" x2="215"  y2="195"/>
+        <line class="web-edge" x1="590" y1="365" x2="975"  y2="575"/>
+        <line class="web-edge" x1="590" y1="365" x2="305"  y2="615"/>
+        <!-- hub to medium nodes -->
+        <line class="web-edge" x1="590" y1="365" x2="835"  y2="245"/>
+        <line class="web-edge" x1="590" y1="365" x2="745"  y2="480"/>
+        <line class="web-edge" x1="590" y1="365" x2="455"  y2="275"/>
+        <line class="web-edge" x1="590" y1="365" x2="490"  y2="510"/>
+        <!-- secondary hub cross-connections -->
+        <line class="web-edge" x1="1090" y1="170" x2="835" y2="245"/>
+        <line class="web-edge" x1="1090" y1="170" x2="975" y2="575"/>
+        <line class="web-edge" x1="215"  y1="195" x2="455" y2="275"/>
+        <line class="web-edge" x1="215"  y1="195" x2="305" y2="615"/>
+        <line class="web-edge" x1="975"  y1="575" x2="745" y2="480"/>
+        <line class="web-edge" x1="305"  y1="615" x2="490" y2="510"/>
+        <line class="web-edge" x1="305"  y1="615" x2="170" y2="430"/>
+        <!-- medium node triangles -->
+        <line class="web-edge" x1="835"  y1="245" x2="745" y2="480"/>
+        <line class="web-edge" x1="455"  y1="275" x2="490" y2="510"/>
+        <line class="web-edge" x1="455"  y1="275" x2="835" y2="245"/>
+        <line class="web-edge" x1="745"  y1="480" x2="490" y2="510"/>
+        <!-- long cross: upper-right to lower-left -->
+        <line class="web-edge" x1="1090" y1="170" x2="305" y2="615"/>
+        <line class="web-edge" x1="215"  y1="195" x2="975" y2="575"/>
       </g>
-      <!-- Ring 1 nodes — slightly different sizes -->
+      <!-- Stage 1 nodes -->
       <g class="web-r1-n">
-        <circle class="web-node-1" cx="730" cy="215" r="5"/>
-        <circle class="web-node-1" cx="900" cy="300" r="4"/>
-        <circle class="web-node-1" cx="885" cy="495" r="4.5"/>
-        <circle class="web-node-1" cx="695" cy="565" r="3.5"/>
-        <circle class="web-node-1" cx="535" cy="488" r="4.5"/>
-        <circle class="web-node-1" cx="548" cy="295" r="4"/>
+        <!-- secondary hubs - big, varied sizes -->
+        <circle class="web-node-1" cx="1090" cy="170" r="13"/>
+        <circle class="web-node-1" cx="215"  cy="195" r="9"/>
+        <circle class="web-node-1" cx="975"  cy="575" r="10"/>
+        <circle class="web-node-1" cx="305"  cy="615" r="7"/>
+        <!-- medium nodes -->
+        <circle class="web-node-1" cx="835"  cy="245" r="5.5"/>
+        <circle class="web-node-1" cx="745"  cy="480" r="5"/>
+        <circle class="web-node-1" cx="455"  cy="275" r="5"/>
+        <circle class="web-node-1" cx="490"  cy="510" r="4.5"/>
+        <circle class="web-node-1" cx="170"  cy="430" r="4"/>
       </g>
 
-      <!-- Ring 2 edges: appear at SYSTEM (stage 2) — irregular outer ring -->
+      <!-- Stage 2 edges: appear at SYSTEM -->
       <g class="web-r2-e">
-        <!-- outer ring (asymmetric — denser upper-right, sparser lower-left) -->
-        <line class="web-edge-2" x1="745"  y1="55"  x2="1005" y2="140"/>
-        <line class="web-edge-2" x1="1005" y1="140" x2="1095" y2="385"/>
-        <line class="web-edge-2" x1="1095" y1="385" x2="965"  y2="645"/>
-        <line class="web-edge-2" x1="965"  y1="645" x2="710"  y2="745"/>
-        <line class="web-edge-2" x1="710"  y1="745" x2="425"  y2="668"/>
-        <line class="web-edge-2" x1="425"  y1="668" x2="295"  y2="430"/>
-        <line class="web-edge-2" x1="295"  y1="430" x2="415"  y2="165"/>
-        <line class="web-edge-2" x1="415"  y1="165" x2="745"  y2="55"/>
-        <!-- inner → outer spokes -->
-        <line class="web-edge-2" x1="730"  y1="215" x2="745"  y2="55"/>
-        <line class="web-edge-2" x1="900"  y1="300" x2="1005" y2="140"/>
-        <line class="web-edge-2" x1="885"  y1="495" x2="1095" y2="385"/>
-        <line class="web-edge-2" x1="695"  y1="565" x2="965"  y2="645"/>
-        <line class="web-edge-2" x1="695"  y1="565" x2="710"  y2="745"/>
-        <line class="web-edge-2" x1="535"  y1="488" x2="425"  y2="668"/>
-        <line class="web-edge-2" x1="548"  y1="295" x2="295"  y2="430"/>
-        <line class="web-edge-2" x1="548"  y1="295" x2="415"  y2="165"/>
-        <!-- cross-connections — more on upper-right for asymmetry -->
-        <line class="web-edge-2" x1="1005" y1="140" x2="730"  y2="215"/>
-        <line class="web-edge-2" x1="745"  y1="55"  x2="900"  y2="300"/>
-        <line class="web-edge-2" x1="1095" y1="385" x2="900"  y2="300"/>
-        <line class="web-edge-2" x1="965"  y1="645" x2="885"  y2="495"/>
-        <line class="web-edge-2" x1="425"  y1="668" x2="695"  y2="565"/>
-        <line class="web-edge-2" x1="295"  y1="430" x2="535"  y2="488"/>
-        <line class="web-edge-2" x1="415"  y1="165" x2="730"  y2="215"/>
-        <!-- extra outer skip-connections for dense upper-right cluster -->
-        <line class="web-edge-2" x1="745"  y1="55"  x2="1095" y2="385"/>
-        <line class="web-edge-2" x1="1005" y1="140" x2="965"  y2="645"/>
-        <!-- peripheral fringe nodes edges -->
-        <line class="web-edge-2" x1="855"  y1="38"  x2="745"  y2="55"/>
-        <line class="web-edge-2" x1="855"  y1="38"  x2="1005" y2="140"/>
-        <line class="web-edge-2" x1="1145" y1="255" x2="1005" y2="140"/>
-        <line class="web-edge-2" x1="1145" y1="255" x2="1095" y2="385"/>
-        <line class="web-edge-2" x1="1130" y1="525" x2="1095" y2="385"/>
-        <line class="web-edge-2" x1="1130" y1="525" x2="965"  y2="645"/>
-        <line class="web-edge-2" x1="845"  y1="775" x2="965"  y2="645"/>
-        <line class="web-edge-2" x1="845"  y1="775" x2="710"  y2="745"/>
-        <line class="web-edge-2" x1="545"  y1="775" x2="710"  y2="745"/>
-        <line class="web-edge-2" x1="545"  y1="775" x2="425"  y2="668"/>
-        <line class="web-edge-2" x1="245"  y1="570" x2="425"  y2="668"/>
-        <line class="web-edge-2" x1="245"  y1="570" x2="295"  y2="430"/>
-        <line class="web-edge-2" x1="245"  y1="290" x2="295"  y2="430"/>
-        <line class="web-edge-2" x1="245"  y1="290" x2="415"  y2="165"/>
+        <!-- outer scattered nodes to nearest inner -->
+        <line class="web-edge-2" x1="935"  y1="80"  x2="1090" y2="170"/>
+        <line class="web-edge-2" x1="935"  y1="80"  x2="835"  y2="245"/>
+        <line class="web-edge-2" x1="1280" y1="90"  x2="1090" y2="170"/>
+        <line class="web-edge-2" x1="1280" y1="90"  x2="935"  y2="80"/>
+        <line class="web-edge-2" x1="1340" y1="310" x2="1090" y2="170"/>
+        <line class="web-edge-2" x1="1340" y1="310" x2="1280" y2="90"/>
+        <line class="web-edge-2" x1="1255" y1="480" x2="975"  y2="575"/>
+        <line class="web-edge-2" x1="1255" y1="480" x2="1340" y2="310"/>
+        <line class="web-edge-2" x1="1255" y1="480" x2="1090" y2="170"/>
+        <line class="web-edge-2" x1="1145" y1="670" x2="975"  y2="575"/>
+        <line class="web-edge-2" x1="1145" y1="670" x2="1255" y2="480"/>
+        <line class="web-edge-2" x1="710"  y1="750" x2="975"  y2="575"/>
+        <line class="web-edge-2" x1="710"  y1="750" x2="1145" y2="670"/>
+        <line class="web-edge-2" x1="710"  y1="750" x2="490"  y2="510"/>
+        <line class="web-edge-2" x1="430"  y1="725" x2="305"  y2="615"/>
+        <line class="web-edge-2" x1="430"  y1="725" x2="710"  y2="750"/>
+        <line class="web-edge-2" x1="125"  y1="620" x2="305"  y2="615"/>
+        <line class="web-edge-2" x1="125"  y1="620" x2="170"  y2="430"/>
+        <line class="web-edge-2" x1="70"   y1="420" x2="170"  y2="430"/>
+        <line class="web-edge-2" x1="70"   y1="420" x2="125"  y2="620"/>
+        <line class="web-edge-2" x1="80"   y1="270" x2="215"  y2="195"/>
+        <line class="web-edge-2" x1="80"   y1="270" x2="170"  y2="430"/>
+        <line class="web-edge-2" x1="360"  y1="110" x2="215"  y2="195"/>
+        <line class="web-edge-2" x1="360"  y1="110" x2="455"  y2="275"/>
+        <line class="web-edge-2" x1="360"  y1="110" x2="80"   y2="270"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="835"  y2="245"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="935"  y2="80"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="455"  y2="275"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="360"  y2="110"/>
+        <!-- dense cluster: upper-right triangulation -->
+        <line class="web-edge-2" x1="1280" y1="90"  x2="1340" y2="310"/>
+        <line class="web-edge-2" x1="935"  y1="80"  x2="1340" y2="310"/>
+        <!-- skip connections for depth -->
+        <line class="web-edge-2" x1="590"  y1="365" x2="1255" y2="480"/>
+        <line class="web-edge-2" x1="835"  y1="245" x2="1255" y2="480"/>
+        <line class="web-edge-2" x1="215"  y1="195" x2="125"  y2="620"/>
+        <line class="web-edge-2" x1="745"  y1="480" x2="710"  y2="750"/>
       </g>
-      <!-- Ring 2 + fringe nodes -->
+      <!-- Stage 2 nodes - scattered, varied sizes, no ring symmetry -->
       <g class="web-r2-n">
-        <circle class="web-node-2" cx="745"  cy="55"  r="3.5"/>
-        <circle class="web-node-2" cx="1005" cy="140" r="4"/>
-        <circle class="web-node-2" cx="1095" cy="385" r="3.5"/>
-        <circle class="web-node-2" cx="965"  cy="645" r="3"/>
-        <circle class="web-node-2" cx="710"  cy="745" r="3.5"/>
-        <circle class="web-node-2" cx="425"  cy="668" r="3"/>
-        <circle class="web-node-2" cx="295"  cy="430" r="3.5"/>
-        <circle class="web-node-2" cx="415"  cy="165" r="3"/>
-        <!-- fringe extras — sparser on left, denser upper-right -->
-        <circle class="web-node-x" cx="855"  cy="38"  r="2.5"/>
-        <circle class="web-node-x" cx="1145" cy="255" r="2.5"/>
-        <circle class="web-node-x" cx="1130" cy="525" r="2"/>
-        <circle class="web-node-x" cx="845"  cy="775" r="2"/>
-        <circle class="web-node-x" cx="545"  cy="775" r="2"/>
-        <circle class="web-node-x" cx="245"  cy="570" r="2.5"/>
-        <circle class="web-node-x" cx="245"  cy="290" r="2.5"/>
+        <circle class="web-node-2" cx="935"  cy="80"  r="5"/>
+        <circle class="web-node-2" cx="1280" cy="90"  r="4"/>
+        <circle class="web-node-2" cx="1340" cy="310" r="5.5"/>
+        <circle class="web-node-2" cx="1255" cy="480" r="4.5"/>
+        <circle class="web-node-2" cx="1145" cy="670" r="4"/>
+        <circle class="web-node-2" cx="710"  cy="750" r="4.5"/>
+        <circle class="web-node-2" cx="430"  cy="725" r="3.5"/>
+        <circle class="web-node-2" cx="125"  cy="620" r="4"/>
+        <circle class="web-node-2" cx="70"   cy="420" r="3"/>
+        <circle class="web-node-2" cx="80"   cy="270" r="3.5"/>
+        <circle class="web-node-2" cx="360"  cy="110" r="4"/>
+        <circle class="web-node-2" cx="670"  cy="130" r="4.5"/>
+        <!-- tiny fringe -->
+        <circle class="web-node-x" cx="1390" cy="165" r="2.5"/>
+        <circle class="web-node-x" cx="1380" cy="575" r="2"/>
+        <circle class="web-node-x" cx="1040" cy="760" r="2.5"/>
+        <circle class="web-node-x" cx="560"  cy="775" r="2"/>
+        <circle class="web-node-x" cx="210"  cy="760" r="2"/>
+        <circle class="web-node-x" cx="55"   cy="155" r="2.5"/>
+        <circle class="web-node-x" cx="735"  cy="35"  r="2"/>
       </g>
     </svg>
 
@@ -908,10 +906,10 @@
         <span class="phil-bg-num">01</span>
         <div class="phil-counter">
           <span class="phil-counter-line"></span>
-          01 / 03 — Design Principles
+          01 / 03 · Design Principles
         </div>
         <div class="phil-word color-orange">PROTOTYPE</div>
-        <p class="phil-desc">Rendering is hypothesis. <strong>Prototyping is proof.</strong> Every idea has to survive contact with reality — where tolerances meet materials, assumptions get stress-tested, and engineering decisions either hold up or get scrapped.</p>
+        <p class="phil-desc">Rendering is hypothesis. <strong>Prototyping is proof.</strong> Every idea has to survive contact with reality: tolerances meet materials, assumptions get stress-tested, and engineering decisions either hold up or get scrapped.</p>
       </div>
 
       <!-- Slide 2: MECHANISM -->
@@ -919,10 +917,10 @@
         <span class="phil-bg-num">02</span>
         <div class="phil-counter">
           <span class="phil-counter-line"></span>
-          02 / 03 — Design Principles
+          02 / 03 · Design Principles
         </div>
         <div class="phil-word color-blue">MECHANISM</div>
-        <p class="phil-desc">Mechanism is the logic beneath the surface — the relationship between <strong>input, feedback, constraint, and intent.</strong> It lives in linkages and gears, yes. But also in feedback loops, decision trees, and the invisible rules that make any system behave. Get the mechanism right, and everything else follows.</p>
+        <p class="phil-desc">Mechanism is the logic beneath the surface: the relationship between <strong>input, feedback, constraint, and intent.</strong> It lives in linkages and gears, yes. But also in feedback loops, decision trees, and the invisible rules that make any system behave. Get the mechanism right, and everything else follows.</p>
       </div>
 
       <!-- Slide 3: SYSTEM -->
@@ -930,7 +928,7 @@
         <span class="phil-bg-num">03</span>
         <div class="phil-counter">
           <span class="phil-counter-line"></span>
-          03 / 03 — Design Principles
+          03 / 03 · Design Principles
         </div>
         <div class="phil-word color-light">SYSTEM</div>
         <p class="phil-desc">No component exists in isolation. <strong>Systems thinking</strong> means understanding how parts interact, how behavior emerges from structure, and how changes in one place ripple through everything else.</p>
@@ -1049,7 +1047,7 @@
           <div>
             <div class="proj-tags"><span class="tag tag-o">Large Scale</span><span class="tag tag-b">Electronics</span><span class="tag tag-o">STEM Ed</span></div>
             <h3>Human Hamster Wheel</h3>
-            <p>600 lb, 10-foot human-powered electricity generator for STEM education. Fully modular — assembled by two people in 13 minutes. A bridge rectifier converts generated AC to DC to power an LED array.</p>
+            <p>600 lb, 10-foot human-powered electricity generator for STEM education. Fully modular, assembled by two people in 13 minutes. A bridge rectifier converts generated AC to DC to power an LED array.</p>
           </div>
           <div class="back-bottom">
             <div class="proj-chips">
@@ -1119,7 +1117,7 @@
           <div>
             <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">User Research</span><span class="tag tag-o">Electronics</span></div>
             <h3>Touchless Faucet Pad</h3>
-            <p>Pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and shutoff delay — all shaped by stakeholder interviews and restroom space analysis.</p>
+            <p>Pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and shutoff delay, all shaped by stakeholder interviews and restroom space analysis.</p>
           </div>
           <div class="back-bottom">
             <div class="proj-chips">
@@ -1180,8 +1178,8 @@
   <div class="curr-grid">
     <div class="curr-card wide reveal">
       <div>
-        <div class="live-badge"><div class="live-dot"></div>Active — University Rover Challenge</div>
-        <h3>Mars Rover — URC Team</h3>
+        <div class="live-badge"><div class="live-dot"></div>Active · University Rover Challenge</div>
+        <h3>Mars Rover · URC Team</h3>
         <p>Contributing to the mechanical design and build of a Mars rover for the University Rover Challenge, one of the most prestigious student robotics competitions globally. Working across structural systems, additive manufacturing components, and integrated design.</p>
         <div class="curr-meta">
           <div class="meta-item"><span class="meta-l">Competition</span><span class="meta-v">Univ. Rover Challenge</span></div>
@@ -1189,9 +1187,9 @@
         </div>
       </div>
       <div>
-        <div class="live-badge"><div class="live-dot"></div>Active — Mines Lunar Surface Simulator</div>
+        <div class="live-badge"><div class="live-dot"></div>Active · Mines Lunar Surface Simulator</div>
         <h3>Rover Wheel Testing Platform</h3>
-        <p>Designing and building a wheel testing rig for the Mines Lunar Surface Simulator — a platform to evaluate rover wheel performance under simulated lunar terrain and gravity conditions for research and validation.</p>
+        <p>Designing and building a wheel testing rig for the Mines Lunar Surface Simulator, a platform to evaluate rover wheel performance under simulated lunar terrain and gravity conditions for research and validation.</p>
         <div class="curr-meta">
           <div class="meta-item"><span class="meta-l">Lab</span><span class="meta-v">Mines Lunar Simulator</span></div>
           <div class="meta-item"><span class="meta-l">Type</span><span class="meta-v">Research Platform</span></div>
@@ -1199,7 +1197,7 @@
       </div>
     </div>
     <div class="curr-card reveal">
-      <div class="live-badge"><div class="live-dot"></div>Funded — ProtoFund Grant</div>
+      <div class="live-badge"><div class="live-dot"></div>Funded · ProtoFund Grant</div>
       <h3>Pneumatic Stilts</h3>
       <p>Adaptive adjustable stilts for theatrical performance using pneumatic pistons. Iterating for live-performance safety, ease of use, and reliability. Managing grant funds and performing cost-benefit analysis.</p>
       <div class="curr-meta">
@@ -1208,7 +1206,7 @@
       </div>
     </div>
     <div class="curr-card reveal d1">
-      <div class="live-badge"><div class="live-dot"></div>Research — Systems Engineering</div>
+      <div class="live-badge"><div class="live-dot"></div>Research · Systems Engineering</div>
       <h3>Alternative Mining Systems Analysis</h3>
       <p>Complex systems analysis on global resource management and alternative material sourcing. Building quantitative system dynamics models in Vensim to test feedback loops and model long-term policy impacts.</p>
       <div class="curr-meta">
@@ -1259,7 +1257,7 @@
       <div class="exp-block-title" style="margin-top:2.5rem">Certifications</div>
       <div class="cert-stack">
         <div class="cert-row"><span class="cert-name">Certified SolidWorks Associate</span><span class="cert-year">Apr 2024</span></div>
-        <div class="cert-row"><span class="cert-name">Markforged Certified — Composites</span><span class="cert-year">Jul 2024</span></div>
+        <div class="cert-row"><span class="cert-name">Markforged Certified · Composites</span><span class="cert-year">Jul 2024</span></div>
         <div class="cert-row"><span class="cert-name">Eagle Scout</span><span class="cert-year">Jun 2023</span></div>
       </div>
     </div>
@@ -1305,7 +1303,7 @@
   <div class="contact-inner">
     <div class="contact-label reveal">Let's work together</div>
     <div class="contact-h reveal">Get In<br>Touch.</div>
-    <p class="contact-sub reveal">Whether you have a project, a question, or just want to connect — my inbox is open.</p>
+    <p class="contact-sub reveal">Whether you have a project, a question, or just want to connect. My inbox is open.</p>
     <div class="contact-btns reveal">
       <a href="mailto:ryder_fine@mines.edu" class="btn btn-primary">ryder_fine@mines.edu</a>
       <a href="mailto:ryderfine9@gmail.com" class="btn btn-ghost">ryderfine9@gmail.com</a>

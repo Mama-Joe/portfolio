@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ryder Fine — Design Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dark:        #0B1120;
+      --dark-2:      #111827;
+      --dark-3:      #1C2840;
+      --accent:      #E85D04;
+      --accent-hi:   #FF7722;
+      --blue:        #3D5AF1;
+      --cream:       #F5F0E8;
+      --cream-2:     #EDE6D8;
+      --text-light:  #EEE9E0;
+      --text-dark:   #1A1A2E;
+      --muted-dark:  #6E839A;
+      --muted-light: #6B6572;
+      --border-dark: #243044;
+      --border-lt:   #D8D0C6;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      color: var(--text-light);
+      overflow-x: hidden;
+    }
+
+
+    /* ─── SCROLL PROGRESS BAR ──────────────────────── */
+    #progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 2px; width: 0%;
+      background: var(--accent);
+      z-index: 300;
+      transition: width .08s linear;
+    }
+
+    /* ─── NAV ──────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      padding: 1.2rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background .3s, border-color .3s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(11,17,32,.88);
+      backdrop-filter: blur(14px);
+      border-color: var(--border-dark);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600; font-size: .95rem;
+      color: var(--text-light); text-decoration: none;
+      letter-spacing: -.01em;
+      display: flex; align-items: center; gap: .65rem;
+    }
+
+    /* ── Engineering crosshair mark ── */
+    .logo-mark { width: 38px; height: 38px; flex-shrink: 0; }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: .7rem; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--muted-dark); text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ─── HERO ─────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 9rem 3rem 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0; will-change: transform;
+      background-image:
+        linear-gradient(rgba(61,90,241,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,90,241,.055) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black 20%, transparent 100%);
+    }
+    .hero-glow { position: absolute; pointer-events: none; border-radius: 50%; will-change: transform; }
+    .glow-orange {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(232,93,4,.12) 0%, transparent 70%);
+      top: 5%; right: 5%;
+    }
+    .glow-blue {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(61,90,241,.08) 0%, transparent 70%);
+      bottom: 10%; left: 10%;
+    }
+    .hero-content { position: relative; max-width: 860px; will-change: transform; }
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .16em;
+      color: var(--accent);
+      display: flex; align-items: center; gap: .8rem;
+      margin-bottom: 1.75rem;
+    }
+    .eyebrow-line { width: 36px; height: 1px; background: var(--accent); }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3.8rem, 9vw, 7.5rem);
+      font-weight: 700; line-height: .92; letter-spacing: -.03em;
+      margin-bottom: 2rem;
+    }
+    .name-accent { color: var(--accent); display: block; }
+    .hero-tagline {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: var(--muted-dark); max-width: 500px;
+      line-height: 1.7; margin-bottom: 3rem;
+    }
+    .hero-tagline strong { color: var(--text-light); font-weight: 500; }
+    .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      padding: .85rem 1.75rem; border-radius: 3px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: .875rem; font-weight: 600; letter-spacing: .01em;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hi); transform: translateY(-2px); }
+    .btn-ghost { background: transparent; color: var(--text-light); border: 1.5px solid var(--border-dark); }
+    .btn-ghost:hover { border-color: var(--muted-dark); transform: translateY(-2px); }
+
+    .hero-bottom {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding: 4rem 0 0;
+    }
+    .scroll-hint {
+      display: flex; align-items: center; gap: .75rem;
+      font-family: 'Space Mono', monospace;
+      font-size: .65rem; text-transform: uppercase; letter-spacing: .12em;
+      color: var(--muted-dark);
+    }
+    .scroll-line {
+      width: 40px; height: 1px; background: var(--muted-dark);
+      animation: pulse-line 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%,100% { width: 40px; opacity: .8; }
+      50%      { width: 16px; opacity: .3; }
+    }
+    .hero-stats { display: flex; gap: 3rem; }
+    .stat { text-align: right; }
+    .stat-n { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
+    .stat-n em { color: var(--accent); font-style: normal; }
+    .stat-l { font-family: 'Space Mono', monospace; font-size: .62rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted-dark); }
+
+    /* ─── TICKER ────────────────────────────────────── */
+    .ticker-wrap { overflow: hidden; background: var(--accent); padding: .65rem 0; white-space: nowrap; }
+    .ticker-inner { display: inline-flex; gap: 2rem; animation: ticker 24s linear infinite; }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item { font-family: 'Space Mono', monospace; font-size: .7rem; text-transform: uppercase; letter-spacing: .14em; color: #fff; flex-shrink: 0; }
+    .ticker-dot { color: rgba(255,255,255,.45); }
+
+    /* ─── SHARED SECTION ─────────────────────────────── */
+    section { padding: 7rem 3rem; }
+    .sec-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 4.5rem; }
+    .sec-num { font-family: 'Space Mono', monospace; font-size: .7rem; color: var(--accent); letter-spacing: .12em; }
+    .sec-rule { height: 1px; width: 48px; background: var(--border-dark); }
+    .sec-rule.lt { background: var(--border-lt); }
+    h2 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -.025em; }
+    h2.on-light { color: var(--text-dark); }
+
+    /* ─── ABOUT ─────────────────────────────────────── */
+    #about { background: var(--cream); color: var(--text-dark); }
+    #about .sec-num { color: var(--accent); }
+    .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .bio p { font-size: 1.05rem; line-height: 1.8; color: var(--muted-light); margin-bottom: 1.2rem; }
+    .bio p strong { color: var(--text-dark); font-weight: 600; }
+    .bio-detail {
+      margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-lt);
+      display: flex; gap: 2rem; flex-wrap: wrap;
+    }
+    .bio-chip {
+      font-family: 'Space Mono', monospace; font-size: .68rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted-light); display: flex; align-items: center; gap: .4rem;
+    }
+    .bio-chip::before { content: ''; display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
+    .three-f { display: flex; flex-direction: column; gap: 1.25rem; }
+    .f-card {
+      padding: 1.75rem; background: #fff; border: 1px solid var(--border-lt); border-radius: 4px;
+      position: relative; transition: transform .2s; overflow: hidden;
+    }
+    .f-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: transparent; transition: background .2s;
+    }
+    .f-card:hover { transform: translateX(6px); }
+    .f-card:hover::before { background: var(--accent); }
+    .f-tag { font-family: 'Space Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .5rem; }
+    .f-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: .4rem; }
+    .f-card p { font-size: .875rem; color: var(--muted-light); line-height: 1.65; }
+
+    /* ─── PHILOSOPHY (PINNED SCROLL) ─────────────────── */
+    #philosophy {
+      height: 300vh;
+      position: relative;
+      padding: 0;
+    }
+    .phil-sticky {
+      height: 100vh;
+      position: sticky; top: 0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background: #070c15;
+    }
+    /* subtle dot grid */
+    .phil-sticky::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+    }
+    .phil-slides { position: relative; width: 100%; max-width: 1100px; padding: 0 3rem; }
+    .phil-slide {
+      position: absolute; top: 50%; left: 3rem; right: 3rem;
+      transform: translateY(calc(-50% + 40px));
+      opacity: 0;
+      transition: opacity .55s ease, transform .55s ease;
+      pointer-events: none;
+    }
+    .phil-slide.active {
+      opacity: 1;
+      transform: translateY(-50%);
+      pointer-events: auto;
+    }
+    .phil-counter {
+      font-family: 'Space Mono', monospace;
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .18em;
+      color: var(--accent); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .phil-counter-line { height: 1px; width: 60px; background: var(--accent); }
+    .phil-word {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(5rem, 16vw, 13rem);
+      font-weight: 700; letter-spacing: -.04em; line-height: .9;
+      margin-bottom: 2.5rem;
+    }
+    .phil-word.color-orange { color: var(--accent); }
+    .phil-word.color-blue   { color: var(--blue); }
+    .phil-word.color-light  { color: var(--text-light); }
+    .phil-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      color: var(--muted-dark); max-width: 520px; line-height: 1.7;
+    }
+    .phil-desc strong { color: var(--text-light); font-weight: 500; }
+
+    /* progress dots */
+    .phil-dots {
+      position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: .6rem;
+    }
+    .phil-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border-dark);
+      transition: background .35s, transform .35s;
+    }
+    .phil-dot.active { background: var(--accent); transform: scale(1.4); }
+
+    /* ─── PROJECTS (FLIP CARDS) ──────────────────────── */
+    #projects { background: var(--dark); }
+    .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+    /* Flip card shell */
+    .proj-card {
+      height: 420px;
+      perspective: 1200px;
+      position: relative;
+    }
+    /* Corner brackets on the outer shell (not affected by 3D) */
+    .proj-card::before, .proj-card::after {
+      content: ''; position: absolute;
+      width: 10px; height: 10px;
+      border-color: var(--accent); border-style: solid;
+      z-index: 10; pointer-events: none;
+      opacity: 0; transition: opacity .25s;
+    }
+    .proj-card::before { top: 7px; left: 7px; border-width: 2px 0 0 2px; }
+    .proj-card::after  { bottom: 7px; right: 7px; border-width: 0 2px 2px 0; }
+    .proj-card:hover::before,
+    .proj-card:hover::after { opacity: 1; }
+
+    /* Flip inner */
+    .flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform .7s cubic-bezier(.4,0,.2,1);
+    }
+    .proj-card:hover .flip-inner { transform: rotateY(180deg); }
+
+    /* Front & back common */
+    .flip-front, .flip-back {
+      position: absolute; width: 100%; height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 4px; overflow: hidden;
+    }
+
+    /* FRONT */
+    .flip-front {
+      background: var(--dark-2);
+      border: 1px solid var(--border-dark);
+      display: flex; flex-direction: column;
+      transition: border-color .25s;
+    }
+    .proj-card:hover .flip-front { border-color: var(--accent); }
+
+    .proj-thumb {
+      flex: 1; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .thumb-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+      background-size: 18px 18px;
+    }
+    .thumb-svg { position: relative; z-index: 1; width: 80px; height: 80px; opacity: .55; }
+    .thumb-green  { background: linear-gradient(135deg,#0d1a10,#162219); }
+    .thumb-purple { background: linear-gradient(135deg,#120d1f,#1a1030); }
+    .thumb-amber  { background: linear-gradient(135deg,#1a1300,#120e00); }
+    .thumb-blue   { background: linear-gradient(135deg,#081424,#0a1833); }
+    .thumb-teal   { background: linear-gradient(135deg,#021614,#03211e); }
+    .thumb-indigo { background: linear-gradient(135deg,#0a0e2a,#0e1238); }
+
+    .flip-hint {
+      font-family: 'Space Mono', monospace;
+      font-size: .62rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--muted-dark);
+      display: flex; align-items: center; justify-content: center; gap: .4rem;
+      padding: .5rem;
+      border-top: 1px solid var(--border-dark);
+      transition: color .2s;
+    }
+    .flip-hint-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent); opacity: .7;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:.7}50%{opacity:.2} }
+
+    .front-label {
+      padding: 1rem 1.2rem .8rem;
+      border-top: 1px solid var(--border-dark);
+    }
+    .front-label h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      color: var(--text-light); letter-spacing: -.01em;
+    }
+    .front-tags { display: flex; gap: .4rem; margin-bottom: .4rem; flex-wrap: wrap; }
+
+    /* BACK */
+    .flip-back {
+      background: var(--dark-3);
+      border: 1px solid var(--accent);
+      transform: rotateY(180deg);
+      padding: 1.75rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .flip-back h3 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--text-light); margin-bottom: .65rem; letter-spacing: -.01em;
+    }
+    .flip-back p { font-size: .84rem; color: var(--muted-dark); line-height: 1.7; flex: 1; }
+    .back-bottom { margin-top: 1.25rem; }
+    .proj-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .chip {
+      font-family: 'Space Mono', monospace; font-size: .62rem; color: var(--muted-dark);
+      text-transform: uppercase; letter-spacing: .06em;
+    }
+    .chip::before { content: '→ '; color: var(--accent); }
+
+    /* Tag styles (shared front/back) */
+    .proj-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .5rem; }
+    .tag { font-family: 'Space Mono', monospace; font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; padding: .2rem .55rem; border-radius: 2px; }
+    .tag-o { background: rgba(232,93,4,.12); color: var(--accent); border: 1px solid rgba(232,93,4,.2); }
+    .tag-b { background: rgba(61,90,241,.12); color: var(--blue); border: 1px solid rgba(61,90,241,.2); }
+
+    /* ─── CURRENT WORK ───────────────────────────────── */
+    #current { background: var(--dark-2); position: relative; overflow: hidden; }
+    #current::before {
+      content: ''; position: absolute; top: -250px; right: -250px;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(61,90,241,.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .curr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .curr-card {
+      background: var(--dark); border: 1px solid var(--border-dark);
+      border-radius: 4px; padding: 2rem; transition: border-color .2s;
+    }
+    .curr-card:hover { border-color: rgba(232,93,4,.4); }
+    .curr-card.wide { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; border-color: rgba(232,93,4,.25); }
+    .live-badge { display: inline-flex; align-items: center; gap: .4rem; font-family: 'Space Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 1rem; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: blink 2s ease-in-out infinite; }
+    .curr-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text-light); margin-bottom: .7rem; letter-spacing: -.01em; }
+    .curr-card p { font-size: .875rem; color: var(--muted-dark); line-height: 1.7; }
+    .curr-meta { margin-top: 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+    .meta-item { display: flex; flex-direction: column; gap: .15rem; }
+    .meta-l { font-family: 'Space Mono', monospace; font-size: .6rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted-dark); }
+    .meta-v { font-family: 'Space Grotesk', sans-serif; font-size: .85rem; font-weight: 500; color: var(--text-light); }
+
+    /* ─── EXPERIENCE ─────────────────────────────────── */
+    #experience { background: var(--cream); color: var(--text-dark); }
+    #experience .sec-num { color: var(--accent); }
+    .exp-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+    .exp-block-title { font-family: 'Space Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 1.75rem; }
+    .exp-item { padding: 0 0 1.5rem 1.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-lt); border-left: 2px solid transparent; transition: border-color .2s; }
+    .exp-item:last-child { border-bottom: none; margin-bottom: 0; }
+    .exp-item:hover { border-left-color: var(--accent); }
+    .exp-org { font-size: .85rem; color: var(--accent); font-weight: 600; margin-bottom: .15rem; }
+    .exp-role { font-family: 'Space Grotesk', sans-serif; font-size: .95rem; font-weight: 600; color: var(--text-dark); }
+    .exp-date { font-family: 'Space Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-light); margin: .25rem 0 .5rem; }
+    .exp-item p { font-size: .83rem; color: var(--muted-light); line-height: 1.65; }
+    .cert-stack { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.25rem; }
+    .cert-row { display: flex; justify-content: space-between; align-items: center; padding: .8rem 1.1rem; background: #fff; border: 1px solid var(--border-lt); border-radius: 3px; transition: border-color .2s; }
+    .cert-row:hover { border-color: var(--accent); }
+    .cert-name { font-family: 'Space Grotesk', sans-serif; font-size: .85rem; font-weight: 600; color: var(--text-dark); }
+    .cert-year { font-family: 'Space Mono', monospace; font-size: .65rem; color: var(--muted-light); }
+    .skills-section { margin-top: 3.5rem; }
+    .skill-clusters { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .skill-group-title { font-family: 'Space Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .75rem; }
+    .skill-pills { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .skill-pill { font-size: .8rem; color: var(--muted-light); padding: .3rem .7rem; background: var(--cream-2); border: 1px solid var(--border-lt); border-radius: 2px; transition: border-color .2s, color .2s; }
+    .skill-pill:hover { border-color: var(--accent); color: var(--text-dark); }
+
+    /* ─── CONTACT ────────────────────────────────────── */
+    #contact { background: var(--dark); text-align: center; padding: 9rem 3rem; }
+    .contact-inner { max-width: 560px; margin: 0 auto; }
+    .contact-label { font-family: 'Space Mono', monospace; font-size: .72rem; text-transform: uppercase; letter-spacing: .15em; color: var(--accent); margin-bottom: 1.5rem; }
+    .contact-h { font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 7vw, 5rem); font-weight: 700; letter-spacing: -.03em; line-height: .95; margin-bottom: 1.5rem; }
+    .contact-sub { font-size: 1rem; color: var(--muted-dark); line-height: 1.7; margin-bottom: 2.75rem; }
+    .contact-btns { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .socials { display: flex; justify-content: center; gap: 2.5rem; }
+    .social-link { font-family: 'Space Mono', monospace; font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted-dark); text-decoration: none; transition: color .2s; }
+    .social-link:hover { color: var(--accent); }
+
+    /* ─── FOOTER ─────────────────────────────────────── */
+    footer { background: var(--dark); border-top: 1px solid var(--border-dark); padding: 1.4rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-family: 'Space Mono', monospace; font-size: .65rem; color: var(--muted-dark); }
+
+    /* ─── SCROLL REVEAL ──────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+    /* ─── RESPONSIVE ─────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .proj-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 5rem 1.5rem; }
+      #hero { padding: 7rem 1.5rem 4rem; }
+      .about-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .proj-grid { grid-template-columns: 1fr; }
+      .proj-card { height: 380px; }
+      .curr-grid { grid-template-columns: 1fr; }
+      .curr-card.wide { grid-column: 1; grid-template-columns: 1fr; gap: 2rem; }
+      .exp-layout { grid-template-columns: 1fr; }
+      .skill-clusters { grid-template-columns: 1fr; }
+      .hero-bottom { position: static; margin-top: 3rem; flex-direction: column; align-items: flex-start; gap: 2rem; }
+      .hero-stats { flex-wrap: wrap; }
+      footer { flex-direction: column; gap: .5rem; text-align: center; }
+      .phil-slide { left: 1.5rem; right: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── PROGRESS BAR ────────────────────────────────────── -->
+<div id="progress-bar"></div>
+
+<!-- ── NAV ────────────────────────────────────────────── -->
+<nav id="nav">
+  <a href="#" class="nav-logo">
+    <!-- Interconnected systems / innovation node mark -->
+    <svg class="logo-mark" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- Hub spokes: center → each outer node -->
+      <line x1="19" y1="19" x2="19" y2="4"  stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="33" y2="13" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="28" y2="32" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="10" y2="32" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="5"  y2="13" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <!-- Ring: connections between adjacent outer nodes -->
+      <line x1="19" y1="4"  x2="33" y2="13" stroke="#E85D04" stroke-width=".8" stroke-linecap="round" opacity=".35"/>
+      <line x1="33" y1="13" x2="28" y2="32" stroke="#E85D04" stroke-width=".8" stroke-linecap="round" opacity=".35"/>
+      <line x1="28" y1="32" x2="10" y2="32" stroke="#E85D04" stroke-width=".8" stroke-linecap="round" opacity=".35"/>
+      <line x1="10" y1="32" x2="5"  y2="13" stroke="#E85D04" stroke-width=".8" stroke-linecap="round" opacity=".35"/>
+      <line x1="5"  y1="13" x2="19" y2="4"  stroke="#E85D04" stroke-width=".8" stroke-linecap="round" opacity=".35"/>
+      <!-- Outer nodes -->
+      <circle cx="19" cy="4"  r="2.2" fill="#E85D04" opacity=".8"/>
+      <circle cx="33" cy="13" r="2.2" fill="#E85D04" opacity=".8"/>
+      <circle cx="28" cy="32" r="2.2" fill="#E85D04" opacity=".8"/>
+      <circle cx="10" cy="32" r="2.2" fill="#E85D04" opacity=".8"/>
+      <circle cx="5"  cy="13" r="2.2" fill="#E85D04" opacity=".8"/>
+      <!-- Central hub — largest, full opacity -->
+      <circle cx="19" cy="19" r="3.8" fill="#E85D04"/>
+    </svg>
+    Ryder Fine
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Work</a></li>
+    <li><a href="#current">Current</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-grid" id="hero-grid"></div>
+  <div class="hero-glow glow-orange" id="glow-a"></div>
+  <div class="hero-glow glow-blue"   id="glow-b"></div>
+
+  <div class="hero-content" id="hero-content">
+    <div class="eyebrow">
+      <span class="eyebrow-line"></span>
+      Design Engineer · Colorado School of Mines
+    </div>
+    <h1>
+      Ryder
+      <span class="name-accent">Fine.</span>
+    </h1>
+    <p class="hero-tagline">
+      I build things that work —
+      <strong>and think about why they should.</strong>
+      Additive manufacturing, integrated systems,
+      and engineering for real-world impact.
+    </p>
+    <div class="cta-row">
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="#contact"  class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-bottom">
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll to explore
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-n">100<em>+</em></div>
+        <div class="stat-l">Parts Designed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">37<em>k</em></div>
+        <div class="stat-l">sq ft Lab Launched</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">3</div>
+        <div class="stat-l">Certifications</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TICKER ──────────────────────────────────────────── -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" aria-hidden="true">
+    <span class="ticker-item">Prototype</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Mechanism</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">System</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Additive Manufacturing</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">CAD</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Systems Thinking</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Rapid Prototyping</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Design Engineering</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Prototype</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Mechanism</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">System</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Additive Manufacturing</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">CAD</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Systems Thinking</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Rapid Prototyping</span><span class="ticker-dot"> · </span>
+    <span class="ticker-item">Design Engineering</span><span class="ticker-dot"> · </span>
+  </div>
+</div>
+
+<!-- ── ABOUT ────────────────────────────────────────────── -->
+<section id="about">
+  <div class="sec-head">
+    <span class="sec-num">01</span>
+    <div class="sec-rule lt"></div>
+    <h2 class="on-light">About</h2>
+  </div>
+  <div class="about-layout">
+    <div class="bio reveal">
+      <p><strong>Ryder Fine designs things that exist in the real world — not just on screens.</strong> A Design Engineer at Colorado School of Mines, he moves between 3D-printed replacement parts and planetary rover platforms — thinking from the component level up to the full system.</p>
+      <p>Currently contributing to a <strong>Mars rover for the University Rover Challenge</strong> and a <strong>wheel testing platform for the Mines Lunar Surface Simulator</strong>, Ryder brings an additive manufacturing mindset to high-stakes engineering. He's a McBride Honors Scholar with international engineering experience from a semester at the University of Nicosia in Cyprus.</p>
+      <p>He believes technically exact and intuitively obvious are rarely at odds — and that the best engineering looks inevitable in hindsight.</p>
+      <div class="bio-detail">
+        <span class="bio-chip">Golden, Colorado</span>
+        <span class="bio-chip">BSc Engineering Design · 2027</span>
+        <span class="bio-chip">Eagle Scout</span>
+        <span class="bio-chip">McBride Honors Program</span>
+      </div>
+    </div>
+    <div class="three-f">
+      <div class="f-card reveal d1">
+        <div class="f-tag">01 — Prototype</div>
+        <h3>Does it exist?</h3>
+        <p>Every idea has to survive contact with reality. Rendering is hypothesis — prototyping is proof. Designs get built because you can't validate what you can't hold, test, break, and rebuild.</p>
+      </div>
+      <div class="f-card reveal d2">
+        <div class="f-tag">02 — Mechanism</div>
+        <h3>Does it move?</h3>
+        <p>The heart of any engineered product is its mechanism: the precise relationship between force, motion, constraint, and intent. Getting mechanisms right separates things that work in theory from things that hold up in the field.</p>
+      </div>
+      <div class="f-card reveal d3">
+        <div class="f-tag">03 — System</div>
+        <h3>Does it scale?</h3>
+        <p>No component exists in isolation. Systems thinking means understanding how parts interact, how behavior emerges from structure, and how changes ripple through the whole — from rover platforms to resource models.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHILOSOPHY (PINNED SCROLL SECTION) ─────────────── -->
+<section id="philosophy">
+  <div class="phil-sticky">
+
+    <!-- Slide 1: PROTOTYPE -->
+    <div class="phil-slides">
+      <div class="phil-slide" id="phil-0">
+        <div class="phil-counter">
+          <span class="phil-counter-line"></span>
+          01 / 03 — Design Principles
+        </div>
+        <div class="phil-word color-orange">PROTOTYPE</div>
+        <p class="phil-desc">Rendering is hypothesis. <strong>Prototyping is proof.</strong> Every idea has to survive contact with reality — where tolerances meet materials, assumptions get stress-tested, and engineering decisions either hold up or get scrapped.</p>
+      </div>
+
+      <!-- Slide 2: MECHANISM -->
+      <div class="phil-slide" id="phil-1">
+        <div class="phil-counter">
+          <span class="phil-counter-line"></span>
+          02 / 03 — Design Principles
+        </div>
+        <div class="phil-word color-blue">MECHANISM</div>
+        <p class="phil-desc">The core of any engineered product is its mechanism — the precise relationship between <strong>force, motion, constraint, and intent.</strong> When the mechanism is right, the rest falls into place.</p>
+      </div>
+
+      <!-- Slide 3: SYSTEM -->
+      <div class="phil-slide" id="phil-2">
+        <div class="phil-counter">
+          <span class="phil-counter-line"></span>
+          03 / 03 — Design Principles
+        </div>
+        <div class="phil-word color-light">SYSTEM</div>
+        <p class="phil-desc">No component exists in isolation. <strong>Systems thinking</strong> means understanding how parts interact, how behavior emerges from structure, and how changes in one place ripple through everything else.</p>
+      </div>
+    </div>
+
+    <!-- Progress dots -->
+    <div class="phil-dots">
+      <div class="phil-dot active" id="dot-0"></div>
+      <div class="phil-dot"       id="dot-1"></div>
+      <div class="phil-dot"       id="dot-2"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── PROJECTS ────────────────────────────────────────── -->
+<section id="projects">
+  <div class="sec-head">
+    <span class="sec-num">02</span>
+    <div class="sec-rule"></div>
+    <h2>Selected Work</h2>
+  </div>
+
+  <div class="proj-grid">
+
+    <!-- 1. Whiteboard Desk -->
+    <div class="proj-card reveal">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="proj-thumb thumb-green">
+            <div class="thumb-grid"></div>
+            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
+              <rect x="10" y="20" width="60" height="40" rx="2" stroke="#4ade80" stroke-width="2"/>
+              <line x1="10" y1="35" x2="70" y2="35" stroke="#4ade80" stroke-width="1.5"/>
+              <rect x="25" y="40" width="30" height="12" rx="1" stroke="#4ade80" stroke-width="1.5"/>
+              <line x1="40" y1="60" x2="40" y2="70" stroke="#4ade80" stroke-width="1.5"/>
+              <line x1="28" y1="70" x2="52" y2="70" stroke="#4ade80" stroke-width="1.5"/>
+              <circle cx="55" cy="27" r="3" stroke="#4ade80" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="front-label">
+            <div class="front-tags">
+              <span class="tag tag-o">Product Design</span>
+              <span class="tag tag-b">CAD</span>
+            </div>
+            <h3>Magnetic Whiteboard Desk</h3>
+          </div>
+          <div class="flip-hint"><div class="flip-hint-dot"></div>Hover to explore</div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">CAD</span></div>
+            <h3>Magnetic Whiteboard Desk</h3>
+            <p>A modular, magnetically-mounted workstation letting students use a laptop and whiteboard simultaneously. Stability engineered through rubber pads, strong magnets, and beveled release geometry. Designed with modularity at its core.</p>
+          </div>
+          <div class="back-bottom">
+            <div class="proj-chips">
+              <span class="chip">Modularity</span>
+              <span class="chip">Needs Assessment</span>
+              <span class="chip">Revision Cycles</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Swan Neck -->
+    <div class="proj-card reveal d1">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="proj-thumb thumb-purple">
+            <div class="thumb-grid"></div>
+            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
+              <path d="M40 65 Q40 45 55 35 Q65 28 60 15" stroke="#c084fc" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="60" cy="12" r="5" stroke="#c084fc" stroke-width="1.5"/>
+              <line x1="32" y1="65" x2="48" y2="65" stroke="#c084fc" stroke-width="2"/>
+              <path d="M36 55 Q34 48 38 42" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="30" cy="48" r="4" stroke="#c084fc" stroke-width="1.5"/>
+              <path d="M26 48 L20 48" stroke="#c084fc" stroke-width="1.5"/>
+              <path d="M28 52 L23 56" stroke="#c084fc" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="front-label">
+            <div class="front-tags">
+              <span class="tag tag-o">Mechanisms</span>
+              <span class="tag tag-b">Iterative</span>
+            </div>
+            <h3>Extending Swan Neck</h3>
+          </div>
+          <div class="flip-hint"><div class="flip-hint-dot"></div>Hover to explore</div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="proj-tags"><span class="tag tag-o">Mechanisms</span><span class="tag tag-b">Iterative</span></div>
+            <h3>Extending Swan Neck</h3>
+            <p>Spring-motor driven costume mechanism for a Destination Imagination performance. Iterated through hinged springs and pneumatics before landing on a reliable remote-actuated solution. Designed for live performance reliability.</p>
+          </div>
+          <div class="back-bottom">
+            <div class="proj-chips">
+              <span class="chip">Visual Impact</span>
+              <span class="chip">Live Performance</span>
+              <span class="chip">Pneumatics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Hamster Wheel -->
+    <div class="proj-card reveal d2">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="proj-thumb thumb-amber">
+            <div class="thumb-grid"></div>
+            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="28" stroke="#fbbf24" stroke-width="2"/>
+              <circle cx="40" cy="40" r="18" stroke="#fbbf24" stroke-width="1.5"/>
+              <circle cx="40" cy="40" r="4" stroke="#fbbf24" stroke-width="1.5"/>
+              <line x1="40" y1="12" x2="40" y2="22" stroke="#fbbf24" stroke-width="1.5"/>
+              <line x1="40" y1="58" x2="40" y2="68" stroke="#fbbf24" stroke-width="1.5"/>
+              <line x1="12" y1="40" x2="22" y2="40" stroke="#fbbf24" stroke-width="1.5"/>
+              <line x1="58" y1="40" x2="68" y2="40" stroke="#fbbf24" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="front-label">
+            <div class="front-tags">
+              <span class="tag tag-o">Large Scale</span>
+              <span class="tag tag-b">Electronics</span>
+            </div>
+            <h3>Human Hamster Wheel</h3>
+          </div>
+          <div class="flip-hint"><div class="flip-hint-dot"></div>Hover to explore</div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="proj-tags"><span class="tag tag-o">Large Scale</span><span class="tag tag-b">Electronics</span></div>
+            <h3>Human Hamster Wheel</h3>
+            <p>600 lb, 10-foot human-powered electricity generator for STEM education. Fully modular — assembled by two people in 13 minutes. A bridge rectifier converts generated AC to DC to power an LED array.</p>
+          </div>
+          <div class="back-bottom">
+            <div class="proj-chips">
+              <span class="chip">600 lbs · 10 ft</span>
+              <span class="chip">FoS 2</span>
+              <span class="chip">Bridge Rectifier</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Pen Plotter -->
+    <div class="proj-card reveal">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="proj-thumb thumb-blue">
+            <div class="thumb-grid"></div>
+            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
+              <rect x="12" y="12" width="56" height="56" rx="2" stroke="#60a5fa" stroke-width="1.5"/>
+              <line x1="12" y1="40" x2="68" y2="40" stroke="#60a5fa" stroke-width="1"/>
+              <line x1="40" y1="12" x2="40" y2="68" stroke="#60a5fa" stroke-width="1"/>
+              <circle cx="40" cy="40" r="4" fill="#60a5fa" fill-opacity=".4" stroke="#60a5fa" stroke-width="1.5"/>
+              <path d="M20 55 L30 35 L45 50 L55 25" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="35" y="8" width="10" height="8" rx="1" stroke="#60a5fa" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="front-label">
+            <div class="front-tags">
+              <span class="tag tag-o">Robotics</span>
+              <span class="tag tag-b">Arduino</span>
+            </div>
+            <h3>2D Pen Plotter</h3>
+          </div>
+          <div class="flip-hint"><div class="flip-hint-dot"></div>Hover to explore</div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="proj-tags"><span class="tag tag-o">Robotics</span><span class="tag tag-b">Arduino</span></div>
+            <h3>2D Pen Plotter</h3>
+            <p>CoreXY system that vectorizes an input image and draws it on paper. Arduino + NEMA 17 motors with limit-switch homing. Custom CAD components iterated through many revisions. Complete software pipeline from SVG to machine movement.</p>
+          </div>
+          <div class="back-bottom">
+            <div class="proj-chips">
+              <span class="chip">CoreXY</span>
+              <span class="chip">Python Pipeline</span>
+              <span class="chip">Iterative Design</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Faucet Pad -->
+    <div class="proj-card reveal d1">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="proj-thumb thumb-teal">
+            <div class="thumb-grid"></div>
+            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
+              <rect x="15" y="50" width="50" height="16" rx="3" stroke="#2dd4bf" stroke-width="1.5"/>
+              <path d="M40 50 L40 30" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
+              <path d="M40 30 Q40 18 52 18" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="52" cy="18" r="4" stroke="#2dd4bf" stroke-width="1.5"/>
+              <line x1="28" y1="58" x2="28" y2="50" stroke="#2dd4bf" stroke-width="1.5"/>
+              <line x1="52" y1="58" x2="52" y2="50" stroke="#2dd4bf" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="front-label">
+            <div class="front-tags">
+              <span class="tag tag-o">Product Design</span>
+              <span class="tag tag-b">User Research</span>
+            </div>
+            <h3>Touchless Faucet Pad</h3>
+          </div>
+          <div class="flip-hint"><div class="flip-hint-dot"></div>Hover to explore</div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">User Research</span></div>
+            <h3>Touchless Faucet Pad</h3>
+            <p>Pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and shutoff delay — all shaped by stakeholder interviews and restroom space analysis.</p>
+          </div>
+          <div class="back-bottom">
+            <div class="proj-chips">
+              <span class="chip">Stakeholder Input</span>
+              <span class="chip">Space Analysis</span>
+              <span class="chip">Go-To-Market</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. PGM Systems Modeling -->
+    <div class="proj-card reveal d2">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="proj-thumb thumb-indigo">
+            <div class="thumb-grid"></div>
+            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="20" r="7" stroke="#818cf8" stroke-width="1.5"/>
+              <circle cx="18" cy="55" r="7" stroke="#818cf8" stroke-width="1.5"/>
+              <circle cx="62" cy="55" r="7" stroke="#818cf8" stroke-width="1.5"/>
+              <line x1="36" y1="26" x2="22" y2="49" stroke="#818cf8" stroke-width="1.5"/>
+              <line x1="44" y1="26" x2="58" y2="49" stroke="#818cf8" stroke-width="1.5"/>
+              <line x1="25" y1="55" x2="55" y2="55" stroke="#818cf8" stroke-width="1.5"/>
+              <path d="M22 49 L22 45 L30 48" stroke="#818cf8" stroke-width="1" stroke-linecap="round"/>
+              <path d="M58 49 L56 43 L64 47" stroke="#818cf8" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="front-label">
+            <div class="front-tags">
+              <span class="tag tag-o">Systems Modeling</span>
+              <span class="tag tag-b">Vensim</span>
+            </div>
+            <h3>Dynamic Systems: PGM Mining</h3>
+          </div>
+          <div class="flip-hint"><div class="flip-hint-dot"></div>Hover to explore</div>
+        </div>
+        <div class="flip-back">
+          <div>
+            <div class="proj-tags"><span class="tag tag-o">Systems Modeling</span><span class="tag tag-b">Vensim</span></div>
+            <h3>Dynamic Systems: PGM Mining</h3>
+            <p>Quantitative stock-flow model of Platinum Group Metal mining in South Africa. Referenced 40+ sources to model CO₂ reduction and worker safety improvements via robotic substitution and grid modernization.</p>
+          </div>
+          <div class="back-bottom">
+            <div class="proj-chips">
+              <span class="chip">Systems Thinking</span>
+              <span class="chip">Policy Modeling</span>
+              <span class="chip">40+ Sources</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /proj-grid -->
+</section>
+
+<!-- ── CURRENT WORK ────────────────────────────────────── -->
+<section id="current">
+  <div class="sec-head">
+    <span class="sec-num">03</span>
+    <div class="sec-rule"></div>
+    <h2>Current Work</h2>
+  </div>
+  <div class="curr-grid">
+    <div class="curr-card wide reveal">
+      <div>
+        <div class="live-badge"><div class="live-dot"></div>Active — University Rover Challenge</div>
+        <h3>Mars Rover — URC Team</h3>
+        <p>Contributing to the mechanical design and build of a Mars rover for the University Rover Challenge, one of the most prestigious student robotics competitions globally. Working across structural systems, additive manufacturing components, and integrated design.</p>
+        <div class="curr-meta">
+          <div class="meta-item"><span class="meta-l">Competition</span><span class="meta-v">Univ. Rover Challenge</span></div>
+          <div class="meta-item"><span class="meta-l">Focus</span><span class="meta-v">Mechanical / AM Systems</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="live-badge"><div class="live-dot"></div>Active — Mines Lunar Surface Simulator</div>
+        <h3>Rover Wheel Testing Platform</h3>
+        <p>Designing and building a wheel testing rig for the Mines Lunar Surface Simulator — a platform to evaluate rover wheel performance under simulated lunar terrain and gravity conditions for research and validation.</p>
+        <div class="curr-meta">
+          <div class="meta-item"><span class="meta-l">Lab</span><span class="meta-v">Mines Lunar Simulator</span></div>
+          <div class="meta-item"><span class="meta-l">Type</span><span class="meta-v">Research Platform</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="curr-card reveal">
+      <div class="live-badge"><div class="live-dot"></div>Funded — ProtoFund Grant</div>
+      <h3>Pneumatic Stilts</h3>
+      <p>Adaptive adjustable stilts for theatrical performance using pneumatic pistons. Iterating for live-performance safety, ease of use, and reliability. Managing grant funds and performing cost-benefit analysis.</p>
+      <div class="curr-meta">
+        <div class="meta-item"><span class="meta-l">Grant</span><span class="meta-v">ProtoFund</span></div>
+        <div class="meta-item"><span class="meta-l">Timeline</span><span class="meta-v">Aug 2025 – May 2026</span></div>
+      </div>
+    </div>
+    <div class="curr-card reveal d1">
+      <div class="live-badge"><div class="live-dot"></div>Research — Systems Engineering</div>
+      <h3>Alternative Mining Systems Analysis</h3>
+      <p>Complex systems analysis on global resource management and alternative material sourcing. Building quantitative system dynamics models in Vensim to test feedback loops and model long-term policy impacts.</p>
+      <div class="curr-meta">
+        <div class="meta-item"><span class="meta-l">Tool</span><span class="meta-v">Vensim</span></div>
+        <div class="meta-item"><span class="meta-l">Timeline</span><span class="meta-v">Aug – Dec 2025</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── EXPERIENCE ──────────────────────────────────────── -->
+<section id="experience">
+  <div class="sec-head">
+    <span class="sec-num">04</span>
+    <div class="sec-rule lt"></div>
+    <h2 class="on-light">Experience</h2>
+  </div>
+  <div class="exp-layout">
+    <div class="reveal">
+      <div class="exp-block-title">Work</div>
+      <div class="exp-item">
+        <div class="exp-org">Labriola Innovation Hub · Colorado School of Mines</div>
+        <div class="exp-role">Technical Assistant / Student Lead</div>
+        <div class="exp-date">Jan 2024 – Present</div>
+        <p>Researched and set up $40K of engineering equipment (CNC, Additive MFG, Machining). Built training systems and SOPs supporting 5,000 students. Co-launched a 37,000 sq ft facility through setup, marketing, and donor tours.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-org">Fine Designs</div>
+        <div class="exp-role">3D Printer Manager / Designer</div>
+        <div class="exp-date">Jun 2020 – Aug 2024</div>
+        <p>Designed and delivered 100+ custom replacement parts through an online storefront, applying CAD, additive manufacturing, and rigorous testing. Upgraded and maintained multiple 3D printers to reduce operating costs.</p>
+      </div>
+      <div class="exp-item">
+        <div class="exp-org">University of Nicosia · Cyprus</div>
+        <div class="exp-role">Semester Abroad</div>
+        <div class="exp-date">Feb – Jun 2024</div>
+        <p>Collaborated in international engineering teams on Formula 1 aerodynamics, pump construction, and water infrastructure projects.</p>
+      </div>
+    </div>
+    <div class="reveal d1">
+      <div class="exp-block-title">Education</div>
+      <div class="exp-item">
+        <div class="exp-org">Colorado School of Mines · Golden, CO</div>
+        <div class="exp-role">B.S. Engineering Design</div>
+        <div class="exp-date">Expected May 2027</div>
+        <p>McBride Honors Program · Club Water Polo · Oredigger Leadership Community. Focus: Product Design & Additive Manufacturing.</p>
+      </div>
+      <div class="exp-block-title" style="margin-top:2.5rem">Certifications</div>
+      <div class="cert-stack">
+        <div class="cert-row"><span class="cert-name">Certified SolidWorks Associate</span><span class="cert-year">Apr 2024</span></div>
+        <div class="cert-row"><span class="cert-name">Markforged Certified — Composites</span><span class="cert-year">Jul 2024</span></div>
+        <div class="cert-row"><span class="cert-name">Eagle Scout</span><span class="cert-year">Jun 2023</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="skills-section reveal">
+    <div class="skill-clusters">
+      <div>
+        <div class="skill-group-title">Technical</div>
+        <div class="skill-pills">
+          <span class="skill-pill">3D Printing / AM</span>
+          <span class="skill-pill">CAD / SolidWorks</span>
+          <span class="skill-pill">DFAM</span>
+          <span class="skill-pill">FEA</span>
+          <span class="skill-pill">CNC Machining</span>
+          <span class="skill-pill">Die-Casting</span>
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">Arduino</span>
+          <span class="skill-pill">Rapid Prototyping</span>
+          <span class="skill-pill">EES</span>
+          <span class="skill-pill">Vensim</span>
+          <span class="skill-pill">Machine Shop</span>
+        </div>
+      </div>
+      <div>
+        <div class="skill-group-title">Professional</div>
+        <div class="skill-pills">
+          <span class="skill-pill">Systems Thinking</span>
+          <span class="skill-pill">Leadership</span>
+          <span class="skill-pill">Technical Writing</span>
+          <span class="skill-pill">Team Building</span>
+          <span class="skill-pill">Problem Solving</span>
+          <span class="skill-pill">Proposal Writing</span>
+          <span class="skill-pill">Cross-functional Collab</span>
+          <span class="skill-pill">Grant Management</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ─────────────────────────────────────────── -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-label reveal">Let's work together</div>
+    <div class="contact-h reveal">Get In<br>Touch.</div>
+    <p class="contact-sub reveal">Whether you have a project, a question, or just want to connect — my inbox is open.</p>
+    <div class="contact-btns reveal">
+      <a href="mailto:ryder_fine@mines.edu" class="btn btn-primary">ryder_fine@mines.edu</a>
+      <a href="mailto:ryderfine9@gmail.com" class="btn btn-ghost">ryderfine9@gmail.com</a>
+    </div>
+    <div class="socials reveal">
+      <a href="https://behance.net/ryderfine"        class="social-link" target="_blank" rel="noopener">Behance</a>
+      <a href="https://linkedin.com/in/ryderfine/"   class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="tel:+18178050404"                     class="social-link">(817) 805-0404</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer>
+  <p>© 2026 Ryder Fine · Design Engineer</p>
+  <p>Prototype · Mechanism · System</p>
+  <p>Golden, CO</p>
+</footer>
+
+<script>
+/* ── PROGRESS BAR ──────────────────────────────────────── */
+const bar = document.getElementById('progress-bar');
+function updateBar() {
+  const max = document.body.scrollHeight - window.innerHeight;
+  bar.style.width = (window.scrollY / max * 100) + '%';
+}
+
+/* ── SMOOTH SCROLL (nav-offset aware, iframe-safe) ─────── */
+function scrollToId(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.pageYOffset - 72;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', e => {
+    const href = link.getAttribute('href');
+    if (!href) return;
+    e.preventDefault();
+    if (href === '#') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const id = href.slice(1);
+    const el = document.getElementById(id);
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const pageTop = rect.top + window.pageYOffset - 72;
+    // For sections near the bottom, scrollTo may not reach if page isn't tall enough;
+    // clamp to max scrollable position
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    window.scrollTo({ top: Math.min(Math.max(0, pageTop), maxScroll), behavior: 'smooth' });
+  });
+});
+
+/* ── STICKY NAV ────────────────────────────────────────── */
+const nav = document.getElementById('nav');
+function updateNav() {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}
+
+/* ── HERO PARALLAX ─────────────────────────────────────── */
+const heroGrid    = document.getElementById('hero-grid');
+const glowA       = document.getElementById('glow-a');
+const glowB       = document.getElementById('glow-b');
+const heroContent = document.getElementById('hero-content');
+
+function updateHero() {
+  const y = window.scrollY;
+  if (y > window.innerHeight) return;
+  heroGrid.style.transform    = `translateY(${y * 0.45}px)`;
+  glowA.style.transform       = `translateY(${y * 0.28}px)`;
+  glowB.style.transform       = `translateY(${y * 0.55}px)`;
+  heroContent.style.transform = `translateY(${y * 0.18}px)`;
+  heroContent.style.opacity   = `${Math.max(0, 1 - y / 480)}`;
+}
+
+/* ── PINNED PHILOSOPHY ─────────────────────────────────── */
+const philSection = document.getElementById('philosophy');
+const philSlides  = philSection.querySelectorAll('.phil-slide');
+const philDots    = philSection.querySelectorAll('.phil-dot');
+let activeSlide   = 0;
+
+philSlides[0].classList.add('active');
+
+function updatePhil() {
+  const rect    = philSection.getBoundingClientRect();
+  const scrolled = -rect.top;
+  const total    = philSection.offsetHeight - window.innerHeight;
+  if (scrolled < 0 || scrolled > total) return;
+
+  const idx = Math.min(philSlides.length - 1, Math.floor((scrolled / total) * philSlides.length));
+  if (idx === activeSlide) return;
+
+  philSlides[activeSlide].classList.remove('active');
+  philDots[activeSlide].classList.remove('active');
+  activeSlide = idx;
+  philSlides[activeSlide].classList.add('active');
+  philDots[activeSlide].classList.add('active');
+}
+
+/* ── SCROLL REVEAL ─────────────────────────────────────── */
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+reveals.forEach(el => revealObs.observe(el));
+
+/* ── SCROLL HANDLER (single RAF-throttled listener) ────── */
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      updateBar();
+      updateNav();
+      updateHero();
+      updatePhil();
+      ticking = false;
+    });
+    ticking = true;
+  }
+}, { passive: true });
+
+/* ── MOBILE: tap to flip ───────────────────────────────── */
+if (window.matchMedia('(pointer: coarse)').matches) {
+  document.querySelectorAll('.proj-card').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+  });
+}
+// Add CSS for mobile flipped state
+const mobileFlip = document.createElement('style');
+mobileFlip.textContent = '.proj-card.flipped .flip-inner { transform: rotateY(180deg); }';
+document.head.appendChild(mobileFlip);
+</script>
+
+</body>
+</html>

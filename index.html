@@ -53,9 +53,11 @@
       display: flex; justify-content: space-between; align-items: center;
       transition: background .3s, border-color .3s;
       border-bottom: 1px solid transparent;
+      background: rgba(11,17,32,.72);
+      backdrop-filter: blur(10px);
     }
     nav.scrolled {
-      background: rgba(11,17,32,.88);
+      background: rgba(11,17,32,.92);
       backdrop-filter: blur(14px);
       border-color: var(--border-dark);
     }
@@ -106,6 +108,30 @@
       bottom: 10%; left: 10%;
     }
     .hero-content { position: relative; max-width: 860px; will-change: transform; }
+    .hero-portrait {
+      position: absolute; right: 0; top: 0; bottom: 0;
+      width: clamp(260px, 34vw, 500px);
+      overflow: hidden; z-index: 2;
+    }
+    .hero-portrait img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center 18%;
+      filter: grayscale(8%);
+    }
+    /* Feather left edge so it blends into the dark background */
+    .hero-portrait::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--dark) 0%, transparent 32%);
+      z-index: 1;
+    }
+    /* Subtle vignette bottom */
+    .hero-portrait::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(11,17,32,.55) 0%, transparent 45%);
+      z-index: 1;
+    }
+    @media (max-width: 900px) { .hero-portrait { display: none; } }
+    @media (min-width: 900px) { .hero-content { max-width: min(600px, 58vw); } }
     .eyebrow {
       font-family: 'Space Mono', monospace;
       font-size: .72rem; text-transform: uppercase; letter-spacing: .16em;
@@ -465,6 +491,121 @@
     footer { background: var(--dark); border-top: 1px solid var(--border-dark); padding: 1.4rem 3rem; display: flex; justify-content: space-between; align-items: center; }
     footer p { font-family: 'Space Mono', monospace; font-size: .65rem; color: var(--muted-dark); }
 
+    /* ─── PHILOSOPHY ENHANCED BACKGROUND ──────────────── */
+    /* Replace dot grid with offset dual-grid */
+    .phil-sticky::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,93,4,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,93,4,.035) 1px, transparent 1px),
+        linear-gradient(rgba(61,90,241,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(61,90,241,.025) 1px, transparent 1px);
+      background-size: 120px 120px, 120px 120px, 40px 40px, 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Animated film grain */
+    .phil-grain {
+      position: absolute; inset: 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .phil-grain::before {
+      content: '';
+      position: absolute; inset: -100%;
+      width: 300%; height: 300%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      animation: grain 1.2s steps(2) infinite;
+    }
+    @keyframes grain {
+      0%,100% { transform: translate(0,0); }
+      25%      { transform: translate(-4%,6%); }
+      50%      { transform: translate(6%,-4%); }
+      75%      { transform: translate(-6%,-6%); }
+    }
+
+    /* CRT scanlines */
+    .phil-scanlines {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent, transparent 3px,
+        rgba(0,0,0,.055) 3px, rgba(0,0,0,.055) 4px
+      );
+    }
+
+    /* Ghost background number */
+    .phil-bg-num {
+      position: absolute; right: -.05em; bottom: -.12em;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(14rem, 38vw, 30rem);
+      font-weight: 700; letter-spacing: -.06em; line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 2px rgba(255,255,255,.18);
+      pointer-events: none; user-select: none; z-index: 0;
+    }
+
+    /* Left accent bar */
+    .phil-accent-bar {
+      position: absolute; left: 3rem; top: 12%; bottom: 12%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(232,93,4,.35) 30%, rgba(232,93,4,.35) 70%, transparent);
+    }
+
+    /* Top / bottom edge rules */
+    .phil-rule-top, .phil-rule-bottom {
+      position: absolute; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-dark) 20%, var(--border-dark) 80%, transparent);
+    }
+    .phil-rule-top    { top: 0; }
+    .phil-rule-bottom { bottom: 0; }
+
+    /* Ensure slides sit above bg elements */
+    .phil-slides { position: relative; z-index: 2; }
+    .phil-dots   { z-index: 2; }
+
+    /* ─── PHILOSOPHY WEB OF CONNECTIONS ─────────────────── */
+    .phil-web {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      z-index: 1; pointer-events: none;
+      opacity: .5;
+    }
+    .web-hub  { fill: var(--accent); animation: hub-pulse 2.8s ease-in-out infinite; }
+    @keyframes hub-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+    .web-edge   { stroke: var(--accent); stroke-opacity: .5; stroke-width: .9; }
+    .web-edge-2 { stroke: var(--blue);   stroke-opacity: .35; stroke-width: .7; }
+    .web-node-1 { fill: var(--accent);    fill-opacity: .75; }
+    .web-node-2 { fill: var(--blue);      fill-opacity: .6; }
+    .web-node-x { fill: var(--muted-dark);fill-opacity: .5; }
+
+    .web-r1-e,.web-r1-n,.web-r2-e,.web-r2-n { transition: opacity .65s ease; }
+    .web-r1-e { opacity: 0; }
+    .web-r1-n { opacity: 0; transition-delay: .25s; }
+    .web-r2-e { opacity: 0; }
+    .web-r2-n { opacity: 0; transition-delay: .3s; }
+
+    [data-web-stage="1"] .web-r1-e,
+    [data-web-stage="2"] .web-r1-e { opacity: 1; }
+    [data-web-stage="1"] .web-r1-n,
+    [data-web-stage="2"] .web-r1-n { opacity: 1; }
+    [data-web-stage="2"] .web-r2-e { opacity: 1; }
+    [data-web-stage="2"] .web-r2-n { opacity: 1; }
+
+    /* ─── PROJECT CARD IMAGES ───────────────────────────── */
+    .thumb-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .7s cubic-bezier(.4,0,.2,1);
+    }
+    .proj-card:hover .thumb-img { transform: scale(1.05); }
+    .thumb-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(11,17,32,.15) 0%, rgba(11,17,32,.55) 100%);
+    }
+
     /* ─── SCROLL REVEAL ──────────────────────────────── */
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -541,6 +682,10 @@
   <div class="hero-glow glow-orange" id="glow-a"></div>
   <div class="hero-glow glow-blue"   id="glow-b"></div>
 
+  <div class="hero-portrait">
+    <img src="Images/DSC_6506 (1).jpg" alt="Ryder Fine">
+  </div>
+
   <div class="hero-content" id="hero-content">
     <div class="eyebrow">
       <span class="eyebrow-line"></span>
@@ -616,7 +761,7 @@
   <div class="about-layout">
     <div class="bio reveal">
       <p><strong>Ryder Fine designs things that exist in the real world — not just on screens.</strong> A Design Engineer at Colorado School of Mines, he moves between 3D-printed replacement parts and planetary rover platforms — thinking from the component level up to the full system.</p>
-      <p>Currently contributing to a <strong>Mars rover for the University Rover Challenge</strong> and a <strong>wheel testing platform for the Mines Lunar Surface Simulator</strong>, Ryder brings an additive manufacturing mindset to high-stakes engineering. He's a McBride Honors Scholar with international engineering experience from a semester at the University of Nicosia in Cyprus.</p>
+      <p>His work spans additive manufacturing, mechanism design, and systems modeling — from a <strong>human-scale hamster wheel that generates electricity</strong> to a <strong>quantitative stock-flow model of PGM mining in South Africa</strong>. A McBride Honors Scholar, he brings international engineering experience from a semester at the University of Nicosia in Cyprus.</p>
       <p>He believes technically exact and intuitively obvious are rarely at odds — and that the best engineering looks inevitable in hindsight.</p>
       <div class="bio-detail">
         <span class="bio-chip">Golden, Colorado</span>
@@ -633,8 +778,8 @@
       </div>
       <div class="f-card reveal d2">
         <div class="f-tag">02 — Mechanism</div>
-        <h3>Does it move?</h3>
-        <p>The heart of any engineered product is its mechanism: the precise relationship between force, motion, constraint, and intent. Getting mechanisms right separates things that work in theory from things that hold up in the field.</p>
+        <h3>Does it work?</h3>
+        <p>Mechanism is the logic beneath the surface — it lives in gears and linkages, but also in feedback loops, decision trees, and the invisible rules that make a system behave. Getting mechanisms right separates things that work in theory from things that hold up in the field.</p>
       </div>
       <div class="f-card reveal d3">
         <div class="f-tag">03 — System</div>
@@ -648,10 +793,119 @@
 <!-- ── PHILOSOPHY (PINNED SCROLL SECTION) ─────────────── -->
 <section id="philosophy">
   <div class="phil-sticky">
+    <div class="phil-grain"></div>
+    <div class="phil-scanlines"></div>
+    <div class="phil-accent-bar"></div>
+    <div class="phil-rule-top"></div>
+    <div class="phil-rule-bottom"></div>
+
+    <!-- Connection web — expands prototype→mechanism→system -->
+    <svg class="phil-web" viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <!-- Hub: always visible — offset slightly right of center -->
+      <circle class="web-hub" cx="720" cy="390" r="7"/>
+
+      <!-- Ring 1 edges: appear at MECHANISM (stage 1) — irregular spacing -->
+      <g class="web-r1-e">
+        <!-- spokes hub → inner nodes -->
+        <line class="web-edge" x1="720" y1="390" x2="730" y2="215"/>
+        <line class="web-edge" x1="720" y1="390" x2="900" y2="300"/>
+        <line class="web-edge" x1="720" y1="390" x2="885" y2="495"/>
+        <line class="web-edge" x1="720" y1="390" x2="695" y2="565"/>
+        <line class="web-edge" x1="720" y1="390" x2="535" y2="488"/>
+        <line class="web-edge" x1="720" y1="390" x2="548" y2="295"/>
+        <!-- inner ring connections -->
+        <line class="web-edge" x1="730" y1="215" x2="900" y2="300"/>
+        <line class="web-edge" x1="900" y1="300" x2="885" y2="495"/>
+        <line class="web-edge" x1="885" y1="495" x2="695" y2="565"/>
+        <line class="web-edge" x1="695" y1="565" x2="535" y2="488"/>
+        <line class="web-edge" x1="535" y1="488" x2="548" y2="295"/>
+        <line class="web-edge" x1="548" y1="295" x2="730" y2="215"/>
+        <!-- one skip-connection for interest -->
+        <line class="web-edge" x1="730" y1="215" x2="885" y2="495"/>
+        <line class="web-edge" x1="900" y1="300" x2="535" y2="488"/>
+      </g>
+      <!-- Ring 1 nodes — slightly different sizes -->
+      <g class="web-r1-n">
+        <circle class="web-node-1" cx="730" cy="215" r="5"/>
+        <circle class="web-node-1" cx="900" cy="300" r="4"/>
+        <circle class="web-node-1" cx="885" cy="495" r="4.5"/>
+        <circle class="web-node-1" cx="695" cy="565" r="3.5"/>
+        <circle class="web-node-1" cx="535" cy="488" r="4.5"/>
+        <circle class="web-node-1" cx="548" cy="295" r="4"/>
+      </g>
+
+      <!-- Ring 2 edges: appear at SYSTEM (stage 2) — irregular outer ring -->
+      <g class="web-r2-e">
+        <!-- outer ring (asymmetric — denser upper-right, sparser lower-left) -->
+        <line class="web-edge-2" x1="745"  y1="55"  x2="1005" y2="140"/>
+        <line class="web-edge-2" x1="1005" y1="140" x2="1095" y2="385"/>
+        <line class="web-edge-2" x1="1095" y1="385" x2="965"  y2="645"/>
+        <line class="web-edge-2" x1="965"  y1="645" x2="710"  y2="745"/>
+        <line class="web-edge-2" x1="710"  y1="745" x2="425"  y2="668"/>
+        <line class="web-edge-2" x1="425"  y1="668" x2="295"  y2="430"/>
+        <line class="web-edge-2" x1="295"  y1="430" x2="415"  y2="165"/>
+        <line class="web-edge-2" x1="415"  y1="165" x2="745"  y2="55"/>
+        <!-- inner → outer spokes -->
+        <line class="web-edge-2" x1="730"  y1="215" x2="745"  y2="55"/>
+        <line class="web-edge-2" x1="900"  y1="300" x2="1005" y2="140"/>
+        <line class="web-edge-2" x1="885"  y1="495" x2="1095" y2="385"/>
+        <line class="web-edge-2" x1="695"  y1="565" x2="965"  y2="645"/>
+        <line class="web-edge-2" x1="695"  y1="565" x2="710"  y2="745"/>
+        <line class="web-edge-2" x1="535"  y1="488" x2="425"  y2="668"/>
+        <line class="web-edge-2" x1="548"  y1="295" x2="295"  y2="430"/>
+        <line class="web-edge-2" x1="548"  y1="295" x2="415"  y2="165"/>
+        <!-- cross-connections — more on upper-right for asymmetry -->
+        <line class="web-edge-2" x1="1005" y1="140" x2="730"  y2="215"/>
+        <line class="web-edge-2" x1="745"  y1="55"  x2="900"  y2="300"/>
+        <line class="web-edge-2" x1="1095" y1="385" x2="900"  y2="300"/>
+        <line class="web-edge-2" x1="965"  y1="645" x2="885"  y2="495"/>
+        <line class="web-edge-2" x1="425"  y1="668" x2="695"  y2="565"/>
+        <line class="web-edge-2" x1="295"  y1="430" x2="535"  y2="488"/>
+        <line class="web-edge-2" x1="415"  y1="165" x2="730"  y2="215"/>
+        <!-- extra outer skip-connections for dense upper-right cluster -->
+        <line class="web-edge-2" x1="745"  y1="55"  x2="1095" y2="385"/>
+        <line class="web-edge-2" x1="1005" y1="140" x2="965"  y2="645"/>
+        <!-- peripheral fringe nodes edges -->
+        <line class="web-edge-2" x1="855"  y1="38"  x2="745"  y2="55"/>
+        <line class="web-edge-2" x1="855"  y1="38"  x2="1005" y2="140"/>
+        <line class="web-edge-2" x1="1145" y1="255" x2="1005" y2="140"/>
+        <line class="web-edge-2" x1="1145" y1="255" x2="1095" y2="385"/>
+        <line class="web-edge-2" x1="1130" y1="525" x2="1095" y2="385"/>
+        <line class="web-edge-2" x1="1130" y1="525" x2="965"  y2="645"/>
+        <line class="web-edge-2" x1="845"  y1="775" x2="965"  y2="645"/>
+        <line class="web-edge-2" x1="845"  y1="775" x2="710"  y2="745"/>
+        <line class="web-edge-2" x1="545"  y1="775" x2="710"  y2="745"/>
+        <line class="web-edge-2" x1="545"  y1="775" x2="425"  y2="668"/>
+        <line class="web-edge-2" x1="245"  y1="570" x2="425"  y2="668"/>
+        <line class="web-edge-2" x1="245"  y1="570" x2="295"  y2="430"/>
+        <line class="web-edge-2" x1="245"  y1="290" x2="295"  y2="430"/>
+        <line class="web-edge-2" x1="245"  y1="290" x2="415"  y2="165"/>
+      </g>
+      <!-- Ring 2 + fringe nodes -->
+      <g class="web-r2-n">
+        <circle class="web-node-2" cx="745"  cy="55"  r="3.5"/>
+        <circle class="web-node-2" cx="1005" cy="140" r="4"/>
+        <circle class="web-node-2" cx="1095" cy="385" r="3.5"/>
+        <circle class="web-node-2" cx="965"  cy="645" r="3"/>
+        <circle class="web-node-2" cx="710"  cy="745" r="3.5"/>
+        <circle class="web-node-2" cx="425"  cy="668" r="3"/>
+        <circle class="web-node-2" cx="295"  cy="430" r="3.5"/>
+        <circle class="web-node-2" cx="415"  cy="165" r="3"/>
+        <!-- fringe extras — sparser on left, denser upper-right -->
+        <circle class="web-node-x" cx="855"  cy="38"  r="2.5"/>
+        <circle class="web-node-x" cx="1145" cy="255" r="2.5"/>
+        <circle class="web-node-x" cx="1130" cy="525" r="2"/>
+        <circle class="web-node-x" cx="845"  cy="775" r="2"/>
+        <circle class="web-node-x" cx="545"  cy="775" r="2"/>
+        <circle class="web-node-x" cx="245"  cy="570" r="2.5"/>
+        <circle class="web-node-x" cx="245"  cy="290" r="2.5"/>
+      </g>
+    </svg>
 
     <!-- Slide 1: PROTOTYPE -->
     <div class="phil-slides">
       <div class="phil-slide" id="phil-0">
+        <span class="phil-bg-num">01</span>
         <div class="phil-counter">
           <span class="phil-counter-line"></span>
           01 / 03 — Design Principles
@@ -662,16 +916,18 @@
 
       <!-- Slide 2: MECHANISM -->
       <div class="phil-slide" id="phil-1">
+        <span class="phil-bg-num">02</span>
         <div class="phil-counter">
           <span class="phil-counter-line"></span>
           02 / 03 — Design Principles
         </div>
         <div class="phil-word color-blue">MECHANISM</div>
-        <p class="phil-desc">The core of any engineered product is its mechanism — the precise relationship between <strong>force, motion, constraint, and intent.</strong> When the mechanism is right, the rest falls into place.</p>
+        <p class="phil-desc">Mechanism is the logic beneath the surface — the relationship between <strong>input, feedback, constraint, and intent.</strong> It lives in linkages and gears, yes. But also in feedback loops, decision trees, and the invisible rules that make any system behave. Get the mechanism right, and everything else follows.</p>
       </div>
 
       <!-- Slide 3: SYSTEM -->
       <div class="phil-slide" id="phil-2">
+        <span class="phil-bg-num">03</span>
         <div class="phil-counter">
           <span class="phil-counter-line"></span>
           03 / 03 — Design Principles
@@ -705,21 +961,15 @@
     <div class="proj-card reveal">
       <div class="flip-inner">
         <div class="flip-front">
-          <div class="proj-thumb thumb-green">
-            <div class="thumb-grid"></div>
-            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
-              <rect x="10" y="20" width="60" height="40" rx="2" stroke="#4ade80" stroke-width="2"/>
-              <line x1="10" y1="35" x2="70" y2="35" stroke="#4ade80" stroke-width="1.5"/>
-              <rect x="25" y="40" width="30" height="12" rx="1" stroke="#4ade80" stroke-width="1.5"/>
-              <line x1="40" y1="60" x2="40" y2="70" stroke="#4ade80" stroke-width="1.5"/>
-              <line x1="28" y1="70" x2="52" y2="70" stroke="#4ade80" stroke-width="1.5"/>
-              <circle cx="55" cy="27" r="3" stroke="#4ade80" stroke-width="1.5"/>
-            </svg>
+          <div class="proj-thumb">
+            <img src="Images/1YrK1sCwzQH6tKtzwKefSP2J-v7OYEich81caULD2zhA.jpg" class="thumb-img" alt="Magnetic Whiteboard Desk in use" style="object-position: center 55%;">
+            <div class="thumb-overlay"></div>
           </div>
           <div class="front-label">
             <div class="front-tags">
               <span class="tag tag-o">Product Design</span>
               <span class="tag tag-b">CAD</span>
+              <span class="tag tag-o">DFAM</span>
             </div>
             <h3>Magnetic Whiteboard Desk</h3>
           </div>
@@ -727,7 +977,7 @@
         </div>
         <div class="flip-back">
           <div>
-            <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">CAD</span></div>
+            <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">CAD</span><span class="tag tag-o">DFAM</span></div>
             <h3>Magnetic Whiteboard Desk</h3>
             <p>A modular, magnetically-mounted workstation letting students use a laptop and whiteboard simultaneously. Stability engineered through rubber pads, strong magnets, and beveled release geometry. Designed with modularity at its core.</p>
           </div>
@@ -746,22 +996,15 @@
     <div class="proj-card reveal d1">
       <div class="flip-inner">
         <div class="flip-front">
-          <div class="proj-thumb thumb-purple">
-            <div class="thumb-grid"></div>
-            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
-              <path d="M40 65 Q40 45 55 35 Q65 28 60 15" stroke="#c084fc" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="60" cy="12" r="5" stroke="#c084fc" stroke-width="1.5"/>
-              <line x1="32" y1="65" x2="48" y2="65" stroke="#c084fc" stroke-width="2"/>
-              <path d="M36 55 Q34 48 38 42" stroke="#c084fc" stroke-width="1.5" stroke-linecap="round"/>
-              <circle cx="30" cy="48" r="4" stroke="#c084fc" stroke-width="1.5"/>
-              <path d="M26 48 L20 48" stroke="#c084fc" stroke-width="1.5"/>
-              <path d="M28 52 L23 56" stroke="#c084fc" stroke-width="1.5"/>
-            </svg>
+          <div class="proj-thumb">
+            <img src="Images/s-blob-v1-IMAGE-2D47x0WK1bA.jpg" class="thumb-img" alt="Extending Swan Neck in performance">
+            <div class="thumb-overlay"></div>
           </div>
           <div class="front-label">
             <div class="front-tags">
               <span class="tag tag-o">Mechanisms</span>
               <span class="tag tag-b">Iterative</span>
+              <span class="tag tag-o">Wearable</span>
             </div>
             <h3>Extending Swan Neck</h3>
           </div>
@@ -769,7 +1012,7 @@
         </div>
         <div class="flip-back">
           <div>
-            <div class="proj-tags"><span class="tag tag-o">Mechanisms</span><span class="tag tag-b">Iterative</span></div>
+            <div class="proj-tags"><span class="tag tag-o">Mechanisms</span><span class="tag tag-b">Iterative</span><span class="tag tag-o">Wearable</span></div>
             <h3>Extending Swan Neck</h3>
             <p>Spring-motor driven costume mechanism for a Destination Imagination performance. Iterated through hinged springs and pneumatics before landing on a reliable remote-actuated solution. Designed for live performance reliability.</p>
           </div>
@@ -788,22 +1031,15 @@
     <div class="proj-card reveal d2">
       <div class="flip-inner">
         <div class="flip-front">
-          <div class="proj-thumb thumb-amber">
-            <div class="thumb-grid"></div>
-            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
-              <circle cx="40" cy="40" r="28" stroke="#fbbf24" stroke-width="2"/>
-              <circle cx="40" cy="40" r="18" stroke="#fbbf24" stroke-width="1.5"/>
-              <circle cx="40" cy="40" r="4" stroke="#fbbf24" stroke-width="1.5"/>
-              <line x1="40" y1="12" x2="40" y2="22" stroke="#fbbf24" stroke-width="1.5"/>
-              <line x1="40" y1="58" x2="40" y2="68" stroke="#fbbf24" stroke-width="1.5"/>
-              <line x1="12" y1="40" x2="22" y2="40" stroke="#fbbf24" stroke-width="1.5"/>
-              <line x1="58" y1="40" x2="68" y2="40" stroke="#fbbf24" stroke-width="1.5"/>
-            </svg>
+          <div class="proj-thumb">
+            <img src="Images/s-blob-v1-IMAGE-vf-cocqu48I.jpg" class="thumb-img" alt="Human Hamster Wheel in use">
+            <div class="thumb-overlay"></div>
           </div>
           <div class="front-label">
             <div class="front-tags">
               <span class="tag tag-o">Large Scale</span>
               <span class="tag tag-b">Electronics</span>
+              <span class="tag tag-o">STEM Ed</span>
             </div>
             <h3>Human Hamster Wheel</h3>
           </div>
@@ -811,7 +1047,7 @@
         </div>
         <div class="flip-back">
           <div>
-            <div class="proj-tags"><span class="tag tag-o">Large Scale</span><span class="tag tag-b">Electronics</span></div>
+            <div class="proj-tags"><span class="tag tag-o">Large Scale</span><span class="tag tag-b">Electronics</span><span class="tag tag-o">STEM Ed</span></div>
             <h3>Human Hamster Wheel</h3>
             <p>600 lb, 10-foot human-powered electricity generator for STEM education. Fully modular — assembled by two people in 13 minutes. A bridge rectifier converts generated AC to DC to power an LED array.</p>
           </div>
@@ -830,21 +1066,15 @@
     <div class="proj-card reveal">
       <div class="flip-inner">
         <div class="flip-front">
-          <div class="proj-thumb thumb-blue">
-            <div class="thumb-grid"></div>
-            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
-              <rect x="12" y="12" width="56" height="56" rx="2" stroke="#60a5fa" stroke-width="1.5"/>
-              <line x1="12" y1="40" x2="68" y2="40" stroke="#60a5fa" stroke-width="1"/>
-              <line x1="40" y1="12" x2="40" y2="68" stroke="#60a5fa" stroke-width="1"/>
-              <circle cx="40" cy="40" r="4" fill="#60a5fa" fill-opacity=".4" stroke="#60a5fa" stroke-width="1.5"/>
-              <path d="M20 55 L30 35 L45 50 L55 25" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="35" y="8" width="10" height="8" rx="1" stroke="#60a5fa" stroke-width="1.5"/>
-            </svg>
+          <div class="proj-thumb">
+            <img src="Images/s-blob-v1-IMAGE-DLoTMGmAua0.jpg" class="thumb-img" alt="2D Pen Plotter in action">
+            <div class="thumb-overlay"></div>
           </div>
           <div class="front-label">
             <div class="front-tags">
               <span class="tag tag-o">Robotics</span>
               <span class="tag tag-b">Arduino</span>
+              <span class="tag tag-o">Python</span>
             </div>
             <h3>2D Pen Plotter</h3>
           </div>
@@ -852,7 +1082,7 @@
         </div>
         <div class="flip-back">
           <div>
-            <div class="proj-tags"><span class="tag tag-o">Robotics</span><span class="tag tag-b">Arduino</span></div>
+            <div class="proj-tags"><span class="tag tag-o">Robotics</span><span class="tag tag-b">Arduino</span><span class="tag tag-o">Python</span></div>
             <h3>2D Pen Plotter</h3>
             <p>CoreXY system that vectorizes an input image and draws it on paper. Arduino + NEMA 17 motors with limit-switch homing. Custom CAD components iterated through many revisions. Complete software pipeline from SVG to machine movement.</p>
           </div>
@@ -871,21 +1101,15 @@
     <div class="proj-card reveal d1">
       <div class="flip-inner">
         <div class="flip-front">
-          <div class="proj-thumb thumb-teal">
-            <div class="thumb-grid"></div>
-            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
-              <rect x="15" y="50" width="50" height="16" rx="3" stroke="#2dd4bf" stroke-width="1.5"/>
-              <path d="M40 50 L40 30" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
-              <path d="M40 30 Q40 18 52 18" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="52" cy="18" r="4" stroke="#2dd4bf" stroke-width="1.5"/>
-              <line x1="28" y1="58" x2="28" y2="50" stroke="#2dd4bf" stroke-width="1.5"/>
-              <line x1="52" y1="58" x2="52" y2="50" stroke="#2dd4bf" stroke-width="1.5"/>
-            </svg>
+          <div class="proj-thumb">
+            <img src="Images/s-blob-v1-IMAGE-NvEjpGLmDq0.jpg" class="thumb-img" alt="Touchless Faucet Pad final demo">
+            <div class="thumb-overlay"></div>
           </div>
           <div class="front-label">
             <div class="front-tags">
               <span class="tag tag-o">Product Design</span>
               <span class="tag tag-b">User Research</span>
+              <span class="tag tag-o">Electronics</span>
             </div>
             <h3>Touchless Faucet Pad</h3>
           </div>
@@ -893,7 +1117,7 @@
         </div>
         <div class="flip-back">
           <div>
-            <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">User Research</span></div>
+            <div class="proj-tags"><span class="tag tag-o">Product Design</span><span class="tag tag-b">User Research</span><span class="tag tag-o">Electronics</span></div>
             <h3>Touchless Faucet Pad</h3>
             <p>Pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and shutoff delay — all shaped by stakeholder interviews and restroom space analysis.</p>
           </div>
@@ -912,23 +1136,15 @@
     <div class="proj-card reveal d2">
       <div class="flip-inner">
         <div class="flip-front">
-          <div class="proj-thumb thumb-indigo">
-            <div class="thumb-grid"></div>
-            <svg class="thumb-svg" viewBox="0 0 80 80" fill="none">
-              <circle cx="40" cy="20" r="7" stroke="#818cf8" stroke-width="1.5"/>
-              <circle cx="18" cy="55" r="7" stroke="#818cf8" stroke-width="1.5"/>
-              <circle cx="62" cy="55" r="7" stroke="#818cf8" stroke-width="1.5"/>
-              <line x1="36" y1="26" x2="22" y2="49" stroke="#818cf8" stroke-width="1.5"/>
-              <line x1="44" y1="26" x2="58" y2="49" stroke="#818cf8" stroke-width="1.5"/>
-              <line x1="25" y1="55" x2="55" y2="55" stroke="#818cf8" stroke-width="1.5"/>
-              <path d="M22 49 L22 45 L30 48" stroke="#818cf8" stroke-width="1" stroke-linecap="round"/>
-              <path d="M58 49 L56 43 L64 47" stroke="#818cf8" stroke-width="1" stroke-linecap="round"/>
-            </svg>
+          <div class="proj-thumb">
+            <img src="Images/s-blob-v1-IMAGE-BS6YwhhiHCc.jpg" class="thumb-img" alt="PGM Mining Vensim systems model">
+            <div class="thumb-overlay"></div>
           </div>
           <div class="front-label">
             <div class="front-tags">
               <span class="tag tag-o">Systems Modeling</span>
               <span class="tag tag-b">Vensim</span>
+              <span class="tag tag-o">Policy</span>
             </div>
             <h3>Dynamic Systems: PGM Mining</h3>
           </div>
@@ -936,7 +1152,7 @@
         </div>
         <div class="flip-back">
           <div>
-            <div class="proj-tags"><span class="tag tag-o">Systems Modeling</span><span class="tag tag-b">Vensim</span></div>
+            <div class="proj-tags"><span class="tag tag-o">Systems Modeling</span><span class="tag tag-b">Vensim</span><span class="tag tag-o">Policy</span></div>
             <h3>Dynamic Systems: PGM Mining</h3>
             <p>Quantitative stock-flow model of Platinum Group Metal mining in South Africa. Referenced 40+ sources to model CO₂ reduction and worker safety improvements via robotic substitution and grid modernization.</p>
           </div>
@@ -1104,7 +1320,17 @@
 
 <!-- ── FOOTER ──────────────────────────────────────────── -->
 <footer>
-  <p>© 2026 Ryder Fine · Design Engineer</p>
+  <p style="display:flex;align-items:center;gap:.5rem;">
+    <svg width="14" height="14" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+      <line x1="19" y1="19" x2="19" y2="4"  stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="33" y2="13" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="28" y2="32" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="10" y2="32" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <line x1="19" y1="19" x2="5"  y2="13" stroke="#E85D04" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+      <circle cx="19" cy="19" r="3.8" fill="#E85D04"/>
+    </svg>
+    Ryder Fine · Design Engineer · 2026
+  </p>
   <p>Prototype · Mechanism · System</p>
   <p>Golden, CO</p>
 </footer>
@@ -1171,9 +1397,11 @@ function updateHero() {
 const philSection = document.getElementById('philosophy');
 const philSlides  = philSection.querySelectorAll('.phil-slide');
 const philDots    = philSection.querySelectorAll('.phil-dot');
+const philSticky  = philSection.querySelector('.phil-sticky');
 let activeSlide   = 0;
 
 philSlides[0].classList.add('active');
+philSticky.setAttribute('data-web-stage', '0');
 
 function updatePhil() {
   const rect    = philSection.getBoundingClientRect();
@@ -1182,6 +1410,7 @@ function updatePhil() {
   if (scrolled < 0 || scrolled > total) return;
 
   const idx = Math.min(philSlides.length - 1, Math.floor((scrolled / total) * philSlides.length));
+  philSticky.setAttribute('data-web-stage', String(idx));
   if (idx === activeSlide) return;
 
   philSlides[activeSlide].classList.remove('active');

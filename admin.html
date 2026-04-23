@@ -146,7 +146,7 @@
     .connect-bar {
       background: var(--dark-3); border: 1px solid var(--border); border-radius: 6px;
       padding: .85rem 1.1rem; display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 1.75rem; font-size: .82rem;
+      margin-bottom: .75rem; font-size: .82rem;
     }
     .connect-bar.connected { border-color: #1e6b3a; background: rgba(30,107,58,.12); }
     .connect-status { flex: 1; color: var(--muted); }
@@ -154,6 +154,22 @@
     .connect-bar.connected .connect-status { color: #4caf82; }
     .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
     .connect-bar.connected .dot { background: #4caf82; }
+
+    .gh-bar {
+      background: var(--dark-3); border: 1px solid var(--border); border-radius: 6px;
+      padding: .85rem 1.1rem; display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.75rem; font-size: .82rem;
+    }
+    .gh-bar.connected { border-color: #1e3a6b; background: rgba(61,90,241,.08); }
+    .gh-status { flex: 1; color: var(--muted); }
+    .gh-bar.connected .gh-status { color: #7b9cf8; }
+    .gh-bar.connected .dot { background: #3D5AF1; }
+    .gh-token-input {
+      background: var(--dark); border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text); font-family: 'Space Mono', monospace; font-size: .72rem;
+      padding: .38rem .7rem; width: 220px; outline: none;
+    }
+    .gh-token-input:focus { border-color: #3D5AF1; }
 
     .section-divider {
       display: flex; align-items: center; gap: 1rem;
@@ -188,6 +204,14 @@
     <div class="connect-status" id="connect-status">Not connected to folder</div>
     <button class="btn btn-ghost" id="btn-connect">Connect folder…</button>
     <button class="btn btn-ghost" id="btn-disconnect" style="display:none">Disconnect</button>
+  </div>
+
+  <div class="gh-bar" id="gh-bar">
+    <div class="dot"></div>
+    <div class="gh-status" id="gh-status">GitHub: no token — saves won't push</div>
+    <input class="gh-token-input" id="gh-token-input" type="password" placeholder="Paste GitHub token…" autocomplete="off">
+    <button class="btn btn-ghost" id="btn-gh-save">Save token</button>
+    <button class="btn btn-ghost" id="btn-gh-clear" style="display:none">Clear</button>
   </div>
 
   <div class="proj-list" id="proj-list"></div>
@@ -351,6 +375,81 @@ document.getElementById('btn-disconnect').addEventListener('click', () => {
   showToast('Disconnected');
 });
 
+// ── GitHub push ───────────────────────────────────────────
+const GH_OWNER  = 'Mama-Joe';
+const GH_REPO   = 'portfolio';
+const GH_BRANCH = 'master';
+const GH_FILE   = 'index.html';
+
+let ghToken = localStorage.getItem('rf_gh_token') || '';
+
+function setGHConnected() {
+  const bar = document.getElementById('gh-bar');
+  bar.classList.add('connected');
+  document.getElementById('gh-status').textContent = 'GitHub: token set — saves will push automatically';
+  document.getElementById('btn-gh-save').style.display = 'none';
+  document.getElementById('btn-gh-clear').style.display = '';
+  document.getElementById('gh-token-input').style.display = 'none';
+}
+
+function setGHDisconnected() {
+  const bar = document.getElementById('gh-bar');
+  bar.classList.remove('connected');
+  document.getElementById('gh-status').textContent = 'GitHub: no token — saves won\'t push';
+  document.getElementById('btn-gh-save').style.display = '';
+  document.getElementById('btn-gh-clear').style.display = 'none';
+  document.getElementById('gh-token-input').style.display = '';
+}
+
+document.getElementById('btn-gh-save').addEventListener('click', () => {
+  const val = document.getElementById('gh-token-input').value.trim();
+  if (!val) { showToast('Paste a token first'); return; }
+  ghToken = val;
+  localStorage.setItem('rf_gh_token', ghToken);
+  setGHConnected();
+  showToast('GitHub token saved');
+});
+
+document.getElementById('btn-gh-clear').addEventListener('click', () => {
+  ghToken = '';
+  localStorage.removeItem('rf_gh_token');
+  document.getElementById('gh-token-input').value = '';
+  setGHDisconnected();
+  showToast('Token cleared');
+});
+
+if (ghToken) setGHConnected();
+
+async function pushToGitHub(projJson, currJson) {
+  const api = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+  const headers = {
+    Authorization: `token ${ghToken}`,
+    Accept: 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+
+  const res = await fetch(api, { headers });
+  if (!res.ok) throw new Error(`GitHub fetch failed: ${res.status}`);
+  const data = await res.json();
+
+  let text = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+  text = replaceBlock(text, '<!-- RF:DATA:START -->', '<!-- RF:DATA:END -->', `window.__RF_PROJECTS__=${projJson}`);
+  text = replaceBlock(text, '<!-- RF:CURR:START -->', '<!-- RF:CURR:END -->', `window.__RF_CURR_PROJECTS__=${currJson}`);
+
+  const encoded = btoa(unescape(encodeURIComponent(text)));
+  const put = await fetch(api, {
+    method: 'PUT',
+    headers,
+    body: JSON.stringify({
+      message: 'Update portfolio data via admin',
+      content: encoded,
+      sha: data.sha,
+      branch: GH_BRANCH,
+    }),
+  });
+  if (!put.ok) throw new Error(`GitHub push failed: ${put.status}`);
+}
+
 function replaceBlock(text, start, end, content) {
   const si = text.indexOf(start), ei = text.indexOf(end);
   if (si === -1 || ei === -1) return text;
@@ -382,12 +481,26 @@ async function save() {
   const currJson = JSON.stringify(currState);
   localStorage.setItem('rf_projects', projJson);
   localStorage.setItem('rf_curr_projects', currJson);
-  if (dirHandle) {
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+
+  if (ghToken) {
+    showToast('Pushing to GitHub…');
+    try {
+      await pushToGitHub(projJson, currJson);
+      showToast('Pushed to GitHub ✓');
+    } catch (e) {
+      showToast('GitHub push failed: ' + e.message);
+    }
+  } else if (dirHandle) {
     const ok = await writeToIndexHtml(projJson, currJson);
     showToast(ok ? 'Published to index.html ✓' : 'Saved to browser only');
   } else {
-    showToast('Saved to browser — connect a folder to publish directly');
+    showToast('Saved to browser — add a GitHub token to push');
   }
+
+  btn.disabled = false;
 }
 
 function renderAll() {

@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Editor — ryderfine.com</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;900&family=Open+Sans:wght@400;500;600&family=Space+Mono:wght@400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark:   #0B1120;
+      --dark-2: #111827;
+      --dark-3: #1C2840;
+      --accent: #E85D04;
+      --blue:   #3D5AF1;
+      --text:   #EEE9E0;
+      --muted:  #6E839A;
+      --border: #243044;
+    }
+    body { font-family: 'Open Sans', sans-serif; background: var(--dark); color: var(--text); min-height: 100vh; }
+
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 2rem; border-bottom: 1px solid var(--border);
+      background: var(--dark-2); position: sticky; top: 0; z-index: 10;
+    }
+    .logo { font-family: 'Barlow', sans-serif; font-weight: 900; font-size: 1.1rem; letter-spacing: .02em; }
+    .logo span { color: var(--accent); }
+    .header-actions { display: flex; gap: .75rem; align-items: center; }
+    .btn {
+      padding: .5rem 1.1rem; border-radius: 4px; font-family: 'Open Sans', sans-serif;
+      font-size: .8rem; font-weight: 600; cursor: pointer; border: none; transition: background .15s, color .15s;
+    }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #ff6820; }
+    .btn-danger { background: transparent; color: #e05; border: 1px solid #e05; }
+    .btn-danger:hover { background: #e05; color: #fff; }
+
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+      background: var(--dark-3); border: 1px solid var(--accent); border-radius: 6px;
+      padding: .7rem 1.2rem; font-size: .82rem; color: var(--text);
+      opacity: 0; transform: translateY(8px); transition: opacity .2s, transform .2s;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    main { max-width: 960px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    h1 { font-family: 'Barlow', sans-serif; font-weight: 900; font-size: 1.6rem; letter-spacing: .02em; margin-bottom: .3rem; }
+    .subtitle { color: var(--muted); font-size: .82rem; margin-bottom: 2rem; }
+    .subtitle a { color: var(--accent); text-decoration: none; }
+    .subtitle a:hover { text-decoration: underline; }
+
+    .proj-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+    .proj-editor {
+      background: var(--dark-2); border: 1px solid var(--border); border-radius: 8px;
+      overflow: hidden; transition: border-color .2s;
+    }
+    .proj-editor:focus-within { border-color: #3a4f6a; }
+
+    .proj-header {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.25rem; background: var(--dark-3);
+      cursor: pointer; user-select: none;
+    }
+    .proj-num {
+      font-family: 'Space Mono', monospace; font-size: .62rem;
+      color: var(--accent); text-transform: uppercase; letter-spacing: .12em;
+      flex-shrink: 0;
+    }
+    .proj-header-title { font-family: 'Barlow', sans-serif; font-weight: 700; font-size: 1rem; flex: 1; }
+    .proj-chevron { color: var(--muted); font-size: .75rem; transition: transform .2s; flex-shrink: 0; }
+    .proj-editor.open .proj-chevron { transform: rotate(180deg); }
+    .proj-editor-thumb {
+      width: 48px; height: 38px; border-radius: 3px; object-fit: cover;
+      border: 1px solid var(--border); flex-shrink: 0;
+    }
+
+    .proj-body { display: none; padding: 1.5rem 1.25rem; border-top: 1px solid var(--border); }
+    .proj-editor.open .proj-body { display: block; }
+
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    @media (max-width: 600px) { .field-grid { grid-template-columns: 1fr; } }
+    .field-full { grid-column: 1 / -1; }
+
+    label { display: block; font-size: .72rem; font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin-bottom: .35rem; }
+    input[type="text"], textarea {
+      width: 100%; background: var(--dark); border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text); font-family: 'Open Sans', sans-serif; font-size: .82rem;
+      padding: .55rem .75rem; outline: none; transition: border-color .15s;
+    }
+    input[type="text"]:focus, textarea:focus { border-color: #3a4f6a; }
+    textarea { resize: vertical; line-height: 1.6; }
+
+    .img-section { margin-bottom: 1.25rem; }
+    .img-row { display: flex; gap: 1rem; align-items: flex-start; }
+    .img-preview-wrap { flex-shrink: 0; }
+    .img-preview {
+      width: 120px; height: 80px; object-fit: cover; border-radius: 4px;
+      border: 1px solid var(--border); display: block; background: var(--dark-3);
+    }
+    .img-inputs { flex: 1; display: flex; flex-direction: column; gap: .6rem; }
+    .img-or { font-size: .72rem; color: var(--muted); text-align: center; }
+    input[type="file"] { display: none; }
+    .file-label {
+      display: inline-block; padding: .45rem .85rem; border-radius: 4px;
+      background: var(--dark-3); border: 1px solid var(--border); cursor: pointer;
+      font-size: .76rem; color: var(--muted); transition: color .15s, border-color .15s;
+    }
+    .file-label:hover { color: var(--text); border-color: var(--muted); }
+
+    .tags-section { margin-bottom: 1rem; }
+    .tags-list { display: flex; flex-direction: column; gap: .5rem; margin-bottom: .6rem; }
+    .tag-row { display: flex; gap: .5rem; align-items: center; }
+    .tag-row input[type="text"] { flex: 1; }
+    .tag-type-select {
+      background: var(--dark); border: 1px solid var(--border); color: var(--text);
+      border-radius: 4px; padding: .52rem .5rem; font-size: .8rem; outline: none;
+      cursor: pointer;
+    }
+    .tag-type-select:focus { border-color: #3a4f6a; }
+    .remove-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      border-radius: 4px; padding: .45rem .6rem; cursor: pointer; font-size: .75rem;
+      transition: color .15s, border-color .15s;
+    }
+    .remove-btn:hover { color: #e05; border-color: #e05; }
+    .add-btn {
+      background: transparent; border: 1px dashed var(--border); color: var(--muted);
+      border-radius: 4px; padding: .4rem .85rem; cursor: pointer; font-size: .76rem;
+      transition: color .15s, border-color .15s; width: 100%;
+    }
+    .add-btn:hover { color: var(--text); border-color: var(--muted); }
+
+    .chips-section { margin-bottom: 1rem; }
+    .chips-list { display: flex; flex-direction: column; gap: .5rem; margin-bottom: .6rem; }
+    .chip-row { display: flex; gap: .5rem; align-items: center; }
+    .chip-row input[type="text"] { flex: 1; }
+
+    .revert-row { display: flex; justify-content: flex-end; padding-top: .75rem; border-top: 1px solid var(--border); margin-top: .75rem; }
+
+    .connect-bar {
+      background: var(--dark-3); border: 1px solid var(--border); border-radius: 6px;
+      padding: .85rem 1.1rem; display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.75rem; font-size: .82rem;
+    }
+    .connect-bar.connected { border-color: #1e6b3a; background: rgba(30,107,58,.12); }
+    .connect-status { flex: 1; color: var(--muted); }
+    .connect-status strong { color: var(--text); }
+    .connect-bar.connected .connect-status { color: #4caf82; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+    .connect-bar.connected .dot { background: #4caf82; }
+
+    .section-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 2.5rem 0 1.25rem; color: var(--muted);
+      font-family: 'Space Mono', monospace; font-size: .68rem;
+      text-transform: uppercase; letter-spacing: .14em;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">RF <span>Editor</span></div>
+  <div class="header-actions">
+    <a href="index.html" target="_blank"><button class="btn btn-ghost">Preview Site ↗</button></a>
+    <button class="btn btn-danger" id="btn-reset">Reset All</button>
+    <button class="btn btn-primary" id="btn-save">Save Changes</button>
+  </div>
+</header>
+
+<div class="toast" id="toast"></div>
+
+<main>
+  <h1>Project Editor</h1>
+  <p class="subtitle">Connect to your site folder below to publish changes directly to <code>index.html</code>. Without connecting, changes save to your browser only.</p>
+
+  <div class="connect-bar" id="connect-bar">
+    <div class="dot"></div>
+    <div class="connect-status" id="connect-status">Not connected to folder</div>
+    <button class="btn btn-ghost" id="btn-connect">Connect folder…</button>
+    <button class="btn btn-ghost" id="btn-disconnect" style="display:none">Disconnect</button>
+  </div>
+
+  <div class="proj-list" id="proj-list"></div>
+
+  <div class="section-divider">
+    <span>Current Work</span>
+  </div>
+  <div class="proj-list" id="curr-list"></div>
+</main>
+
+<script>
+const DEFAULTS = [
+  {
+    img: 'Images/1YrK1sCwzQH6tKtzwKefSP2J-v7OYEich81caULD2zhA.jpg',
+    imgAlt: 'Magnetic Whiteboard Desk in use',
+    imgPos: 'center 55%',
+    title: 'Magnetic Whiteboard Desk',
+    purpose: 'For laptop + whiteboard multitasking',
+    description: 'A modular, magnetically-mounted workstation letting students use a laptop and whiteboard simultaneously. Stability engineered through rubber pads, strong magnets, and beveled release geometry.',
+    tags: [{text:'Product Design',type:'o'},{text:'CAD',type:'b'},{text:'DFAM',type:'o'}],
+    chips: ['Modularity','Needs Assessment','Revision Cycles'],
+    gallery: ['','',''],
+  },
+  {
+    img: 'Images/s-blob-v1-IMAGE-2D47x0WK1bA.jpg',
+    imgAlt: 'Extending Swan Neck in performance',
+    imgPos: 'center center',
+    title: 'Extending Swan Neck',
+    purpose: 'For a live stage performance',
+    description: 'Spring-motor driven costume mechanism for a Destination Imagination performance. Iterated through hinged springs and pneumatics before landing on a reliable remote-actuated solution.',
+    tags: [{text:'Mechanisms',type:'o'},{text:'Iterative',type:'b'},{text:'Wearable',type:'o'}],
+    chips: ['Visual Impact','Live Performance','Pneumatics'],
+    gallery: ['','',''],
+  },
+  {
+    img: 'Images/s-blob-v1-IMAGE-vf-cocqu48I.jpg',
+    imgAlt: 'Human Hamster Wheel in use',
+    imgPos: 'center center',
+    title: 'Human Hamster Wheel',
+    purpose: 'For STEM education',
+    description: '600 lb, 10-foot human-powered electricity generator for STEM education. Fully modular, assembled by two people in 13 minutes. A bridge rectifier converts generated AC to DC to power an LED array.',
+    tags: [{text:'Large Scale',type:'o'},{text:'Electronics',type:'b'},{text:'STEM Ed',type:'o'}],
+    chips: ['600 lbs · 10 ft','FoS 2','Bridge Rectifier'],
+    gallery: ['','',''],
+  },
+  {
+    img: 'Images/s-blob-v1-IMAGE-DLoTMGmAua0.jpg',
+    imgAlt: '2D Pen Plotter in action',
+    imgPos: 'center center',
+    title: '2D Pen Plotter',
+    purpose: 'For automated vector drawing',
+    description: 'CoreXY system that vectorizes an input image and draws it on paper. Arduino + NEMA 17 motors with limit-switch homing. Complete software pipeline from SVG to machine movement.',
+    tags: [{text:'Robotics',type:'o'},{text:'Arduino',type:'b'},{text:'Python',type:'o'}],
+    chips: ['CoreXY','Python Pipeline','Iterative Design'],
+    gallery: ['','',''],
+  },
+  {
+    img: 'Images/s-blob-v1-IMAGE-NvEjpGLmDq0.jpg',
+    imgAlt: 'Touchless Faucet Pad final demo',
+    imgPos: 'center center',
+    title: 'Touchless Faucet Pad',
+    purpose: 'For hands-free faucet control',
+    description: 'Pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and shutoff delay, all shaped by stakeholder interviews and restroom space analysis.',
+    tags: [{text:'Prototyping',type:'o'},{text:'Concepting',type:'b'},{text:'Data Analysis',type:'o'}],
+    chips: ['Stakeholder Input','Space Analysis','Go-To-Market'],
+    gallery: ['','',''],
+  },
+  {
+    img: 'Images/s-blob-v1-IMAGE-BS6YwhhiHCc.jpg',
+    imgAlt: 'PGM Mining Vensim systems model',
+    imgPos: 'center center',
+    title: 'Dynamic Systems: PGM Mining',
+    purpose: 'For platinum supply policy modeling',
+    description: 'Quantitative stock-flow model of Platinum Group Metal mining in South Africa. Referenced 40+ sources to model CO₂ reduction and worker safety improvements via robotic substitution and grid modernization.',
+    tags: [{text:'Systems Modeling',type:'o'},{text:'Vensim',type:'b'},{text:'Policy',type:'o'}],
+    chips: ['Systems Thinking','Policy Modeling','40+ Sources'],
+    gallery: ['','',''],
+  },
+];
+
+let state = JSON.parse(localStorage.getItem('rf_projects') || 'null') || DEFAULTS.map(d => ({...d, tags: d.tags.map(t=>({...t})), chips: [...d.chips]}));
+
+function cloneDefaults() {
+  return DEFAULTS.map(d => ({...d, tags: d.tags.map(t=>({...t})), chips: [...d.chips], gallery: [...d.gallery]}));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function readState() {
+  const cards = document.querySelectorAll('#proj-list .proj-editor');
+  cards.forEach((card, i) => {
+    const p = state[i];
+    p.img     = card.querySelector('.field-img-url').value.trim();
+    p.imgAlt  = card.querySelector('.field-img-alt').value.trim();
+    p.imgPos  = card.querySelector('.field-img-pos').value.trim();
+    p.title   = card.querySelector('.field-title').value.trim();
+    p.purpose = card.querySelector('.field-purpose').value.trim();
+    p.description = card.querySelector('.field-desc').value.trim();
+
+    p.tags = [];
+    card.querySelectorAll('.tag-row').forEach(row => {
+      const txt  = row.querySelector('input[type="text"]').value.trim();
+      const type = row.querySelector('.tag-type-select').value;
+      if (txt) p.tags.push({ text: txt, type });
+    });
+
+    p.chips = [];
+    card.querySelectorAll('.chip-row input').forEach(inp => {
+      const txt = inp.value.trim();
+      if (txt) p.chips.push(txt);
+    });
+
+    p.gallery = [1,2,3].map(n => (card.querySelector('.field-gallery-' + n) || {value:''}).value.trim());
+  });
+}
+
+/* ── FILE SYSTEM ACCESS ─────────────────────────────────── */
+let dirHandle = null;
+
+function setConnected(handle) {
+  dirHandle = handle;
+  const bar = document.getElementById('connect-bar');
+  const status = document.getElementById('connect-status');
+  bar.classList.add('connected');
+  status.innerHTML = `Connected to <strong>${handle.name}/</strong> — saves write directly to index.html`;
+  document.getElementById('btn-connect').style.display = 'none';
+  document.getElementById('btn-disconnect').style.display = '';
+}
+
+function setDisconnected() {
+  dirHandle = null;
+  const bar = document.getElementById('connect-bar');
+  const status = document.getElementById('connect-status');
+  bar.classList.remove('connected');
+  status.textContent = 'Not connected — saves go to browser storage only';
+  document.getElementById('btn-connect').style.display = '';
+  document.getElementById('btn-disconnect').style.display = 'none';
+}
+
+document.getElementById('btn-connect').addEventListener('click', async () => {
+  if (!('showDirectoryPicker' in window)) {
+    showToast('Your browser doesn\'t support folder access (use Chrome/Edge)');
+    return;
+  }
+  try {
+    const handle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    setConnected(handle);
+    showToast('Folder connected');
+  } catch (e) {
+    if (e.name !== 'AbortError') showToast('Could not connect: ' + e.message);
+  }
+});
+
+document.getElementById('btn-disconnect').addEventListener('click', () => {
+  setDisconnected();
+  showToast('Disconnected');
+});
+
+function replaceBlock(text, start, end, content) {
+  const si = text.indexOf(start), ei = text.indexOf(end);
+  if (si === -1 || ei === -1) return text;
+  return text.slice(0, si) + start + `<script>${content}<\/script>` + end + text.slice(ei + end.length);
+}
+
+async function writeToIndexHtml(projJson, currJson) {
+  if (!dirHandle) return false;
+  try {
+    const fileHandle = await dirHandle.getFileHandle('index.html', { create: false });
+    const file = await fileHandle.getFile();
+    let text = await file.text();
+    text = replaceBlock(text, '<!-- RF:DATA:START -->', '<!-- RF:DATA:END -->', `window.__RF_PROJECTS__=${projJson}`);
+    text = replaceBlock(text, '<!-- RF:CURR:START -->', '<!-- RF:CURR:END -->', `window.__RF_CURR_PROJECTS__=${currJson}`);
+    const writable = await fileHandle.createWritable();
+    await writable.write(text);
+    await writable.close();
+    return true;
+  } catch (e) {
+    showToast('Write failed: ' + e.message);
+    return false;
+  }
+}
+
+async function save() {
+  readState();
+  readCurrState();
+  const projJson = JSON.stringify(state);
+  const currJson = JSON.stringify(currState);
+  localStorage.setItem('rf_projects', projJson);
+  localStorage.setItem('rf_curr_projects', currJson);
+  if (dirHandle) {
+    const ok = await writeToIndexHtml(projJson, currJson);
+    showToast(ok ? 'Published to index.html ✓' : 'Saved to browser only');
+  } else {
+    showToast('Saved to browser — connect a folder to publish directly');
+  }
+}
+
+function renderAll() {
+  const list = document.getElementById('proj-list');
+  list.innerHTML = '';
+  state.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'proj-editor';
+    el.innerHTML = buildEditorHTML(p, i);
+    list.appendChild(el);
+    bindEditor(el, i);
+  });
+}
+
+function buildEditorHTML(p, i) {
+  const tagsHTML = p.tags.map(t => tagRowHTML(t.text, t.type)).join('');
+  const chipsHTML = p.chips.map(c => chipRowHTML(c)).join('');
+  return `
+    <div class="proj-header">
+      <img class="proj-editor-thumb" src="${p.img}" alt="" onerror="this.style.opacity='.3'">
+      <span class="proj-num">Project ${String(i+1).padStart(2,'0')}</span>
+      <span class="proj-header-title">${p.title || 'Untitled'}</span>
+      <span class="proj-chevron">▼</span>
+    </div>
+    <div class="proj-body">
+      <div class="img-section">
+        <label>Image</label>
+        <div class="img-row">
+          <div class="img-preview-wrap">
+            <img class="img-preview" src="${p.img}" alt="" onerror="this.style.opacity='.3'">
+          </div>
+          <div class="img-inputs">
+            <input type="text" class="field-img-url" placeholder="Image URL or paste base64…" value="${p.img}">
+            <div class="img-or">— or upload —</div>
+            <label class="file-label" for="file-${i}">Choose file…</label>
+            <input type="file" id="file-${i}" accept="image/*" class="file-input">
+          </div>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div>
+          <label>Alt text</label>
+          <input type="text" class="field-img-alt" value="${escH(p.imgAlt)}">
+        </div>
+        <div>
+          <label>Object position (CSS)</label>
+          <input type="text" class="field-img-pos" placeholder="center center" value="${escH(p.imgPos||'')}">
+        </div>
+        <div>
+          <label>Title</label>
+          <input type="text" class="field-title" value="${escH(p.title)}">
+        </div>
+        <div>
+          <label>Purpose line</label>
+          <input type="text" class="field-purpose" value="${escH(p.purpose)}">
+        </div>
+        <div class="field-full">
+          <label>Description</label>
+          <textarea class="field-desc" rows="3">${escH(p.description)}</textarea>
+        </div>
+      </div>
+
+      <div class="tags-section">
+        <label>Tags</label>
+        <div class="tags-list">${tagsHTML}</div>
+        <button class="add-btn add-tag">+ Add tag</button>
+      </div>
+
+      <div class="chips-section">
+        <label>Detail chips</label>
+        <div class="chips-list">${chipsHTML}</div>
+        <button class="add-btn add-chip">+ Add chip</button>
+      </div>
+
+      <div class="tags-section">
+        <label>Gallery images (shown in expanded modal — leave blank to reuse thumbnail)</label>
+        <div class="field-grid" style="margin-top:.4rem">
+          ${[1,2,3].map(n => `<div>
+            <label>Image ${n}</label>
+            <div style="display:flex;gap:.4rem;align-items:center">
+              <input type="text" class="field-gallery-${n}" placeholder="URL or base64…" value="${escH((p.gallery||[])[n-1]||'')}" style="flex:1;min-width:0">
+              <label class="file-label" for="gfile-${i}-${n}" style="white-space:nowrap;flex-shrink:0">Browse…</label>
+              <input type="file" id="gfile-${i}-${n}" accept="image/*" class="gallery-file-input" data-slot="${n}">
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="revert-row">
+        <button class="btn btn-ghost revert-proj">Revert this project</button>
+      </div>
+    </div>
+  `;
+}
+
+function tagRowHTML(text, type) {
+  return `<div class="tag-row">
+    <input type="text" value="${escH(text)}" placeholder="Tag label">
+    <select class="tag-type-select">
+      <option value="o"${type==='o'?' selected':''}>Orange</option>
+      <option value="b"${type==='b'?' selected':''}>Blue</option>
+    </select>
+    <button class="remove-btn remove-tag">✕</button>
+  </div>`;
+}
+
+function chipRowHTML(text) {
+  return `<div class="chip-row">
+    <input type="text" value="${escH(text)}" placeholder="Chip label">
+    <button class="remove-btn remove-chip">✕</button>
+  </div>`;
+}
+
+function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function bindEditor(el, i) {
+  // Toggle open/close
+  el.querySelector('.proj-header').addEventListener('click', () => {
+    el.classList.toggle('open');
+  });
+
+  // File upload → base64
+  el.querySelector('.file-input').addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const url = ev.target.result;
+      el.querySelector('.field-img-url').value = url;
+      el.querySelector('.img-preview').src = url;
+      el.querySelector('.proj-editor-thumb').src = url;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Gallery file uploads → base64
+  el.querySelectorAll('.gallery-file-input').forEach(input => {
+    input.addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const n = e.target.dataset.slot;
+      const reader = new FileReader();
+      reader.onload = ev => {
+        el.querySelector('.field-gallery-' + n).value = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Live URL preview
+  el.querySelector('.field-img-url').addEventListener('input', e => {
+    el.querySelector('.img-preview').src = e.target.value;
+    el.querySelector('.proj-editor-thumb').src = e.target.value;
+  });
+
+  // Live title update in header
+  el.querySelector('.field-title').addEventListener('input', e => {
+    el.querySelector('.proj-header-title').textContent = e.target.value || 'Untitled';
+  });
+
+  // Add tag
+  el.querySelector('.add-tag').addEventListener('click', () => {
+    const list = el.querySelector('.tags-list');
+    const row = document.createElement('div');
+    row.innerHTML = tagRowHTML('', 'o');
+    const newRow = row.firstElementChild;
+    list.appendChild(newRow);
+    bindRemove(newRow, '.remove-tag', '.tags-list');
+  });
+
+  // Add chip
+  el.querySelector('.add-chip').addEventListener('click', () => {
+    const list = el.querySelector('.chips-list');
+    const row = document.createElement('div');
+    row.innerHTML = chipRowHTML('');
+    const newRow = row.firstElementChild;
+    list.appendChild(newRow);
+    bindRemove(newRow, '.remove-chip', '.chips-list');
+  });
+
+  // Remove buttons (existing)
+  el.querySelectorAll('.remove-tag').forEach(btn => bindRemove(btn.closest('.tag-row'), '.remove-tag', '.tags-list'));
+  el.querySelectorAll('.remove-chip').forEach(btn => bindRemove(btn.closest('.chip-row'), '.remove-chip', '.chips-list'));
+
+  // Revert this project
+  el.querySelector('.revert-proj').addEventListener('click', () => {
+    state[i] = { ...DEFAULTS[i], tags: DEFAULTS[i].tags.map(t=>({...t})), chips: [...DEFAULTS[i].chips] };
+    renderAll();
+    document.querySelectorAll('#proj-list .proj-editor')[i].classList.add('open');
+    showToast(`Project ${i+1} reverted to default`);
+  });
+}
+
+function bindRemove(el, btnSel, listSel) {
+  const btn = el.querySelector ? el.querySelector(btnSel) || el : el;
+  const row = el;
+  if (!btn || !row) return;
+  btn.addEventListener('click', () => row.remove());
+}
+
+document.getElementById('btn-save').addEventListener('click', save);
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (!confirm('Reset ALL projects to original content? This cannot be undone.')) return;
+  localStorage.removeItem('rf_projects');
+  localStorage.removeItem('rf_curr_projects');
+  state = cloneDefaults();
+  currState = cloneCurrDefaults();
+  renderAll();
+  renderCurr();
+  showToast('All projects reset to defaults');
+});
+
+/* ── CURRENT WORK ───────────────────────────────────────── */
+const CURR_DEFAULTS = [
+  {
+    img: '', badge: 'Active · University Rover Challenge',
+    title: 'Mars Rover · URC Team',
+    description: 'Contributing to the mechanical design and build of a Mars rover for the University Rover Challenge — one of the most prestigious student robotics competitions globally. Working across structural systems, additive manufacturing components, and integrated design.',
+    purpose: 'For the University Rover Challenge',
+    tags: [{text:'Active',type:'o'},{text:'URC 2025',type:'b'},{text:'Mechanical',type:'o'}],
+    chips: ['Structural Systems','Additive Mfg','Integrated Design'],
+    gallery: ['','',''],
+  },
+  {
+    img: '', badge: 'Active · Mines Lunar Simulator',
+    title: 'Rover Wheel Testing Platform',
+    description: 'Designing and building a wheel testing rig for the Mines Lunar Surface Simulator — evaluating rover wheel performance under simulated lunar terrain and gravity conditions.',
+    purpose: 'For Mines Lunar Surface Simulator',
+    tags: [{text:'Active',type:'o'},{text:'Research',type:'b'},{text:'Mechanisms',type:'o'}],
+    chips: ['Lunar Terrain','Research Platform','Wheel Testing'],
+    gallery: ['','',''],
+  },
+  {
+    img: '', badge: 'Funded · ProtoFund Grant',
+    title: 'Pneumatic Stilts',
+    description: 'Adaptive adjustable stilts for theatrical performance using pneumatic pistons. Iterating for live-performance safety, ease of use, and reliability. Managing grant funds and cost-benefit analysis.',
+    purpose: 'For theatrical performance',
+    tags: [{text:'Funded',type:'o'},{text:'ProtoFund',type:'b'},{text:'Wearable',type:'o'}],
+    chips: ['Pneumatics','Stage Safety','Grant-Funded'],
+    gallery: ['','',''],
+  },
+  {
+    img: '', badge: 'Research · Systems Engineering',
+    title: 'Alternative Mining Systems Analysis',
+    description: 'Complex systems analysis on global resource management. Building quantitative system dynamics models in Vensim to test feedback loops and model long-term policy impacts.',
+    purpose: 'For global resource policy modeling',
+    tags: [{text:'Research',type:'o'},{text:'Vensim',type:'b'},{text:'Systems',type:'o'}],
+    chips: ['System Dynamics','Policy Modeling','Feedback Loops'],
+    gallery: ['','',''],
+  },
+];
+
+const CURR_LABELS = ['Featured · Mars Rover', 'Card 01 · Rover Wheel', 'Card 02 · Pneumatic Stilts', 'Card 03 · Mining Systems'];
+
+let currState = JSON.parse(localStorage.getItem('rf_curr_projects') || 'null')
+  || cloneCurrDefaults();
+
+function cloneCurrDefaults() {
+  return CURR_DEFAULTS.map(d => ({...d, tags: d.tags.map(t=>({...t})), chips: [...d.chips], gallery: [...d.gallery]}));
+}
+
+function readCurrState() {
+  document.querySelectorAll('#curr-list .proj-editor').forEach((card, i) => {
+    const p = currState[i];
+    p.img         = card.querySelector('.field-curr-img').value.trim();
+    p.badge       = card.querySelector('.field-badge').value.trim();
+    p.title       = card.querySelector('.field-title').value.trim();
+    p.description = card.querySelector('.field-desc').value.trim();
+    p.purpose     = card.querySelector('.field-purpose').value.trim();
+    p.tags = [];
+    card.querySelectorAll('.tag-row').forEach(row => {
+      const txt = row.querySelector('input[type="text"]').value.trim();
+      const type = row.querySelector('.tag-type-select').value;
+      if (txt) p.tags.push({ text: txt, type });
+    });
+    p.chips = [];
+    card.querySelectorAll('.chip-row input').forEach(inp => {
+      const txt = inp.value.trim(); if (txt) p.chips.push(txt);
+    });
+    p.gallery = [1,2,3].map(n => (card.querySelector('.field-gallery-' + n) || {value:''}).value.trim());
+  });
+}
+
+function buildCurrEditorHTML(p, i) {
+  const tagsHTML  = p.tags.map(t => tagRowHTML(t.text, t.type)).join('');
+  const chipsHTML = p.chips.map(c => chipRowHTML(c)).join('');
+  return `
+    <div class="proj-header">
+      <span class="proj-num">${CURR_LABELS[i]}</span>
+      <span class="proj-header-title">${escH(p.title || 'Untitled')}</span>
+      <span class="proj-chevron">▼</span>
+    </div>
+    <div class="proj-body">
+      <div class="img-section">
+        <label>Cover image</label>
+        <div class="img-row">
+          <div class="img-preview-wrap">
+            <img class="img-preview curr-cover-preview" src="${escH(p.img||'')}" alt="" style="opacity:${p.img?'1':'.25'}" onerror="this.style.opacity='.25'">
+          </div>
+          <div class="img-inputs">
+            <input type="text" class="field-curr-img" placeholder="URL or paste base64…" value="${escH(p.img||'')}">
+            <div class="img-or">— or upload —</div>
+            <label class="file-label" for="cimg-${i}">Browse…</label>
+            <input type="file" id="cimg-${i}" accept="image/*" class="curr-cover-file">
+          </div>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field-full">
+          <label>Badge text</label>
+          <input type="text" class="field-badge" value="${escH(p.badge)}">
+        </div>
+        <div class="field-full">
+          <label>Title</label>
+          <input type="text" class="field-title" value="${escH(p.title)}">
+        </div>
+        <div>
+          <label>Purpose line (modal)</label>
+          <input type="text" class="field-purpose" value="${escH(p.purpose)}">
+        </div>
+        <div class="field-full">
+          <label>Description</label>
+          <textarea class="field-desc" rows="3">${escH(p.description)}</textarea>
+        </div>
+      </div>
+
+      <div class="tags-section">
+        <label>Tags</label>
+        <div class="tags-list">${tagsHTML}</div>
+        <button class="add-btn add-tag">+ Add tag</button>
+      </div>
+
+      <div class="chips-section">
+        <label>Detail chips</label>
+        <div class="chips-list">${chipsHTML}</div>
+        <button class="add-btn add-chip">+ Add chip</button>
+      </div>
+
+      <div class="tags-section">
+        <label>Gallery images (shown in expanded modal)</label>
+        <div class="field-grid" style="margin-top:.4rem">
+          ${[1,2,3].map(n => `<div>
+            <label>Image ${n}</label>
+            <div style="display:flex;gap:.4rem;align-items:center">
+              <input type="text" class="field-gallery-${n}" placeholder="URL or base64…" value="${escH((p.gallery||[])[n-1]||'')}" style="flex:1;min-width:0">
+              <label class="file-label" for="cgfile-${i}-${n}" style="white-space:nowrap;flex-shrink:0">Browse…</label>
+              <input type="file" id="cgfile-${i}-${n}" accept="image/*" class="gallery-file-input" data-slot="${n}">
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+
+      <div class="revert-row">
+        <button class="btn btn-ghost revert-curr">Revert to default</button>
+      </div>
+    </div>`;
+}
+
+function bindCurrEditor(el, i) {
+  el.querySelector('.proj-header').addEventListener('click', () => el.classList.toggle('open'));
+
+  el.querySelector('.field-title').addEventListener('input', e => {
+    el.querySelector('.proj-header-title').textContent = e.target.value || 'Untitled';
+  });
+
+  // Cover image file upload → base64
+  el.querySelector('.curr-cover-file').addEventListener('change', e => {
+    const file = e.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      el.querySelector('.field-curr-img').value = ev.target.result;
+      const preview = el.querySelector('.curr-cover-preview');
+      preview.src = ev.target.result;
+      preview.style.opacity = '1';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Live URL preview
+  el.querySelector('.field-curr-img').addEventListener('input', e => {
+    const preview = el.querySelector('.curr-cover-preview');
+    preview.src = e.target.value;
+    preview.style.opacity = e.target.value ? '1' : '.25';
+  });
+
+  el.querySelectorAll('.gallery-file-input').forEach(input => {
+    input.addEventListener('change', e => {
+      const file = e.target.files[0]; if (!file) return;
+      const n = e.target.dataset.slot;
+      const reader = new FileReader();
+      reader.onload = ev => { el.querySelector('.field-gallery-' + n).value = ev.target.result; };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  el.querySelector('.add-tag').addEventListener('click', () => {
+    const list = el.querySelector('.tags-list');
+    const row = document.createElement('div');
+    row.innerHTML = tagRowHTML('', 'o');
+    const newRow = row.firstElementChild;
+    list.appendChild(newRow);
+    bindRemove(newRow, '.remove-tag', '.tags-list');
+  });
+
+  el.querySelector('.add-chip').addEventListener('click', () => {
+    const list = el.querySelector('.chips-list');
+    const row = document.createElement('div');
+    row.innerHTML = chipRowHTML('');
+    const newRow = row.firstElementChild;
+    list.appendChild(newRow);
+    bindRemove(newRow, '.remove-chip', '.chips-list');
+  });
+
+  el.querySelectorAll('.remove-tag').forEach(btn => bindRemove(btn.closest('.tag-row'), '.remove-tag', '.tags-list'));
+  el.querySelectorAll('.remove-chip').forEach(btn => bindRemove(btn.closest('.chip-row'), '.remove-chip', '.chips-list'));
+
+  el.querySelector('.revert-curr').addEventListener('click', () => {
+    currState[i] = {...CURR_DEFAULTS[i], tags: CURR_DEFAULTS[i].tags.map(t=>({...t})), chips: [...CURR_DEFAULTS[i].chips], gallery: [...CURR_DEFAULTS[i].gallery]};
+    renderCurr();
+    document.querySelectorAll('#curr-list .proj-editor')[i].classList.add('open');
+    showToast(`"${CURR_LABELS[i]}" reverted to default`);
+  });
+}
+
+function renderCurr() {
+  const list = document.getElementById('curr-list');
+  list.innerHTML = '';
+  currState.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'proj-editor';
+    el.innerHTML = buildCurrEditorHTML(p, i);
+    list.appendChild(el);
+    bindCurrEditor(el, i);
+  });
+}
+
+renderAll();
+renderCurr();
+</script>
+</body>
+</html>

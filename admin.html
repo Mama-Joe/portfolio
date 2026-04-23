@@ -423,7 +423,7 @@ if (ghToken) setGHConnected();
 async function pushToGitHub(projJson, currJson) {
   const api = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
   const headers = {
-    Authorization: `token ${ghToken}`,
+    Authorization: `Bearer ${ghToken}`,
     Accept: 'application/vnd.github.v3+json',
     'Content-Type': 'application/json',
   };

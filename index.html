@@ -83,6 +83,44 @@
     }
     .nav-links a:hover { color: var(--accent); }
 
+    .nav-hamburger {
+      display: none;
+      flex-direction: column; justify-content: center; gap: 5px;
+      width: 36px; height: 36px; cursor: pointer;
+      background: none; border: none; padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block; height: 2px; border-radius: 2px;
+      background: var(--text-light);
+      transition: transform .3s cubic-bezier(.4,0,.2,1), opacity .3s, width .3s;
+    }
+    .nav-hamburger span:nth-child(1) { width: 22px; }
+    .nav-hamburger span:nth-child(2) { width: 16px; }
+    .nav-hamburger span:nth-child(3) { width: 22px; }
+    nav.menu-open .nav-hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); width: 22px; }
+    nav.menu-open .nav-hamburger span:nth-child(2) { opacity: 0; }
+    nav.menu-open .nav-hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); width: 22px; }
+
+    .nav-mobile {
+      display: none;
+      position: fixed; inset: 0; z-index: 199;
+      background: rgba(11,17,32,.97);
+      backdrop-filter: blur(16px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s cubic-bezier(.4,0,.2,1);
+    }
+    .nav-mobile.open { opacity: 1; pointer-events: all; }
+    .nav-mobile a {
+      font-family: 'Barlow', sans-serif; font-weight: 900;
+      font-size: clamp(2rem, 7vw, 2.8rem);
+      color: var(--text-light); text-decoration: none;
+      letter-spacing: -.01em;
+      transition: color .2s;
+    }
+    .nav-mobile a:hover { color: var(--accent); }
+
     /* ─── HERO ─────────────────────────────────────── */
     #hero {
       min-height: 100vh;
@@ -768,6 +806,8 @@
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-mobile { display: flex; }
       section { padding: 5rem 1.5rem; }
       #hero { padding: 7rem 1.5rem 4rem; }
       .about-layout { grid-template-columns: 1fr; gap: 3rem; }
@@ -900,7 +940,17 @@
     <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <a href="#projects">Work</a>
+  <a href="#current">Current</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</div>
 
 <!-- ── HERO ────────────────────────────────────────────── -->
 <section id="hero">
@@ -970,7 +1020,6 @@
   </div>
 </div>
 
-<!-- ── ABOUT ────────────────────────────────────────────── -->
 <!-- ── PHILOSOPHY (PINNED SCROLL SECTION) ─────────────── -->
 <section id="philosophy">
   <div class="phil-sticky">
@@ -1297,7 +1346,6 @@
   <!-- Header -->
   <div class="curr-header-row">
     <div class="sec-head">
-      <span class="sec-num">03</span>
       <div class="sec-rule"></div>
       <h2>Current Work</h2>
     </div>
@@ -1402,7 +1450,6 @@
   <div class="about-layout">
     <div class="about-copy">
       <div class="sec-head">
-        <span class="sec-num">05</span>
         <div class="sec-rule lt"></div>
         <h2 class="on-light">About</h2>
       </div>
@@ -1544,6 +1591,26 @@ const nav = document.getElementById('nav');
 function updateNav() {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 }
+
+/* ── HAMBURGER MENU ─────────────────────────────────────── */
+const navMobile  = document.getElementById('nav-mobile');
+const hamburger  = document.getElementById('nav-hamburger');
+
+function closeMenu() {
+  nav.classList.remove('menu-open');
+  navMobile.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+hamburger.addEventListener('click', () => {
+  const isOpen = navMobile.classList.toggle('open');
+  nav.classList.toggle('menu-open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+navMobile.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', closeMenu);
+});
 
 /* ── HERO GRID MOUSE REVEAL ────────────────────────────── */
 const heroEl = document.getElementById('hero');

@@ -323,7 +323,7 @@
       margin-bottom: 2rem;
       color: var(--text-dark);
     }
-    .name-accent { color: var(--accent); display: block; }
+    .name-accent { color: var(--accent); display: block; margin-top: .15em; }
     .hero-tagline {
       font-size: clamp(1rem, 1.8vw, 1.2rem);
       color: var(--muted-light); max-width: 500px;
@@ -403,6 +403,7 @@
     .about-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr); gap: 5rem; align-items: start; }
     .about-copy { display: flex; flex-direction: column; }
     .about-copy .sec-head { margin-bottom: 2rem; }
+    .about-copy .sec-rule { height: 2px; }
     .bio p { font-size: 1.05rem; line-height: 1.8; color: var(--muted-light); margin-bottom: 1.2rem; }
     .bio p strong { color: var(--text-dark); font-weight: 600; }
     .bio-detail {
@@ -420,7 +421,7 @@
       position: relative; transition: transform .2s; overflow: visible;
     }
     .f-reveal {
-      position: absolute; top: -.5rem; right: 1.5rem;
+      position: absolute; top: -3rem; right: 1.5rem;
       width: 140px; height: 110px;
       pointer-events: none; z-index: 40;
     }
@@ -530,7 +531,13 @@
       width: 24px; height: 4px; border-radius: 99px;
       background: var(--border-dark);
       cursor: pointer;
+      position: relative;
       transition: background .35s, width .35s, opacity .35s;
+    }
+    .phil-dot::before {
+      content: '';
+      position: absolute;
+      inset: -12px -10px;
     }
     .phil-dot:hover,
     .phil-dot:focus-visible { background: var(--muted-dark); opacity: .9; }
@@ -1196,10 +1203,9 @@
     Ryder Fine
   </a>
   <ul class="nav-links">
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#current">In-Progress</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="#projects">Work</a></li>
-    <li><a href="#current">Current</a></li>
-    <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-mobile">
@@ -1208,8 +1214,8 @@
 </nav>
 
 <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
-  <a href="#projects" tabindex="-1">Work</a>
-  <a href="#current" tabindex="-1">Current</a>
+  <a href="#projects" tabindex="-1">Projects</a>
+  <a href="#current" tabindex="-1">In-Progress</a>
   <a href="#about" tabindex="-1">About</a>
   <a href="#contact" tabindex="-1">Contact</a>
 </div>
@@ -1726,7 +1732,7 @@
           </div>
           <div class="f-tag">01 · Concept</div>
           <h3>What's the right problem?</h3>
-          <p>Concept work is the discipline of needs-finding to transform into requirements that serve real users.</p>
+          <p>The pottery wheel redesign started with stakeholder interviews and needs finding, then early prototypes, before any CAD was opened. Working that way surfaces the real constraints early, so the design solves the right problem instead of a clean version of the wrong one.</p>
         </div>
         <div class="f-card reveal d2">
           <div class="f-reveal">
@@ -1735,7 +1741,7 @@
           </div>
           <div class="f-tag">02 · Create</div>
           <h3>Does it actually work?</h3>
-          <p>Ideas only have weight when they're built and tested. Creating means tolerances, materials, fabrication constraints, and iteration — closing the gap between what was designed and what reality will accept.</p>
+          <p>A 600 lb hamster wheel has to assemble in 13 minutes by two people. A swan neck mechanism has to fire reliably in the middle of a live performance. Building means figuring out what the design actually demands from materials, tolerances, and your own hands. Iteration closes that gap. Optimism doesn't.</p>
         </div>
         <div class="f-card reveal d3">
           <div class="f-reveal">
@@ -1744,7 +1750,7 @@
           </div>
           <div class="f-tag">03 · Connect</div>
           <h3>How does it fit the whole?</h3>
-          <p>A part is only as good as its integration. Systems thinking means every component decision accounts for the ripple effects — on the assembly, the user, and the purpose the whole thing was built to serve.</p>
+          <p>The platinum mining model pulled from 40+ sources because CO₂ reductions and worker safety aren't separate levers. They're the same system. That's the work: tracking how a component decision, a policy variable, or a structural tradeoff propagates through everything else it touches.</p>
         </div>
       </div>
   </div>
@@ -1908,17 +1914,27 @@ document.addEventListener('mouseleave', () => document.body.classList.add('cur-h
 }());
 
 /* Expand ring on interactive elements; white cursors on orange buttons */
+const CURSOR_TARGETS = '.proj-card, .curr-featured, .curr-card, .btn, a, button:not(.proj-modal-close), .phil-dot';
+
 document.addEventListener('mouseover', e => {
-  if (e.target.closest('.proj-card, .btn, a, button, .phil-dot'))
+  if (e.target.closest(CURSOR_TARGETS))
     document.body.classList.add('cur-expand');
   else
     document.body.classList.remove('cur-expand');
-
 });
 document.addEventListener('mouseout', e => {
-  if (!e.relatedTarget?.closest('.proj-card,.btn,a,button,.phil-dot'))
+  if (!e.relatedTarget?.closest(CURSOR_TARGETS))
     document.body.classList.remove('cur-expand');
 });
+
+/* Re-check cursor state after scroll — element moves under cursor without firing mouse events */
+window.addEventListener('scroll', () => {
+  const el = document.elementFromPoint(rx, ry);
+  if (el?.closest(CURSOR_TARGETS))
+    document.body.classList.add('cur-expand');
+  else
+    document.body.classList.remove('cur-expand');
+}, { passive: true });
 
 /* Hero grid reveal still works — sync with ring position */
 const heroGridReveal = document.getElementById('hero-grid-reveal');

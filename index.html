@@ -4,6 +4,63 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ryder Fine, Design Engineer</title>
+
+  <!-- ── SEO: Core ───────────────────────────────────────── -->
+  <meta name="description" content="Ryder Fine is a Design Engineer building technically rigorous products and experiences that bridge physical intuition with digital precision. Based in Golden, CO." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://ryderfine.com/" />
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+  <!-- ── SEO: Open Graph (social sharing) ────────────────── -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://ryderfine.com/" />
+  <meta property="og:title"       content="Ryder Fine, Design Engineer" />
+  <meta property="og:description" content="Design Engineer building technically rigorous products and experiences that bridge physical intuition with digital precision." />
+  <meta property="og:image"       content="https://ryderfine.com/Images/DSC_6506%20(1).jpg" />
+  <meta property="og:image:width"  content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:locale"      content="en_US" />
+  <meta property="og:site_name"   content="Ryder Fine" />
+
+  <!-- ── SEO: Twitter / X Card ───────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Ryder Fine, Design Engineer" />
+  <meta name="twitter:description" content="Design Engineer building technically rigorous products and experiences that bridge physical intuition with digital precision." />
+  <meta name="twitter:image"       content="https://ryderfine.com/Images/DSC_6506%20(1).jpg" />
+
+  <!-- ── SEO: JSON-LD Structured Data ────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ryder Fine",
+    "jobTitle": "Design Engineer",
+    "description": "Design Engineer building technically rigorous products and experiences that bridge physical intuition with digital precision.",
+    "url": "https://ryderfine.com",
+    "email": "ryderfine9@gmail.com",
+    "telephone": "+18178050404",
+    "image": "https://ryderfine.com/Images/DSC_6506%20(1).jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Golden",
+      "addressRegion": "CO",
+      "addressCountry": "US"
+    },
+    "sameAs": [
+      "https://behance.net/ryderfine",
+      "https://linkedin.com/in/ryderfine/"
+    ],
+    "knowsAbout": [
+      "Design Engineering",
+      "Product Design",
+      "Systems Thinking",
+      "Mechanical Engineering",
+      "UX Design",
+      "Fabrication"
+    ]
+  }
+  </script>
+
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,21 +69,40 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --dark:        #0B1120;
-      --dark-2:      #111827;
-      --dark-3:      #1C2840;
+      --dark:        #2E2E2E;
+      --dark-2:      #383838;
+      --dark-3:      #424242;
       --accent:      #E85D04;
       --accent-hi:   #FF7722;
       --blue:        #3D5AF1;
       --cream:       #F5F0E8;
       --cream-2:     #EDE6D8;
       --text-light:  #EEE9E0;
-      --text-dark:   #1A1A2E;
-      --muted-dark:  #6E839A;
-      --muted-light: #6B6572;
-      --border-dark: #243044;
+      --text-dark:   #1C1A18;
+      --muted-dark:  #A8A8A8;
+      --muted-light: #5F5C6A; /* was #6B6572 — bumped to clear 4.5:1 on cream */
+      --border-dark: #4A4A4A;
       --border-lt:   #D8D0C6;
     }
+
+    /* ─── SCREEN-READER ONLY UTILITY ──────────────────── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+
+    /* ─── SKIP LINK ────────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: -100%; left: 1rem;
+      background: var(--accent); color: #fff;
+      font-family: 'Space Mono', monospace;
+      font-size: .75rem; text-transform: uppercase; letter-spacing: .1em;
+      padding: .6rem 1.2rem; border-radius: 0 0 4px 4px;
+      text-decoration: none; z-index: 9999;
+      transition: top .15s ease;
+    }
+    .skip-link:focus { top: 0; }
 
     html { scroll-behavior: smooth; }
 
@@ -54,11 +130,11 @@
       display: flex; justify-content: space-between; align-items: center;
       transition: background .3s, border-color .3s;
       border-bottom: 1px solid transparent;
-      background: rgba(11,17,32,.72);
+      background: rgba(46,46,46,.72);
       backdrop-filter: blur(10px);
     }
     nav.scrolled {
-      background: rgba(11,17,32,.92);
+      background: rgba(46,46,46,.92);
       backdrop-filter: blur(14px);
       border-color: var(--border-dark);
     }
@@ -104,7 +180,7 @@
     .nav-mobile {
       display: none;
       position: fixed; inset: 0; z-index: 199;
-      background: rgba(11,17,32,.97);
+      background: rgba(46,46,46,.97);
       backdrop-filter: blur(16px);
       flex-direction: column; align-items: center; justify-content: center;
       gap: 2.5rem;
@@ -121,12 +197,39 @@
     }
     .nav-mobile a:hover { color: var(--accent); }
 
+    /* ─── FOCUS VISIBLE RINGS ──────────────────────── */
+    /* Global baseline — visible on both light and dark backgrounds */
+    :focus { outline: none; }
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+    /* Cream sections need slightly thicker ring for visibility */
+    #hero :focus-visible,
+    #projects :focus-visible,
+    #about :focus-visible,
+    #experience :focus-visible {
+      outline-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(232,93,4,.18);
+    }
+    /* Cards used as buttons get a more prominent ring */
+    .proj-card:focus-visible,
+    .curr-featured:focus-visible,
+    .curr-card:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 5px rgba(232,93,4,.2);
+    }
+
     /* ─── HERO ─────────────────────────────────────── */
     #hero {
       min-height: 100vh;
       display: flex; flex-direction: column; justify-content: center;
       padding: 9rem 3rem 5rem;
-      position: relative; overflow: hidden;
+      position: relative; overflow: clip;
+      background: var(--cream);
+      color: var(--text-dark);
     }
     @keyframes hero-up {
       from { opacity: 0; transform: translateY(22px); }
@@ -149,9 +252,10 @@
     }
     .hero-grid {
       position: absolute; inset: 0; will-change: transform;
+      pointer-events: none;
       background-image:
-        linear-gradient(rgba(61,90,241,.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(61,90,241,.055) 1px, transparent 1px);
+        linear-gradient(rgba(26,26,46,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,26,46,.07) 1px, transparent 1px);
       background-size: 64px 64px;
       animation: grid-move 6s linear infinite;
       mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black 20%, transparent 100%);
@@ -159,8 +263,8 @@
     .hero-grid-reveal {
       position: absolute; inset: 0; pointer-events: none; z-index: 1;
       background-image:
-        linear-gradient(rgba(61,90,241,.35) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(61,90,241,.35) 1px, transparent 1px);
+        linear-gradient(rgba(26,26,46,.35) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,26,46,.35) 1px, transparent 1px);
       background-size: 64px 64px;
       animation: grid-move 6s linear infinite;
       -webkit-mask-image: radial-gradient(280px circle at -9999px -9999px, black, transparent);
@@ -170,17 +274,18 @@
     .hero-glow { position: absolute; pointer-events: none; border-radius: 50%; will-change: transform; }
     .glow-orange {
       width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(232,93,4,.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(232,93,4,.10) 0%, transparent 70%);
       top: 5%; right: 5%;
     }
     .glow-blue {
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(61,90,241,.08) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(61,90,241,.06) 0%, transparent 70%);
       bottom: 10%; left: 10%;
     }
-    .hero-content { position: relative; max-width: 860px; will-change: transform; }
+    .hero-content { position: relative; z-index: 3; max-width: 860px; will-change: transform; }
     .hero-portrait {
       position: absolute; right: 0; top: 0; bottom: 0;
+      pointer-events: none;
       width: clamp(260px, 34vw, 500px);
       z-index: 2;
       -webkit-mask-image: linear-gradient(to right,
@@ -193,12 +298,12 @@
       object-fit: cover; object-position: center 18%;
       filter: grayscale(8%);
     }
-    /* Top + bottom vignette as a dark overlay (not background-match) */
+    /* Top + bottom vignette — blends into cream */
     .hero-portrait::after {
       content: ''; position: absolute; inset: 0;
       background:
-        linear-gradient(to top,  rgba(11,17,32,.7) 0%, transparent 38%),
-        linear-gradient(to bottom, rgba(11,17,32,.45) 0%, transparent 20%);
+        linear-gradient(to top,  rgba(245,240,232,.85) 0%, transparent 40%),
+        linear-gradient(to bottom, rgba(245,240,232,.45) 0%, transparent 22%);
       z-index: 1;
     }
     @media (max-width: 900px) { .hero-portrait { display: none; } }
@@ -216,14 +321,15 @@
       font-size: clamp(3.8rem, 9vw, 7.5rem);
       font-weight: 900; line-height: .92; letter-spacing: .02em;
       margin-bottom: 2rem;
+      color: var(--text-dark);
     }
     .name-accent { color: var(--accent); display: block; }
     .hero-tagline {
       font-size: clamp(1rem, 1.8vw, 1.2rem);
-      color: var(--muted-dark); max-width: 500px;
+      color: var(--muted-light); max-width: 500px;
       line-height: 1.7; margin-bottom: 3rem;
     }
-    .hero-tagline strong { color: var(--text-light); font-weight: 500; }
+    .hero-tagline strong { color: var(--text-dark); font-weight: 600; }
     .cta-row { display: flex; gap: 1rem; flex-wrap: wrap; }
 
     .btn {
@@ -231,12 +337,29 @@
       padding: .85rem 1.75rem; border-radius: 3px;
       font-family: 'Barlow', sans-serif;
       font-size: .875rem; font-weight: 600; letter-spacing: .01em;
-      text-decoration: none; transition: all .2s;
+      text-decoration: none;
     }
-    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      transition: background .18s ease, transform .18s ease;
+    }
     .btn-primary:hover { background: var(--accent-hi); transform: translateY(-2px); }
-    .btn-ghost { background: transparent; color: var(--text-light); border: 1.5px solid var(--border-dark); }
-    .btn-ghost:hover { border-color: var(--muted-dark); transform: translateY(-2px); }
+    .btn-ghost {
+      background: transparent; color: var(--text-dark); border: 1.5px solid var(--border-lt);
+      transition: border-color .18s ease, color .18s ease, transform .18s ease;
+    }
+    .btn-ghost:hover { border-color: var(--muted-light); transform: translateY(-2px); }
+
+    /* Hero is cream — ghost button needs a visible border and clear label */
+    #hero .btn-ghost {
+      border-color: rgba(26,26,46,.32);
+      color: var(--text-dark);
+    }
+    #hero .btn-ghost:hover {
+      border-color: var(--text-dark);
+      background: rgba(26,26,46,.05);
+      transform: translateY(-2px);
+    }
 
     .hero-bottom {
       display: flex; justify-content: space-between; align-items: flex-end;
@@ -246,10 +369,10 @@
       display: flex; align-items: center; gap: .75rem;
       font-family: 'Space Mono', monospace;
       font-size: .65rem; text-transform: uppercase; letter-spacing: .12em;
-      color: var(--muted-dark);
+      color: var(--muted-light);
     }
     .scroll-line {
-      width: 40px; height: 1px; background: var(--muted-dark);
+      width: 40px; height: 1px; background: var(--muted-light);
       animation: pulse-line 2.2s ease-in-out infinite;
     }
     @keyframes pulse-line {
@@ -343,7 +466,7 @@
       position: sticky; top: 0;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden;
-      background: #070c15;
+      background: #1C1A18;
     }
     /* subtle dot grid */
     .phil-sticky::before {
@@ -358,13 +481,19 @@
       position: absolute; top: 50%; left: 3rem; right: 3rem;
       transform: translateY(calc(-50% + 40px));
       opacity: 0;
-      transition: opacity .55s ease, transform .55s ease;
+      transition: opacity .45s ease, transform .45s cubic-bezier(.2,0,0,1);
       pointer-events: none;
     }
     .phil-slide.active {
       opacity: 1;
       transform: translateY(-50%);
       pointer-events: auto;
+    }
+    .phil-slide.exiting {
+      opacity: 0;
+      transform: translateY(calc(-50% - 20px));
+      transition: opacity .3s ease, transform .3s cubic-bezier(.4,0,1,1);
+      pointer-events: none;
     }
     .phil-counter {
       font-family: 'Space Mono', monospace;
@@ -398,17 +527,20 @@
       appearance: none;
       border: 0;
       padding: 0;
-      width: 6px; height: 6px; border-radius: 50%;
+      width: 24px; height: 4px; border-radius: 99px;
       background: var(--border-dark);
       cursor: pointer;
-      transition: background .35s, transform .35s;
+      transition: background .35s, width .35s, opacity .35s;
     }
     .phil-dot:hover,
-    .phil-dot:focus-visible { background: var(--muted-dark); transform: scale(1.2); }
-    .phil-dot.active { background: var(--accent); transform: scale(1.4); }
+    .phil-dot:focus-visible { background: var(--muted-dark); opacity: .9; }
+    .phil-dot.active { background: var(--accent); width: 40px; }
 
     /* ─── PROJECTS (FLIP CARDS) ──────────────────────── */
-    #projects { background: var(--dark); }
+    #projects { background: var(--cream); }
+    #projects .sec-rule { background: var(--accent); }
+    #projects h2 { color: var(--text-dark); }
+    #projects .sec-num { color: var(--accent); }
     .proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
 
     /* Card shell */
@@ -427,8 +559,8 @@
     }
     .proj-card::before { top: 7px; left: 7px; border-width: 2px 0 0 2px; border-top-left-radius: 4px; }
     .proj-card::after  { bottom: 7px; right: 7px; border-width: 0 2px 2px 0; border-bottom-right-radius: 4px; }
-    .proj-card:hover::before,
-    .proj-card:hover::after { opacity: 1; }
+    .proj-card:hover::before,  .proj-card:focus-visible::before,
+    .proj-card:hover::after,   .proj-card:focus-visible::after { opacity: 1; }
 
     /* Full-card image layer */
     .flip-inner {
@@ -438,7 +570,8 @@
       border-radius: 6px;
       transition: border-color .25s;
     }
-    .proj-card:hover .flip-inner { border-color: var(--accent); }
+    .proj-card:hover .flip-inner,
+    .proj-card:focus-visible .flip-inner { border-color: var(--accent); }
 
     .flip-front { position: absolute; inset: 0; }
 
@@ -470,7 +603,8 @@
       transition: transform .45s cubic-bezier(.4,0,.2,1);
       z-index: 2;
     }
-    .proj-card:hover .card-overlay { transform: translateY(0); }
+    .proj-card:hover .card-overlay,
+    .proj-card:focus-visible .card-overlay { transform: translateY(0); }
 
     .card-label {
       flex-shrink: 0;
@@ -540,18 +674,29 @@
     .tag-b { background: rgba(61,90,241,.12); color: var(--blue); border: 1px solid rgba(61,90,241,.2); }
 
     /* ─── CURRENT WORK ───────────────────────────────── */
-    #current { background: #131316; position: relative; overflow: hidden; }
-    #current::before {
-      content: ''; position: absolute; top: -300px; right: -200px;
-      width: 700px; height: 700px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(85,104,248,.055) 0%, transparent 68%);
-      pointer-events: none;
+    #current {
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 75% 20%, rgba(232,93,4,.13) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 10% 80%, rgba(61,90,241,.12) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 50% 50%, rgba(232,93,4,.04) 0%, transparent 70%),
+        #111110;
     }
+    /* diagonal rule lines — technical drawing feel */
+    #current::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+    /* orange streak — top right edge */
     #current::after {
-      content: ''; position: absolute; bottom: -200px; left: -100px;
-      width: 500px; height: 500px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(232,93,4,.04) 0%, transparent 68%);
-      pointer-events: none;
+      content: ''; position: absolute;
+      top: 0; right: 0; width: 1px; height: 55%;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      opacity: .45; pointer-events: none;
     }
     .curr-header-row {
       display: flex; justify-content: space-between; align-items: flex-end;
@@ -579,7 +724,8 @@
       border-radius: 6px; overflow: hidden; margin-bottom: 1.25rem;
       transition: border-color .25s; position: relative; z-index: 1;
     }
-    .curr-featured:hover { border-color: rgba(232,93,4,.35); }
+    .curr-featured:hover,
+    .curr-featured:focus-visible { border-color: rgba(232,93,4,.35); }
     .curr-featured-visual {
       background: linear-gradient(135deg, #0d1018, #111520);
       position: relative; overflow: hidden; min-height: 280px;
@@ -633,7 +779,8 @@
       content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, var(--accent) var(--prog, 50%), var(--border-dark) var(--prog, 50%));
     }
-    .curr-card:hover { border-color: rgba(232,93,4,.3); transform: translateY(-3px); }
+    .curr-card:hover,
+    .curr-card:focus-visible { border-color: rgba(232,93,4,.3); transform: translateY(-3px); }
     .curr-card h3 { font-family: 'Barlow', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-light); margin-bottom: .6rem; letter-spacing: -.01em; }
     .curr-card p { font-size: .84rem; color: var(--muted-dark); line-height: 1.7; }
     .curr-card .curr-meta { margin-top: 1.25rem; }
@@ -666,6 +813,11 @@
 
     /* ─── CONTACT ────────────────────────────────────── */
     #contact { background: var(--dark); text-align: center; padding: 9rem 3rem; }
+    #contact .btn-ghost {
+      color: var(--text-light);
+      border-color: var(--border-dark);
+    }
+    #contact .btn-ghost:hover { border-color: var(--muted-dark); }
     .contact-inner { max-width: 560px; margin: 0 auto; }
     .contact-label { font-family: 'Space Mono', monospace; font-size: .72rem; text-transform: uppercase; letter-spacing: .15em; color: var(--accent); margin-bottom: 1.5rem; }
     .contact-h { font-family: 'Barlow', sans-serif; font-size: clamp(3rem, 7vw, 5rem); font-weight: 900; letter-spacing: .02em; line-height: .95; margin-bottom: 1.5rem; }
@@ -676,8 +828,9 @@
     .social-link:hover { color: var(--accent); }
 
     /* ─── FOOTER ─────────────────────────────────────── */
-    footer { background: var(--dark); border-top: 1px solid var(--border-dark); padding: 1.4rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+    footer { background: var(--dark); border-top: 1px solid var(--border-dark); padding: 1.4rem 3rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
     footer p { font-family: 'Space Mono', monospace; font-size: .65rem; color: var(--muted-dark); }
+    footer p:last-child { text-align: right; }
 
     /* ─── PHILOSOPHY ENHANCED BACKGROUND ──────────────── */
     /* Replace dot grid with offset dual-grid */
@@ -786,17 +939,25 @@
       position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
-      transition: transform .7s cubic-bezier(.4,0,.2,1);
+      transition: transform .35s ease;
     }
-    .proj-card:hover .thumb-img { transform: scale(1.05); }
+    .proj-card:hover .thumb-img { transform: scale(1.04); }
     .thumb-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to bottom, rgba(11,17,32,.15) 0%, rgba(11,17,32,.55) 100%);
+      background: linear-gradient(to bottom, rgba(46,46,46,.15) 0%, rgba(46,46,46,.55) 100%);
     }
 
     /* ─── SCROLL REVEAL ──────────────────────────────── */
-    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      filter: blur(3px);
+      transition:
+        transform .45s cubic-bezier(.2,0,0,1),
+        opacity   .5s  ease          .05s,
+        filter    .4s  ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); filter: blur(0px); }
     .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
 
     /* ─── RESPONSIVE ─────────────────────────────────── */
@@ -825,11 +986,11 @@
     /* ── PROJECT MODAL ─────────────────────────────────────── */
     .proj-modal-overlay {
       position: fixed; inset: 0; z-index: 500;
-      background: rgba(11,17,32,0);
+      background: rgba(46,46,46,0);
       pointer-events: none;
       transition: background .5s;
     }
-    .proj-modal-overlay.open { background: rgba(11,17,32,.7); pointer-events: all; }
+    .proj-modal-overlay.open { background: rgba(46,46,46,.7); pointer-events: all; }
     .proj-modal {
       position: fixed; overflow: hidden; z-index: 501;
       background: var(--dark-2); border: 1px solid var(--border-dark);
@@ -897,7 +1058,7 @@
     .proj-modal-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-dark); }
     .proj-modal-close {
       position: absolute; top: 1rem; right: 1rem; z-index: 10;
-      background: rgba(11,17,32,.55); border: 1px solid var(--border-dark);
+      background: rgba(46,46,46,.55); border: 1px solid var(--border-dark);
       backdrop-filter: blur(6px); border-radius: 50%;
       width: 34px; height: 34px;
       display: flex; align-items: center; justify-content: center;
@@ -907,15 +1068,116 @@
     .proj-modal.expanded .proj-modal-close { opacity: 1; }
     .proj-modal-close:hover { background: var(--dark); color: var(--text-light); }
     .proj-card { cursor: pointer; }
+
+    /* ─── CUSTOM CURSOR ───────────────────────────────────────────── */
+    @media (pointer: fine) {
+      *, *::before, *::after { cursor: none !important; }
+    }
+    #cursor-dot {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+      transition: opacity .25s ease, transform .25s cubic-bezier(.4,0,.2,1);
+      will-change: transform, left, top;
+    }
+    #cursor-ring {
+      position: fixed; top: 0; left: 0; z-index: 9998;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid rgba(232,93,4,.7);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      display: flex; align-items: center; justify-content: center;
+      transition: width .35s cubic-bezier(.4,0,.2,1),
+                  height .35s cubic-bezier(.4,0,.2,1),
+                  background .35s ease,
+                  border-color .35s ease;
+      will-change: left, top;
+    }
+    /* Expanded state — dot bursts outward, hand pops in from the same point */
+    body.cur-expand #cursor-ring { opacity: 0; }
+    body.cur-expand #cursor-dot  { opacity: 0; transform: translate(-50%, -50%) scale(4); }
+    body.cur-expand #cursor-hand { opacity: 1; transform: translate(-18px, -19px) scale(1); }
+
+    /* Hidden state — cursor left window */
+    body.cur-hide #cursor-dot,
+    body.cur-hide #cursor-ring,
+    body.cur-hide #cursor-hand { opacity: 0; }
+
+    /* Hand cursor — scales in from the finger-tip point */
+    #cursor-hand {
+      position: fixed; top: 0; left: 0; z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transform-origin: 18px 19px;
+      transform: translate(-18px, -19px) scale(0.1);
+      transition: opacity .25s ease,
+                  transform .35s cubic-bezier(.34,1.56,.64,1);
+      will-change: left, top;
+    }
+    #cursor-hand img { display: block; width: 52px; height: 52px; }
+
+    /* ─── REDUCED MOTION ─────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      /* Kill decorative infinite animations */
+      .phil-grain,
+      .scroll-line,
+      .ticker-inner,
+      .live-dot,
+      .hero-grid,
+      .hero-grid-reveal { animation: none !important; }
+      #cursor-dot, #cursor-ring, #cursor-hand { display: none; }
+      *, *::before, *::after { cursor: auto !important; }
+
+      /* Freeze the SVG web hub pulse */
+      .web-hub { animation: none !important; opacity: 1; }
+
+      /* Kill hero entry animations */
+      .eyebrow, h1, .hero-tagline, .cta-row,
+      .hero-portrait, .hero-bottom {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      /* Collapse all transitions to imperceptible */
+      *,
+      *::before,
+      *::after {
+        animation-duration:        0.01ms !important;
+        animation-iteration-count: 1      !important;
+        transition-duration:       0.01ms !important;
+        transition-delay:          0ms    !important;
+        scroll-behavior:           auto   !important;
+      }
+
+      /* Lock hero parallax layers */
+      .hero-grid,
+      .hero-glow,
+      .hero-content { transform: none !important; will-change: auto; }
+    }
   </style>
 </head>
 <body>
+<a href="#projects" class="skip-link">Skip to selected work</a>
+<div id="cursor-dot"  aria-hidden="true"></div>
+<div id="cursor-ring" aria-hidden="true"></div>
+
+<div id="cursor-hand" aria-hidden="true">
+  <img src="images/ChatGPT Image Apr 29, 2026, 01_13_35 AM.png" alt="">
+</div>
 
 <!-- ── PROGRESS BAR ────────────────────────────────────── -->
-<div id="progress-bar"></div>
+<div id="progress-bar"
+  role="progressbar"
+  aria-label="Page scroll progress"
+  aria-valuenow="0"
+  aria-valuemin="0"
+  aria-valuemax="100"></div>
 
 <!-- ── NAV ────────────────────────────────────────────── -->
-<nav id="nav">
+<nav id="nav" aria-label="Main navigation">
   <a href="#" class="nav-logo">
     <div class="logo-mark">
       <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -940,27 +1202,30 @@
     <li><a href="#experience">Experience</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle menu">
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-mobile">
     <span></span><span></span><span></span>
   </button>
 </nav>
 
-<div class="nav-mobile" id="nav-mobile">
-  <a href="#projects">Work</a>
-  <a href="#current">Current</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>
+<div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+  <a href="#projects" tabindex="-1">Work</a>
+  <a href="#current" tabindex="-1">Current</a>
+  <a href="#about" tabindex="-1">About</a>
+  <a href="#contact" tabindex="-1">Contact</a>
 </div>
 
+<!-- ── MAIN CONTENT ──────────────────────────────────────── -->
+<main id="main-content">
+
 <!-- ── HERO ────────────────────────────────────────────── -->
-<section id="hero">
+<section id="hero" aria-label="Introduction">
   <div class="hero-grid" id="hero-grid"></div>
   <div class="hero-grid-reveal" id="hero-grid-reveal"></div>
   <div class="hero-glow glow-orange" id="glow-a"></div>
   <div class="hero-glow glow-blue"   id="glow-b"></div>
 
   <div class="hero-portrait">
-    <img src="Images/DSC_6506 (1).jpg" alt="Ryder Fine">
+    <img src="Images/DSC_6506 (1).jpg" alt="Ryder Fine, Design Engineer">
   </div>
 
   <div class="hero-content" id="hero-content">
@@ -981,19 +1246,18 @@
     <div class="cta-row">
       <a href="#projects" class="btn btn-primary">View My Work</a>
       <a href="#contact"  class="btn btn-ghost">Get In Touch</a>
-      <a href="resume.pdf" download class="btn btn-ghost">
+      <a href="resume.pdf" download aria-label="Download resume PDF" class="btn btn-ghost">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
           <path d="M7 1v8M4 6l3 3 3-3M2 11h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         Resume
       </a>
     </div>
-  </div>
-
-  <div class="hero-bottom">
-    <div class="scroll-hint">
-      <div class="scroll-line"></div>
-      Scroll to explore
+    <div class="hero-bottom">
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        Scroll to explore
+      </div>
     </div>
   </div>
 </section>
@@ -1036,147 +1300,136 @@
       <!-- Hub: always visible - offset left of center -->
       <circle class="web-hub" cx="590" cy="365" r="10"/>
 
-      <!-- Stage 1 edges: appear at MECHANISM -->
+      <!-- Stage 1 edges: staggered from hub outward -->
       <g class="web-r1-e">
-        <!-- hub to secondary hubs -->
-        <line class="web-edge" x1="590" y1="365" x2="1090" y2="170"/>
-        <line class="web-edge" x1="590" y1="365" x2="215"  y2="195"/>
-        <line class="web-edge" x1="590" y1="365" x2="975"  y2="575"/>
-        <line class="web-edge" x1="590" y1="365" x2="305"  y2="615"/>
-        <!-- hub to medium nodes -->
-        <line class="web-edge" x1="590" y1="365" x2="835"  y2="245"/>
-        <line class="web-edge" x1="590" y1="365" x2="745"  y2="480"/>
-        <line class="web-edge" x1="590" y1="365" x2="455"  y2="275"/>
-        <line class="web-edge" x1="590" y1="365" x2="490"  y2="510"/>
-        <!-- secondary hub cross-connections -->
-        <line class="web-edge" x1="1090" y1="170" x2="835" y2="245"/>
-        <line class="web-edge" x1="1090" y1="170" x2="975" y2="575"/>
-        <line class="web-edge" x1="215"  y1="195" x2="455" y2="275"/>
-        <line class="web-edge" x1="215"  y1="195" x2="305" y2="615"/>
-        <line class="web-edge" x1="975"  y1="575" x2="745" y2="480"/>
-        <line class="web-edge" x1="305"  y1="615" x2="490" y2="510"/>
-        <line class="web-edge" x1="305"  y1="615" x2="170" y2="430"/>
-        <!-- medium node triangles -->
-        <line class="web-edge" x1="835"  y1="245" x2="745" y2="480"/>
-        <line class="web-edge" x1="455"  y1="275" x2="490" y2="510"/>
-        <line class="web-edge" x1="455"  y1="275" x2="835" y2="245"/>
-        <line class="web-edge" x1="745"  y1="480" x2="490" y2="510"/>
-        <!-- long cross: upper-right to lower-left -->
-        <line class="web-edge" x1="1090" y1="170" x2="305" y2="615"/>
-        <line class="web-edge" x1="215"  y1="195" x2="975" y2="575"/>
+        <line class="web-edge" x1="590" y1="365" x2="1090" y2="170" style="transition-delay:.00s"/>
+        <line class="web-edge" x1="590" y1="365" x2="215"  y2="195" style="transition-delay:.04s"/>
+        <line class="web-edge" x1="590" y1="365" x2="975"  y2="575" style="transition-delay:.08s"/>
+        <line class="web-edge" x1="590" y1="365" x2="305"  y2="615" style="transition-delay:.12s"/>
+        <line class="web-edge" x1="590" y1="365" x2="835"  y2="245" style="transition-delay:.06s"/>
+        <line class="web-edge" x1="590" y1="365" x2="745"  y2="480" style="transition-delay:.10s"/>
+        <line class="web-edge" x1="590" y1="365" x2="455"  y2="275" style="transition-delay:.05s"/>
+        <line class="web-edge" x1="590" y1="365" x2="490"  y2="510" style="transition-delay:.14s"/>
+        <line class="web-edge" x1="1090" y1="170" x2="835" y2="245" style="transition-delay:.22s"/>
+        <line class="web-edge" x1="1090" y1="170" x2="975" y2="575" style="transition-delay:.28s"/>
+        <line class="web-edge" x1="215"  y1="195" x2="455" y2="275" style="transition-delay:.24s"/>
+        <line class="web-edge" x1="215"  y1="195" x2="305" y2="615" style="transition-delay:.30s"/>
+        <line class="web-edge" x1="975"  y1="575" x2="745" y2="480" style="transition-delay:.26s"/>
+        <line class="web-edge" x1="305"  y1="615" x2="490" y2="510" style="transition-delay:.32s"/>
+        <line class="web-edge" x1="305"  y1="615" x2="170" y2="430" style="transition-delay:.34s"/>
+        <line class="web-edge" x1="835"  y1="245" x2="745" y2="480" style="transition-delay:.36s"/>
+        <line class="web-edge" x1="455"  y1="275" x2="490" y2="510" style="transition-delay:.38s"/>
+        <line class="web-edge" x1="455"  y1="275" x2="835" y2="245" style="transition-delay:.40s"/>
+        <line class="web-edge" x1="745"  y1="480" x2="490" y2="510" style="transition-delay:.42s"/>
+        <line class="web-edge" x1="1090" y1="170" x2="305" y2="615" style="transition-delay:.50s"/>
+        <line class="web-edge" x1="215"  y1="195" x2="975" y2="575" style="transition-delay:.52s"/>
       </g>
-      <!-- Stage 1 nodes -->
+      <!-- Stage 1 nodes — appear after their connecting edge -->
       <g class="web-r1-n">
-        <!-- secondary hubs - big, varied sizes -->
-        <circle class="web-node-1" cx="1090" cy="170" r="13"/>
-        <circle class="web-node-1" cx="215"  cy="195" r="9"/>
-        <circle class="web-node-1" cx="975"  cy="575" r="10"/>
-        <circle class="web-node-1" cx="305"  cy="615" r="7"/>
-        <!-- medium nodes -->
-        <circle class="web-node-1" cx="835"  cy="245" r="5.5"/>
-        <circle class="web-node-1" cx="745"  cy="480" r="5"/>
-        <circle class="web-node-1" cx="455"  cy="275" r="5"/>
-        <circle class="web-node-1" cx="490"  cy="510" r="4.5"/>
-        <circle class="web-node-1" cx="170"  cy="430" r="4"/>
+        <circle class="web-node-1" cx="1090" cy="170" r="13"  style="transition-delay:.12s"/>
+        <circle class="web-node-1" cx="215"  cy="195" r="9"   style="transition-delay:.16s"/>
+        <circle class="web-node-1" cx="975"  cy="575" r="10"  style="transition-delay:.20s"/>
+        <circle class="web-node-1" cx="305"  cy="615" r="7"   style="transition-delay:.24s"/>
+        <circle class="web-node-1" cx="835"  cy="245" r="5.5" style="transition-delay:.18s"/>
+        <circle class="web-node-1" cx="745"  cy="480" r="5"   style="transition-delay:.22s"/>
+        <circle class="web-node-1" cx="455"  cy="275" r="5"   style="transition-delay:.17s"/>
+        <circle class="web-node-1" cx="490"  cy="510" r="4.5" style="transition-delay:.26s"/>
+        <circle class="web-node-1" cx="170"  cy="430" r="4"   style="transition-delay:.46s"/>
       </g>
 
-      <!-- Stage 2 edges: appear at SYSTEM -->
+      <!-- Stage 2 edges: ripple outward from existing nodes -->
       <g class="web-r2-e">
-        <!-- outer scattered nodes to nearest inner -->
-        <line class="web-edge-2" x1="935"  y1="80"  x2="1090" y2="170"/>
-        <line class="web-edge-2" x1="935"  y1="80"  x2="835"  y2="245"/>
-        <line class="web-edge-2" x1="1280" y1="90"  x2="1090" y2="170"/>
-        <line class="web-edge-2" x1="1280" y1="90"  x2="935"  y2="80"/>
-        <line class="web-edge-2" x1="1340" y1="310" x2="1090" y2="170"/>
-        <line class="web-edge-2" x1="1340" y1="310" x2="1280" y2="90"/>
-        <line class="web-edge-2" x1="1255" y1="480" x2="975"  y2="575"/>
-        <line class="web-edge-2" x1="1255" y1="480" x2="1340" y2="310"/>
-        <line class="web-edge-2" x1="1255" y1="480" x2="1090" y2="170"/>
-        <line class="web-edge-2" x1="1145" y1="670" x2="975"  y2="575"/>
-        <line class="web-edge-2" x1="1145" y1="670" x2="1255" y2="480"/>
-        <line class="web-edge-2" x1="710"  y1="750" x2="975"  y2="575"/>
-        <line class="web-edge-2" x1="710"  y1="750" x2="1145" y2="670"/>
-        <line class="web-edge-2" x1="710"  y1="750" x2="490"  y2="510"/>
-        <line class="web-edge-2" x1="430"  y1="725" x2="305"  y2="615"/>
-        <line class="web-edge-2" x1="430"  y1="725" x2="710"  y2="750"/>
-        <line class="web-edge-2" x1="125"  y1="620" x2="305"  y2="615"/>
-        <line class="web-edge-2" x1="125"  y1="620" x2="170"  y2="430"/>
-        <line class="web-edge-2" x1="70"   y1="420" x2="170"  y2="430"/>
-        <line class="web-edge-2" x1="70"   y1="420" x2="125"  y2="620"/>
-        <line class="web-edge-2" x1="80"   y1="270" x2="215"  y2="195"/>
-        <line class="web-edge-2" x1="80"   y1="270" x2="170"  y2="430"/>
-        <line class="web-edge-2" x1="360"  y1="110" x2="215"  y2="195"/>
-        <line class="web-edge-2" x1="360"  y1="110" x2="455"  y2="275"/>
-        <line class="web-edge-2" x1="360"  y1="110" x2="80"   y2="270"/>
-        <line class="web-edge-2" x1="670"  y1="130" x2="835"  y2="245"/>
-        <line class="web-edge-2" x1="670"  y1="130" x2="935"  y2="80"/>
-        <line class="web-edge-2" x1="670"  y1="130" x2="455"  y2="275"/>
-        <line class="web-edge-2" x1="670"  y1="130" x2="360"  y2="110"/>
-        <!-- dense cluster: upper-right triangulation -->
-        <line class="web-edge-2" x1="1280" y1="90"  x2="1340" y2="310"/>
-        <line class="web-edge-2" x1="935"  y1="80"  x2="1340" y2="310"/>
-        <!-- skip connections for depth -->
-        <line class="web-edge-2" x1="590"  y1="365" x2="1255" y2="480"/>
-        <line class="web-edge-2" x1="835"  y1="245" x2="1255" y2="480"/>
-        <line class="web-edge-2" x1="215"  y1="195" x2="125"  y2="620"/>
-        <line class="web-edge-2" x1="745"  y1="480" x2="710"  y2="750"/>
+        <line class="web-edge-2" x1="935"  y1="80"  x2="1090" y2="170" style="transition-delay:.00s"/>
+        <line class="web-edge-2" x1="935"  y1="80"  x2="835"  y2="245" style="transition-delay:.03s"/>
+        <line class="web-edge-2" x1="1280" y1="90"  x2="1090" y2="170" style="transition-delay:.06s"/>
+        <line class="web-edge-2" x1="1280" y1="90"  x2="935"  y2="80"  style="transition-delay:.09s"/>
+        <line class="web-edge-2" x1="1340" y1="310" x2="1090" y2="170" style="transition-delay:.12s"/>
+        <line class="web-edge-2" x1="1340" y1="310" x2="1280" y2="90"  style="transition-delay:.15s"/>
+        <line class="web-edge-2" x1="1255" y1="480" x2="975"  y2="575" style="transition-delay:.08s"/>
+        <line class="web-edge-2" x1="1255" y1="480" x2="1340" y2="310" style="transition-delay:.18s"/>
+        <line class="web-edge-2" x1="1255" y1="480" x2="1090" y2="170" style="transition-delay:.22s"/>
+        <line class="web-edge-2" x1="1145" y1="670" x2="975"  y2="575" style="transition-delay:.10s"/>
+        <line class="web-edge-2" x1="1145" y1="670" x2="1255" y2="480" style="transition-delay:.24s"/>
+        <line class="web-edge-2" x1="710"  y1="750" x2="975"  y2="575" style="transition-delay:.14s"/>
+        <line class="web-edge-2" x1="710"  y1="750" x2="1145" y2="670" style="transition-delay:.26s"/>
+        <line class="web-edge-2" x1="710"  y1="750" x2="490"  y2="510" style="transition-delay:.28s"/>
+        <line class="web-edge-2" x1="430"  y1="725" x2="305"  y2="615" style="transition-delay:.12s"/>
+        <line class="web-edge-2" x1="430"  y1="725" x2="710"  y2="750" style="transition-delay:.30s"/>
+        <line class="web-edge-2" x1="125"  y1="620" x2="305"  y2="615" style="transition-delay:.14s"/>
+        <line class="web-edge-2" x1="125"  y1="620" x2="170"  y2="430" style="transition-delay:.32s"/>
+        <line class="web-edge-2" x1="70"   y1="420" x2="170"  y2="430" style="transition-delay:.16s"/>
+        <line class="web-edge-2" x1="70"   y1="420" x2="125"  y2="620" style="transition-delay:.34s"/>
+        <line class="web-edge-2" x1="80"   y1="270" x2="215"  y2="195" style="transition-delay:.10s"/>
+        <line class="web-edge-2" x1="80"   y1="270" x2="170"  y2="430" style="transition-delay:.36s"/>
+        <line class="web-edge-2" x1="360"  y1="110" x2="215"  y2="195" style="transition-delay:.08s"/>
+        <line class="web-edge-2" x1="360"  y1="110" x2="455"  y2="275" style="transition-delay:.20s"/>
+        <line class="web-edge-2" x1="360"  y1="110" x2="80"   y2="270" style="transition-delay:.38s"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="835"  y2="245" style="transition-delay:.06s"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="935"  y2="80"  style="transition-delay:.18s"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="455"  y2="275" style="transition-delay:.22s"/>
+        <line class="web-edge-2" x1="670"  y1="130" x2="360"  y2="110" style="transition-delay:.40s"/>
+        <line class="web-edge-2" x1="1280" y1="90"  x2="1340" y2="310" style="transition-delay:.44s"/>
+        <line class="web-edge-2" x1="935"  y1="80"  x2="1340" y2="310" style="transition-delay:.46s"/>
+        <line class="web-edge-2" x1="590"  y1="365" x2="1255" y2="480" style="transition-delay:.52s"/>
+        <line class="web-edge-2" x1="835"  y1="245" x2="1255" y2="480" style="transition-delay:.54s"/>
+        <line class="web-edge-2" x1="215"  y1="195" x2="125"  y2="620" style="transition-delay:.56s"/>
+        <line class="web-edge-2" x1="745"  y1="480" x2="710"  y2="750" style="transition-delay:.58s"/>
       </g>
-      <!-- Stage 2 nodes - scattered, varied sizes, no ring symmetry -->
+      <!-- Stage 2 nodes -->
       <g class="web-r2-n">
-        <circle class="web-node-2" cx="935"  cy="80"  r="5"/>
-        <circle class="web-node-2" cx="1280" cy="90"  r="4"/>
-        <circle class="web-node-2" cx="1340" cy="310" r="5.5"/>
-        <circle class="web-node-2" cx="1255" cy="480" r="4.5"/>
-        <circle class="web-node-2" cx="1145" cy="670" r="4"/>
-        <circle class="web-node-2" cx="710"  cy="750" r="4.5"/>
-        <circle class="web-node-2" cx="430"  cy="725" r="3.5"/>
-        <circle class="web-node-2" cx="125"  cy="620" r="4"/>
-        <circle class="web-node-2" cx="70"   cy="420" r="3"/>
-        <circle class="web-node-2" cx="80"   cy="270" r="3.5"/>
-        <circle class="web-node-2" cx="360"  cy="110" r="4"/>
-        <circle class="web-node-2" cx="670"  cy="130" r="4.5"/>
-        <!-- tiny fringe -->
-        <circle class="web-node-x" cx="1390" cy="165" r="2.5"/>
-        <circle class="web-node-x" cx="1380" cy="575" r="2"/>
-        <circle class="web-node-x" cx="1040" cy="760" r="2.5"/>
-        <circle class="web-node-x" cx="560"  cy="775" r="2"/>
-        <circle class="web-node-x" cx="210"  cy="760" r="2"/>
-        <circle class="web-node-x" cx="55"   cy="155" r="2.5"/>
-        <circle class="web-node-x" cx="735"  cy="35"  r="2"/>
+        <circle class="web-node-2" cx="935"  cy="80"  r="5"   style="transition-delay:.08s"/>
+        <circle class="web-node-2" cx="1280" cy="90"  r="4"   style="transition-delay:.14s"/>
+        <circle class="web-node-2" cx="1340" cy="310" r="5.5" style="transition-delay:.20s"/>
+        <circle class="web-node-2" cx="1255" cy="480" r="4.5" style="transition-delay:.16s"/>
+        <circle class="web-node-2" cx="1145" cy="670" r="4"   style="transition-delay:.18s"/>
+        <circle class="web-node-2" cx="710"  cy="750" r="4.5" style="transition-delay:.22s"/>
+        <circle class="web-node-2" cx="430"  cy="725" r="3.5" style="transition-delay:.20s"/>
+        <circle class="web-node-2" cx="125"  cy="620" r="4"   style="transition-delay:.22s"/>
+        <circle class="web-node-2" cx="70"   cy="420" r="3"   style="transition-delay:.24s"/>
+        <circle class="web-node-2" cx="80"   cy="270" r="3.5" style="transition-delay:.18s"/>
+        <circle class="web-node-2" cx="360"  cy="110" r="4"   style="transition-delay:.16s"/>
+        <circle class="web-node-2" cx="670"  cy="130" r="4.5" style="transition-delay:.14s"/>
+        <circle class="web-node-x" cx="1390" cy="165" r="2.5" style="transition-delay:.60s"/>
+        <circle class="web-node-x" cx="1380" cy="575" r="2"   style="transition-delay:.64s"/>
+        <circle class="web-node-x" cx="1040" cy="760" r="2.5" style="transition-delay:.62s"/>
+        <circle class="web-node-x" cx="560"  cy="775" r="2"   style="transition-delay:.66s"/>
+        <circle class="web-node-x" cx="210"  cy="760" r="2"   style="transition-delay:.68s"/>
+        <circle class="web-node-x" cx="55"   cy="155" r="2.5" style="transition-delay:.70s"/>
+        <circle class="web-node-x" cx="735"  cy="35"  r="2"   style="transition-delay:.72s"/>
       </g>
     </svg>
 
     <!-- Slide 1: CONCEPT -->
-    <div class="phil-slides">
-      <div class="phil-slide" id="phil-0">
-        <span class="phil-bg-num">01</span>
+    <div class="phil-slides" aria-live="polite" aria-atomic="true">
+      <div class="phil-slide" id="phil-0" role="region" aria-label="Design principle 1 of 3: Concept">
+        <span class="phil-bg-num" aria-hidden="true">01</span>
         <div class="phil-counter">
-          <span class="phil-counter-line"></span>
+          <span class="phil-counter-line" aria-hidden="true"></span>
           01 / 03 · Design Principles
         </div>
-        <div class="phil-word color-orange">CONCEPT</div>
+        <h2 class="phil-word color-orange">CONCEPT</h2>
         <p class="phil-desc">Before a line is drawn, the problem has to be understood. <strong>Concept is the discipline of asking the right question</strong> — converting ambiguity into design intent, need into direction. The best solutions don't start with answers; they start with knowing exactly what you're solving.</p>
       </div>
 
       <!-- Slide 2: CREATE -->
-      <div class="phil-slide" id="phil-1">
-        <span class="phil-bg-num">02</span>
+      <div class="phil-slide" id="phil-1" role="region" aria-label="Design principle 2 of 3: Create">
+        <span class="phil-bg-num" aria-hidden="true">02</span>
         <div class="phil-counter">
-          <span class="phil-counter-line"></span>
+          <span class="phil-counter-line" aria-hidden="true"></span>
           02 / 03 · Design Principles
         </div>
-        <div class="phil-word color-blue">CREATE</div>
+        <h2 class="phil-word color-blue">CREATE</h2>
         <p class="phil-desc">An idea is only real when it's built. <strong>Creating is where intent becomes hardware</strong> — through fabrication, iteration, and the honest resistance of materials under constraint. Every prototype is a decision tested against reality, not theory.</p>
       </div>
 
       <!-- Slide 3: CONNECT -->
-      <div class="phil-slide" id="phil-2">
-        <span class="phil-bg-num">03</span>
+      <div class="phil-slide" id="phil-2" role="region" aria-label="Design principle 3 of 3: Connect">
+        <span class="phil-bg-num" aria-hidden="true">03</span>
         <div class="phil-counter">
-          <span class="phil-counter-line"></span>
+          <span class="phil-counter-line" aria-hidden="true"></span>
           03 / 03 · Design Principles
         </div>
-        <div class="phil-word color-light">CONNECT</div>
+        <h2 class="phil-word color-light">CONNECT</h2>
         <p class="phil-desc">No part exists in isolation. <strong>Systems thinking</strong> means tracking how components become assemblies, assemblies become products, and products shape outcomes in the real world. Designing across scales — from a single joint to a full architecture — is what separates engineering from guessing.</p>
       </div>
     </div>
@@ -1201,7 +1454,7 @@
   <div class="proj-grid">
 
     <!-- 1. Whiteboard Desk -->
-    <div class="proj-card reveal" data-g1="" data-g2="" data-g3="">
+    <div class="proj-card reveal" role="button" tabindex="0" aria-label="View project: Magnetic Whiteboard Desk" data-g1="" data-g2="" data-g3="">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1224,7 +1477,7 @@
     </div>
 
     <!-- 2. Swan Neck -->
-    <div class="proj-card reveal d1" data-g1="" data-g2="" data-g3="">
+    <div class="proj-card reveal d1" role="button" tabindex="0" aria-label="View project: Extending Swan Neck" data-g1="" data-g2="" data-g3="">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1247,7 +1500,7 @@
     </div>
 
     <!-- 3. Hamster Wheel -->
-    <div class="proj-card reveal d2" data-g1="" data-g2="" data-g3="">
+    <div class="proj-card reveal d2" role="button" tabindex="0" aria-label="View project: Human Hamster Wheel" data-g1="" data-g2="" data-g3="">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1270,7 +1523,7 @@
     </div>
 
     <!-- 4. Pen Plotter -->
-    <div class="proj-card reveal" data-g1="" data-g2="" data-g3="">
+    <div class="proj-card reveal" role="button" tabindex="0" aria-label="View project: 2D Pen Plotter" data-g1="" data-g2="" data-g3="">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1293,7 +1546,7 @@
     </div>
 
     <!-- 5. Faucet Pad -->
-    <div class="proj-card reveal d1" data-g1="" data-g2="" data-g3="">
+    <div class="proj-card reveal d1" role="button" tabindex="0" aria-label="View project: Touchless Faucet Pad" data-g1="" data-g2="" data-g3="">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1316,7 +1569,7 @@
     </div>
 
     <!-- 6. PGM Systems Modeling -->
-    <div class="proj-card reveal d2" data-g1="" data-g2="" data-g3="">
+    <div class="proj-card reveal d2" role="button" tabindex="0" aria-label="View project: Dynamic Systems PGM Mining" data-g1="" data-g2="" data-g3="">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1357,6 +1610,7 @@
 
   <!-- Featured: Mars Rover -->
   <div class="curr-featured reveal"
+    role="button" tabindex="0" aria-label="View current project: Mars Rover — URC Team"
     data-modal-purpose="For the University Rover Challenge"
     data-modal-tags='[{"text":"Active","type":"o"},{"text":"URC 2025","type":"b"},{"text":"Mechanical","type":"o"}]'
     data-modal-chips='["Structural Systems","Additive Mfg","Integrated Design"]'
@@ -1403,6 +1657,7 @@
   <!-- Secondary cards -->
   <div class="curr-secondary">
     <div class="curr-card reveal" style="--prog: 55%"
+      role="button" tabindex="0" aria-label="View current project: Rover Wheel Testing Platform"
       data-modal-purpose="For Mines Lunar Surface Simulator"
       data-modal-tags='[{"text":"Active","type":"o"},{"text":"Research","type":"b"},{"text":"Mechanisms","type":"o"}]'
       data-modal-chips='["Lunar Terrain","Research Platform","Wheel Testing"]'
@@ -1416,6 +1671,7 @@
       </div>
     </div>
     <div class="curr-card reveal d1" style="--prog: 40%"
+      role="button" tabindex="0" aria-label="View current project: Pneumatic Stilts"
       data-modal-purpose="For theatrical performance"
       data-modal-tags='[{"text":"Funded","type":"o"},{"text":"ProtoFund","type":"b"},{"text":"Wearable","type":"o"}]'
       data-modal-chips='["Pneumatics","Stage Safety","Grant-Funded"]'
@@ -1429,6 +1685,7 @@
       </div>
     </div>
     <div class="curr-card reveal d2" style="--prog: 65%"
+      role="button" tabindex="0" aria-label="View current project: Alternative Mining Systems Analysis"
       data-modal-purpose="For global resource policy modeling"
       data-modal-tags='[{"text":"Research","type":"o"},{"text":"Vensim","type":"b"},{"text":"Systems","type":"o"}]'
       data-modal-chips='["System Dynamics","Policy Modeling","Feedback Loops"]'
@@ -1450,7 +1707,7 @@
   <div class="about-layout">
     <div class="about-copy">
       <div class="sec-head">
-        <div class="sec-rule lt"></div>
+        <div class="sec-rule"></div>
         <h2 class="on-light">About</h2>
       </div>
       <div class="bio reveal">
@@ -1506,11 +1763,13 @@
       <a href="tel:+18178050404" class="btn btn-primary">+1 (817) 805-0404</a>
     </div>
     <div class="socials reveal">
-      <a href="https://behance.net/ryderfine"        class="social-link" target="_blank" rel="noopener">Behance</a>
-      <a href="https://linkedin.com/in/ryderfine/"   class="social-link" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://behance.net/ryderfine"        class="social-link" target="_blank" rel="noopener" aria-label="Behance (opens in new tab)">Behance</a>
+      <a href="https://linkedin.com/in/ryderfine/"   class="social-link" target="_blank" rel="noopener" aria-label="LinkedIn (opens in new tab)">LinkedIn</a>
     </div>
   </div>
 </section>
+
+</main><!-- /main-content -->
 
 <!-- ── FOOTER ──────────────────────────────────────────── -->
 <footer>
@@ -1530,8 +1789,9 @@
 </footer>
 
 <!-- ── PROJECT MODAL ───────────────────────────────────── -->
-<div class="proj-modal-overlay" id="proj-modal-overlay">
-  <div class="proj-modal" id="proj-modal">
+<div class="proj-modal-overlay" id="proj-modal-overlay" aria-hidden="true">
+  <div class="proj-modal" id="proj-modal"
+    role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="proj-modal-gallery">
       <img class="pmg-main" id="modal-gimg-0" src="" alt="">
       <div class="pmg-row" id="modal-pmg-row">
@@ -1540,7 +1800,7 @@
       </div>
     </div>
     <div class="proj-modal-body">
-      <button class="proj-modal-close" id="modal-close">✕</button>
+      <button class="proj-modal-close" id="modal-close" aria-label="Close project detail">✕</button>
       <div class="proj-modal-tags" id="modal-tags"></div>
       <div class="proj-modal-title" id="modal-title"></div>
       <div class="proj-modal-purpose" id="modal-purpose"></div>
@@ -1555,7 +1815,9 @@
 const bar = document.getElementById('progress-bar');
 function updateBar() {
   const max = document.body.scrollHeight - window.innerHeight;
-  bar.style.width = (window.scrollY / max * 100) + '%';
+  const pct = Math.round(window.scrollY / max * 100);
+  bar.style.width = pct + '%';
+  bar.setAttribute('aria-valuenow', pct);
 }
 
 /* ── SMOOTH SCROLL (nav-offset aware, iframe-safe) ─────── */
@@ -1599,13 +1861,22 @@ const hamburger  = document.getElementById('nav-hamburger');
 function closeMenu() {
   nav.classList.remove('menu-open');
   navMobile.classList.remove('open');
+  navMobile.setAttribute('aria-hidden', 'true');
+  navMobile.querySelectorAll('a').forEach(a => a.setAttribute('tabindex', '-1'));
+  hamburger.setAttribute('aria-expanded', 'false');
   document.body.style.overflow = '';
 }
 
 hamburger.addEventListener('click', () => {
   const isOpen = navMobile.classList.toggle('open');
   nav.classList.toggle('menu-open', isOpen);
+  hamburger.setAttribute('aria-expanded', String(isOpen));
+  navMobile.setAttribute('aria-hidden', String(!isOpen));
+  navMobile.querySelectorAll('a').forEach(a =>
+    a.setAttribute('tabindex', isOpen ? '0' : '-1')
+  );
   document.body.style.overflow = isOpen ? 'hidden' : '';
+  if (isOpen) navMobile.querySelector('a').focus();
 });
 
 navMobile.querySelectorAll('a').forEach(a => {
@@ -1614,14 +1885,54 @@ navMobile.querySelectorAll('a').forEach(a => {
 
 /* ── HERO GRID MOUSE REVEAL ────────────────────────────── */
 const heroEl = document.getElementById('hero');
-const gridReveal = document.getElementById('hero-grid-reveal');
-heroEl.addEventListener('mousemove', e => {
-  const r = heroEl.getBoundingClientRect();
-  const x = e.clientX - r.left, y = e.clientY - r.top;
-  const g = `radial-gradient(280px circle at ${x}px ${y}px, black, transparent)`;
-  gridReveal.style.webkitMaskImage = g;
-  gridReveal.style.maskImage = g;
+/* ── CUSTOM CURSOR ──────────────────────────────────────── */
+const curDot  = document.getElementById('cursor-dot');
+const curRing = document.getElementById('cursor-ring');
+const curHand = document.getElementById('cursor-hand');
+let rx = -9999, ry = -9999, cx = -9999, cy = -9999;
+
+document.addEventListener('mousemove', e => {
+  rx = e.clientX; ry = e.clientY;
+  curDot.style.left  = rx + 'px';
+  curDot.style.top   = ry + 'px';
+  curHand.style.left = rx + 'px';
+  curHand.style.top  = ry + 'px';
+  document.body.classList.remove('cur-hide');
 });
+document.addEventListener('mouseleave', () => document.body.classList.add('cur-hide'));
+
+(function tickRing() {
+  cx += (rx - cx) * 0.40;
+  cy += (ry - cy) * 0.40;
+  curRing.style.left = cx + 'px';
+  curRing.style.top  = cy + 'px';
+  requestAnimationFrame(tickRing);
+}());
+
+/* Expand ring on interactive elements; white cursors on orange buttons */
+document.addEventListener('mouseover', e => {
+  if (e.target.closest('.proj-card, .btn, a, button, .phil-dot'))
+    document.body.classList.add('cur-expand');
+  else
+    document.body.classList.remove('cur-expand');
+
+});
+document.addEventListener('mouseout', e => {
+  if (!e.relatedTarget?.closest('.proj-card,.btn,a,button,.phil-dot'))
+    document.body.classList.remove('cur-expand');
+});
+
+/* Hero grid reveal still works — sync with ring position */
+const heroGridReveal = document.getElementById('hero-grid-reveal');
+if (heroGridReveal) {
+  (function syncHeroReveal() {
+    const r = heroEl.getBoundingClientRect();
+    const hm = `radial-gradient(280px circle at ${cx - r.left}px ${cy - r.top}px, black, transparent)`;
+    heroGridReveal.style.webkitMaskImage = hm;
+    heroGridReveal.style.maskImage = hm;
+    requestAnimationFrame(syncHeroReveal);
+  }());
+}
 
 /* ── HERO PARALLAX ─────────────────────────────────────── */
 const heroGrid    = document.getElementById('hero-grid');
@@ -1636,7 +1947,7 @@ function updateHero() {
   glowA.style.transform       = `translateY(${y * 0.28}px)`;
   glowB.style.transform       = `translateY(${y * 0.55}px)`;
   heroContent.style.transform = `translateY(${y * 0.18}px)`;
-  heroContent.style.opacity   = `${Math.max(0, 1 - y / 480)}`;
+  heroContent.style.opacity   = `${Math.max(0, 1 - y / 900)}`;
 }
 
 /* ── PINNED PHILOSOPHY ─────────────────────────────────── */
@@ -1668,7 +1979,12 @@ function updatePhil() {
   philSticky.setAttribute('data-web-stage', String(idx));
   if (idx === activeSlide) return;
 
-  philSlides[activeSlide].classList.remove('active');
+  const outgoing = philSlides[activeSlide];
+  outgoing.classList.add('exiting');
+  outgoing.classList.remove('active');
+  const exitRef = outgoing;
+  setTimeout(() => exitRef.classList.remove('exiting'), 320);
+
   philDots[activeSlide].classList.remove('active');
   activeSlide = idx;
   philSlides[activeSlide].classList.add('active');
@@ -1718,6 +2034,16 @@ if (window.matchMedia('(pointer: coarse)').matches) {
     card.addEventListener('click', () => card.classList.toggle('flipped'));
   });
 }
+
+/* ── KEYBOARD ACCESS FOR CARDS ─────────────────────────── */
+document.querySelectorAll('.proj-card, .curr-featured, .curr-card').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      card.click();
+    }
+  });
+});
 // Add CSS for mobile flipped state
 const mobileFlip = document.createElement('style');
 mobileFlip.textContent = '.proj-card.flipped .flip-inner { transform: rotateY(180deg); }';
@@ -1742,9 +2068,11 @@ function getModalDims() {
 }
 
 let lastCardRect = null;
+let lastFocusedCard = null;
 
-function openModal({ title, purpose, desc, tagsHTML, chipsHTML, gallery, galleryAlt }, rect) {
+function openModal({ title, purpose, desc, tagsHTML, chipsHTML, gallery, galleryAlt }, rect, triggerEl) {
   lastCardRect = rect;
+  lastFocusedCard = triggerEl || document.activeElement;
 
   const fallback = gallery[0] || '';
   const hasExtra = gallery[1] || gallery[2];
@@ -1765,6 +2093,7 @@ function openModal({ title, purpose, desc, tagsHTML, chipsHTML, gallery, gallery
   projModal.style.cssText = `left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;border-radius:6px;`;
 
   modalOverlay.classList.add('open');
+  modalOverlay.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
 
   const { w, h, l, t } = getModalDims();
@@ -1776,7 +2105,10 @@ function openModal({ title, purpose, desc, tagsHTML, chipsHTML, gallery, gallery
   projModal.style.height       = h + 'px';
   projModal.style.borderRadius = '12px';
 
-  setTimeout(() => projModal.classList.add('expanded'), 420);
+  setTimeout(() => {
+    projModal.classList.add('expanded');
+    document.getElementById('modal-close').focus();
+  }, 420);
 }
 
 // ── Selected Work cards ────────────────────────────────────
@@ -1792,7 +2124,7 @@ document.querySelectorAll('.proj-card').forEach(card => {
       chipsHTML:  card.querySelector('.proj-chips').innerHTML,
       gallery:    [g[0] || img.src, g[1] || img.src, g[2] || img.src],
       galleryAlt: img.alt,
-    }, card.getBoundingClientRect());
+    }, card.getBoundingClientRect(), card);
   });
 });
 
@@ -1814,7 +2146,7 @@ function currCardData(card) {
 }
 
 document.querySelectorAll('.curr-featured, .curr-card').forEach(card => {
-  card.addEventListener('click', () => openModal(currCardData(card), card.getBoundingClientRect()));
+  card.addEventListener('click', () => openModal(currCardData(card), card.getBoundingClientRect(), card));
 });
 
 document.getElementById('modal-close').addEventListener('click', closeModal);
@@ -1824,7 +2156,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 function closeModal() {
   projModal.classList.remove('expanded');
   modalOverlay.classList.remove('open');
+  modalOverlay.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+
+  // Return focus to the card that triggered the modal
+  if (lastFocusedCard) lastFocusedCard.focus();
 
   // Animate back to the card's original position
   if (lastCardRect) {
@@ -1839,6 +2175,7 @@ function closeModal() {
     projModal.classList.remove('animating', 'is-open');
     projModal.style.cssText = '';
     lastCardRect = null;
+    lastFocusedCard = null;
   }, 560);
 }
 
@@ -1878,28 +2215,47 @@ function closeModal() {
     return Array.from({ length: 55 }, () => ({
       x:  Math.random() * w,
       y:  Math.random() * h,
-      vx: (Math.random() - 0.5) * 0.35,
-      vy: (Math.random() - 0.5) * 0.35,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
       r:  Math.random() * 2.5 + 1,
       orange: Math.random() > 0.45,
       op: Math.random() * 0.45 + 0.2,
+      /* wander: each node has a slowly-drifting personal heading */
+      wa: Math.random() * Math.PI * 2,   // wander angle
+      ws: (Math.random() - 0.5) * 0.04,  // wander turn speed
     }));
   }
 
   function tick() {
     ctx.clearRect(0, 0, w, h);
+    const hasMouse = mouse.x > -9000;
+
     nodes.forEach(n => {
-      const dx = mouse.x - n.x, dy = mouse.y - n.y;
-      const d  = Math.sqrt(dx * dx + dy * dy);
-      if (d < 180 && d > 0) { n.vx += (dx / d) * 0.018; n.vy += (dy / d) * 0.018; }
-      n.vx *= 0.97; n.vy *= 0.97;
+      /* Wander — very gentle drift along a slowly-rotating heading */
+      n.wa += n.ws + (Math.random() - 0.5) * 0.008;
+      n.vx += Math.cos(n.wa) * 0.003;
+      n.vy += Math.sin(n.wa) * 0.003;
+
+      /* Cursor attraction — nodes drift toward the pointer */
+      if (hasMouse) {
+        const dx = mouse.x - n.x, dy = mouse.y - n.y;
+        const d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < 200 && d > 0) { n.vx += (dx / d) * 0.014; n.vy += (dy / d) * 0.014; }
+      }
+
+      /* Speed cap + damping */
+      const spd = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+      if (spd > 0.55) { n.vx = (n.vx / spd) * 0.55; n.vy = (n.vy / spd) * 0.55; }
+      n.vx *= 0.988; n.vy *= 0.988;
+
       n.x  += n.vx;  n.y  += n.vy;
-      if (n.x < 0) { n.x = 0; n.vx *= -1; }
-      if (n.x > w) { n.x = w; n.vx *= -1; }
-      if (n.y < 0) { n.y = 0; n.vy *= -1; }
-      if (n.y > h) { n.y = h; n.vy *= -1; }
+      if (n.x < 0) { n.x = 0; n.vx *= -1; n.wa = Math.PI - n.wa; }
+      if (n.x > w) { n.x = w; n.vx *= -1; n.wa = Math.PI - n.wa; }
+      if (n.y < 0) { n.y = 0; n.vy *= -1; n.wa = -n.wa; }
+      if (n.y > h) { n.y = h; n.vy *= -1; n.wa = -n.wa; }
     });
 
+    /* Node-to-node edges */
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
         const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
@@ -1913,6 +2269,22 @@ function closeModal() {
           ctx.stroke();
         }
       }
+    }
+
+    /* Cursor-to-node edges — connect the pointer into the web */
+    if (hasMouse) {
+      nodes.forEach(n => {
+        const dx = mouse.x - n.x, dy = mouse.y - n.y;
+        const d  = Math.sqrt(dx * dx + dy * dy);
+        if (d < 180) {
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(n.x, n.y);
+          ctx.strokeStyle = `rgba(232,93,4,${(1 - d / 180) * 0.5})`;
+          ctx.lineWidth = 0.9;
+          ctx.stroke();
+        }
+      });
     }
 
     nodes.forEach(n => {

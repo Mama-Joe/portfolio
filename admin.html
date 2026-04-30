@@ -97,13 +97,25 @@
     textarea { resize: vertical; line-height: 1.6; }
 
     .img-section { margin-bottom: 1.25rem; }
+    .crop-wrap {
+      position: relative; width: 100%; aspect-ratio: 4/3;
+      border-radius: 4px; overflow: hidden; cursor: crosshair;
+      background: var(--dark-3); border: 1px solid var(--border); margin-bottom: .75rem;
+      user-select: none;
+    }
+    .img-preview {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      pointer-events: none; user-select: none;
+    }
+    .focal-dot {
+      position: absolute; width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid #fff; background: rgba(232,93,4,.75);
+      box-shadow: 0 0 0 1px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.5);
+      transform: translate(-50%,-50%); pointer-events: none;
+    }
     .img-row { display: flex; gap: 1rem; align-items: flex-start; }
     .img-preview-wrap { flex-shrink: 0; }
-    .img-preview {
-      width: 120px; height: 80px; object-fit: cover; border-radius: 4px;
-      border: 1px solid var(--border); display: block; background: var(--dark-3);
-    }
-    .img-inputs { flex: 1; display: flex; flex-direction: column; gap: .6rem; }
+    .img-inputs { display: flex; flex-direction: column; gap: .6rem; }
     .img-or { font-size: .72rem; color: var(--muted); text-align: center; }
     input[type="file"] { display: none; }
     .file-label {
@@ -527,27 +539,23 @@ function buildEditorHTML(p, i) {
     </div>
     <div class="proj-body">
       <div class="img-section">
-        <label>Image</label>
-        <div class="img-row">
-          <div class="img-preview-wrap">
-            <img class="img-preview" src="${p.img}" alt="" onerror="this.style.opacity='.3'">
-          </div>
-          <div class="img-inputs">
-            <input type="text" class="field-img-url" placeholder="Image URL or paste base64…" value="${p.img}">
-            <div class="img-or">— or upload —</div>
-            <label class="file-label" for="file-${i}">Choose file…</label>
-            <input type="file" id="file-${i}" accept="image/*" class="file-input">
-          </div>
+        <label>Cover image — click or drag to reposition</label>
+        <div class="crop-wrap">
+          <img class="img-preview" src="${p.img}" alt="" onerror="this.style.opacity='.3'" style="object-position:${escH(p.imgPos||'center center')}">
+          <div class="focal-dot"></div>
         </div>
+        <div class="img-inputs">
+          <input type="text" class="field-img-url" placeholder="Image URL or paste base64…" value="${p.img}">
+          <div class="img-or">— or upload —</div>
+          <label class="file-label" for="file-${i}">Choose file…</label>
+          <input type="file" id="file-${i}" accept="image/*" class="file-input">
+        </div>
+        <input type="hidden" class="field-img-pos" value="${escH(p.imgPos||'center center')}">
       </div>
       <div class="field-grid">
         <div>
           <label>Alt text</label>
           <input type="text" class="field-img-alt" value="${escH(p.imgAlt)}">
-        </div>
-        <div>
-          <label>Object position (CSS)</label>
-          <input type="text" class="field-img-pos" placeholder="center center" value="${escH(p.imgPos||'')}">
         </div>
         <div>
           <label>Title</label>
@@ -622,6 +630,44 @@ function bindEditor(el, i) {
     el.classList.toggle('open');
   });
 
+  // Focal point crop picker
+  const cropWrap  = el.querySelector('.crop-wrap');
+  const focalDot  = el.querySelector('.focal-dot');
+  const cropImg   = el.querySelector('.img-preview');
+  const posField  = el.querySelector('.field-img-pos');
+
+  function parsePct(v) {
+    if (!v) return 50;
+    v = v.trim();
+    if (v === 'center') return 50;
+    if (v === 'top' || v === 'left') return 0;
+    if (v === 'bottom' || v === 'right') return 100;
+    return parseFloat(v) || 50;
+  }
+  function initDot() {
+    const parts = (posField.value || 'center center').split(' ');
+    const x = parsePct(parts[0]), y = parsePct(parts[1] ?? parts[0]);
+    focalDot.style.left = x + '%';
+    focalDot.style.top  = y + '%';
+    cropImg.style.objectPosition = posField.value || 'center center';
+  }
+  initDot();
+
+  function applyFocal(e) {
+    const r = cropWrap.getBoundingClientRect();
+    const x = Math.round(Math.max(0, Math.min(100, (e.clientX - r.left)  / r.width  * 100)));
+    const y = Math.round(Math.max(0, Math.min(100, (e.clientY - r.top)   / r.height * 100)));
+    const pos = `${x}% ${y}%`;
+    posField.value = pos;
+    cropImg.style.objectPosition = pos;
+    focalDot.style.left = x + '%';
+    focalDot.style.top  = y + '%';
+  }
+  let draggingFocal = false;
+  cropWrap.addEventListener('mousedown', e => { draggingFocal = true; applyFocal(e); e.preventDefault(); });
+  window.addEventListener('mousemove',  e => { if (draggingFocal) applyFocal(e); });
+  window.addEventListener('mouseup',    ()  => { draggingFocal = false; });
+
   // File upload → base64
   el.querySelector('.file-input').addEventListener('change', e => {
     const file = e.target.files[0];
@@ -630,7 +676,7 @@ function bindEditor(el, i) {
     reader.onload = ev => {
       const url = ev.target.result;
       el.querySelector('.field-img-url').value = url;
-      el.querySelector('.img-preview').src = url;
+      cropImg.src = url;
       el.querySelector('.proj-editor-thumb').src = url;
     };
     reader.readAsDataURL(file);
@@ -652,7 +698,7 @@ function bindEditor(el, i) {
 
   // Live URL preview
   el.querySelector('.field-img-url').addEventListener('input', e => {
-    el.querySelector('.img-preview').src = e.target.value;
+    cropImg.src = e.target.value;
     el.querySelector('.proj-editor-thumb').src = e.target.value;
   });
 

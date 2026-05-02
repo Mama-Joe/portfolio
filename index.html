@@ -66,7 +66,7 @@
   <link rel="apple-touch-icon"                     href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;900&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@700;900&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -114,9 +114,9 @@
       color: var(--text-light);
       overflow-x: hidden;
     }
-    /* Bold inline text switches to DM Serif Display for contrast pop */
+    /* Bold inline text switches to DM Serif Text for contrast pop */
     strong {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'DM Serif Text', serif;
       font-weight: normal;
       font-size: 1.08em;
       letter-spacing: 0.03em;
@@ -148,7 +148,7 @@
       border-color: var(--border-dark);
     }
     .nav-logo {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'DM Serif Text', serif;
       font-weight: 600; font-size: .95rem;
       color: var(--text-light); text-decoration: none;
       letter-spacing: .03em;
@@ -345,7 +345,7 @@
     .btn {
       display: inline-flex; align-items: center; gap: .5rem;
       padding: .85rem 1.75rem; border-radius: 3px;
-      font-family: 'DM Serif Display', serif;
+      font-family: 'DM Serif Text', serif;
       font-size: .875rem; font-weight: 600; letter-spacing: .08em;
       text-decoration: none;
     }
@@ -463,7 +463,7 @@
     .f-card:hover { transform: translateX(6px); }
     .f-card:hover::before { background: var(--accent); }
     .f-tag { font-family: 'DM Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: .5rem; }
-    .f-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: .4rem; letter-spacing: .04em; }
+    .f-card h3 { font-family: 'DM Serif Text', serif; font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: .4rem; letter-spacing: .04em; }
     .f-card p { font-size: .875rem; color: var(--muted-light); line-height: 1.65; }
 
     /* ─── PHILOSOPHY (PINNED SCROLL) ─────────────────── */
@@ -632,7 +632,7 @@
     }
     .proj-card:hover .card-label { border-color: var(--accent); background: var(--dark-3); }
     .card-label h3 {
-      font-family: 'DM Serif Display', serif;
+      font-family: 'DM Serif Text', serif;
       font-size: 1rem; font-weight: 600;
       color: var(--text-light); letter-spacing: .03em;
     }
@@ -772,12 +772,12 @@
       padding: .28rem .7rem; border-radius: 2px; width: fit-content;
     }
     .curr-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: blink 2s ease-in-out infinite; }
-    .curr-featured h3 { font-family: 'DM Serif Display', serif; font-size: 1.55rem; font-weight: 900; color: var(--text-light); letter-spacing: .03em; line-height: 1.1; }
+    .curr-featured h3 { font-family: 'DM Serif Text', serif; font-size: 1.55rem; font-weight: 900; color: var(--text-light); letter-spacing: .03em; line-height: 1.1; }
     .curr-featured > .curr-featured-body > p { font-size: .875rem; color: var(--muted-dark); line-height: 1.75; }
     .curr-meta { display: flex; gap: 2rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--border-dark); margin-top: .25rem; }
     .meta-item { display: flex; flex-direction: column; gap: .15rem; }
     .meta-l { font-family: 'DM Mono', monospace; font-size: .6rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted-dark); }
-    .meta-v { font-family: 'DM Serif Display', serif; font-size: .85rem; font-weight: 600; color: var(--text-light); letter-spacing: .03em; }
+    .meta-v { font-family: 'DM Serif Text', serif; font-size: .85rem; font-weight: 600; color: var(--text-light); letter-spacing: .03em; }
     .curr-progress { height: 2px; border-radius: 2px; background: var(--border-dark); overflow: hidden; margin-top: .4rem; width: 120px; }
     .curr-progress-fill {
       height: 100%; border-radius: 2px;
@@ -798,7 +798,7 @@
     }
     .curr-card:hover,
     .curr-card:focus-visible { border-color: rgba(232,93,4,.3); transform: translateY(-3px); }
-    .curr-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--text-light); margin-bottom: .6rem; letter-spacing: .03em; }
+    .curr-card h3 { font-family: 'DM Serif Text', serif; font-size: 1.1rem; font-weight: 700; color: var(--text-light); margin-bottom: .6rem; letter-spacing: .03em; }
     .curr-card p { font-size: .84rem; color: var(--muted-dark); line-height: 1.7; }
     .curr-card .curr-meta { margin-top: 1.25rem; }
     @media (max-width: 768px) { .curr-featured { grid-template-columns: 1fr; } .curr-featured-visual { min-height: 180px; } .curr-secondary { grid-template-columns: 1fr; } }
@@ -813,13 +813,13 @@
     .exp-item:last-child { border-bottom: none; margin-bottom: 0; }
     .exp-item:hover { border-left-color: var(--accent); }
     .exp-org { font-size: .85rem; color: var(--accent); font-weight: 600; margin-bottom: .15rem; }
-    .exp-role { font-family: 'DM Serif Display', serif; font-size: .95rem; font-weight: 600; color: var(--text-dark); letter-spacing: .03em; }
+    .exp-role { font-family: 'DM Serif Text', serif; font-size: .95rem; font-weight: 600; color: var(--text-dark); letter-spacing: .03em; }
     .exp-date { font-family: 'DM Mono', monospace; font-size: .65rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted-light); margin: .25rem 0 .5rem; }
     .exp-item p { font-size: .83rem; color: var(--muted-light); line-height: 1.65; }
     .cert-stack { display: flex; flex-direction: column; gap: .6rem; margin-top: 1.25rem; }
     .cert-row { display: flex; justify-content: space-between; align-items: center; padding: .8rem 1.1rem; background: #fff; border: 1px solid var(--border-lt); border-radius: 3px; transition: border-color .2s; }
     .cert-row:hover { border-color: var(--accent); }
-    .cert-name { font-family: 'DM Serif Display', serif; font-size: .85rem; font-weight: 600; color: var(--text-dark); letter-spacing: .03em; }
+    .cert-name { font-family: 'DM Serif Text', serif; font-size: .85rem; font-weight: 600; color: var(--text-dark); letter-spacing: .03em; }
     .cert-year { font-family: 'DM Mono', monospace; font-size: .65rem; color: var(--muted-light); }
     .skills-section { margin-top: 3.5rem; }
     .skill-clusters { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -1064,7 +1064,7 @@
     }
     .proj-modal-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
     .proj-modal-title {
-      font-family: 'DM Serif Display', serif; font-size: 1.65rem; font-weight: 900;
+      font-family: 'DM Serif Text', serif; font-size: 1.65rem; font-weight: 900;
       letter-spacing: .04em; color: var(--text-light); line-height: 1.1;
     }
     .proj-modal-purpose {

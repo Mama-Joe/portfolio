@@ -393,15 +393,23 @@ const GH_REPO   = 'portfolio';
 const GH_BRANCH = 'master';
 const GH_FILE   = 'index.html';
 
-let ghToken = localStorage.getItem('rf_gh_token') || '';
+// SECURITY: PAT is held in memory only for this tab session. It is never
+// written to localStorage / sessionStorage / cookies, so a same-origin XSS
+// cannot exfiltrate a long-lived token. Closing this tab forgets it; you
+// re-paste it next time.
+let ghToken = '';
+
+// Proactively wipe any token left over from older versions of admin.html
+try { localStorage.removeItem('rf_gh_token'); } catch (e) {}
 
 function setGHConnected() {
   const bar = document.getElementById('gh-bar');
   bar.classList.add('connected');
-  document.getElementById('gh-status').textContent = 'GitHub: token set — saves will push automatically';
+  document.getElementById('gh-status').textContent = 'GitHub: token set for this session — cleared on tab close';
   document.getElementById('btn-gh-save').style.display = 'none';
   document.getElementById('btn-gh-clear').style.display = '';
   document.getElementById('gh-token-input').style.display = 'none';
+  document.getElementById('gh-token-input').value = '';
 }
 
 function setGHDisconnected() {
@@ -414,23 +422,23 @@ function setGHDisconnected() {
 }
 
 document.getElementById('btn-gh-save').addEventListener('click', () => {
-  const val = document.getElementById('gh-token-input').value.trim();
+  const input = document.getElementById('gh-token-input');
+  const val = input.value.trim();
   if (!val) { showToast('Paste a token first'); return; }
   ghToken = val;
-  localStorage.setItem('rf_gh_token', ghToken);
+  // Wipe the input so the token isn't sitting in DOM where it can be
+  // grabbed by any script that walks the DOM after compromise.
+  input.value = '';
   setGHConnected();
-  showToast('GitHub token saved');
+  showToast('GitHub token set for this session');
 });
 
 document.getElementById('btn-gh-clear').addEventListener('click', () => {
   ghToken = '';
-  localStorage.removeItem('rf_gh_token');
   document.getElementById('gh-token-input').value = '';
   setGHDisconnected();
   showToast('Token cleared');
 });
-
-if (ghToken) setGHConnected();
 
 async function pushToGitHub(projJson, currJson) {
   const api = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
@@ -445,8 +453,8 @@ async function pushToGitHub(projJson, currJson) {
   const data = await res.json();
 
   let text = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-  text = replaceBlock(text, '<!-- RF:DATA:START -->', '<!-- RF:DATA:END -->', `window.__RF_PROJECTS__=${projJson}`);
-  text = replaceBlock(text, '<!-- RF:CURR:START -->', '<!-- RF:CURR:END -->', `window.__RF_CURR_PROJECTS__=${currJson}`);
+  text = replaceBlock(text, '<!-- RF:DATA:START -->', '<!-- RF:DATA:END -->', `window.__RF_PROJECTS__=${escScript(projJson)}`);
+  text = replaceBlock(text, '<!-- RF:CURR:START -->', '<!-- RF:CURR:END -->', `window.__RF_CURR_PROJECTS__=${escScript(currJson)}`);
 
   const encoded = btoa(unescape(encodeURIComponent(text)));
   const put = await fetch(api, {
@@ -474,8 +482,8 @@ async function writeToIndexHtml(projJson, currJson) {
     const fileHandle = await dirHandle.getFileHandle('index.html', { create: false });
     const file = await fileHandle.getFile();
     let text = await file.text();
-    text = replaceBlock(text, '<!-- RF:DATA:START -->', '<!-- RF:DATA:END -->', `window.__RF_PROJECTS__=${projJson}`);
-    text = replaceBlock(text, '<!-- RF:CURR:START -->', '<!-- RF:CURR:END -->', `window.__RF_CURR_PROJECTS__=${currJson}`);
+    text = replaceBlock(text, '<!-- RF:DATA:START -->', '<!-- RF:DATA:END -->', `window.__RF_PROJECTS__=${escScript(projJson)}`);
+    text = replaceBlock(text, '<!-- RF:CURR:START -->', '<!-- RF:CURR:END -->', `window.__RF_CURR_PROJECTS__=${escScript(currJson)}`);
     const writable = await fileHandle.createWritable();
     await writable.write(text);
     await writable.close();
@@ -532,20 +540,20 @@ function buildEditorHTML(p, i) {
   const chipsHTML = p.chips.map(c => chipRowHTML(c)).join('');
   return `
     <div class="proj-header">
-      <img class="proj-editor-thumb" src="${p.img}" alt="" onerror="this.style.opacity='.3'">
+      <img class="proj-editor-thumb" src="${escH(p.img)}" alt="" onerror="this.style.opacity='.3'">
       <span class="proj-num">Project ${String(i+1).padStart(2,'0')}</span>
-      <span class="proj-header-title">${p.title || 'Untitled'}</span>
+      <span class="proj-header-title">${escH(p.title || 'Untitled')}</span>
       <span class="proj-chevron">▼</span>
     </div>
     <div class="proj-body">
       <div class="img-section">
         <label>Cover image — click or drag to reposition</label>
         <div class="crop-wrap">
-          <img class="img-preview" src="${p.img}" alt="" onerror="this.style.opacity='.3'" style="object-position:${escH(p.imgPos||'center center')}">
+          <img class="img-preview" src="${escH(p.img)}" alt="" onerror="this.style.opacity='.3'" style="object-position:${escH(p.imgPos||'center center')}">
           <div class="focal-dot"></div>
         </div>
         <div class="img-inputs">
-          <input type="text" class="field-img-url" placeholder="Image URL or paste base64…" value="${p.img}">
+          <input type="text" class="field-img-url" placeholder="Image URL or paste base64…" value="${escH(p.img)}">
           <div class="img-or">— or upload —</div>
           <label class="file-label" for="file-${i}">Choose file…</label>
           <input type="file" id="file-${i}" accept="image/*" class="file-input">
@@ -622,7 +630,21 @@ function chipRowHTML(text) {
   </div>`;
 }
 
-function escH(s) { return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function escH(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+}
+// Escape sequences that would prematurely close an inline <script>...</script>
+// when JSON is embedded directly into a script tag. JSON.stringify does not
+// handle this; an unescaped `</script>` in a string value would break out of
+// the script context and execute arbitrary HTML/JS for every site visitor.
+function escScript(s) {
+  return String(s).replace(/<\/(script)/gi, '<\\/$1').replace(/<!--/g, '<\\!--');
+}
 
 function bindEditor(el, i) {
   // Toggle open/close

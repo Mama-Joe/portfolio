@@ -12,7 +12,6 @@
       --dark-2: #111827;
       --dark-3: #1C2840;
       --accent: #E85D04;
-      --blue:   #3D5AF1;
       --text:   #EEE9E0;
       --muted:  #6E839A;
       --border: #243044;
@@ -172,16 +171,16 @@
       padding: .85rem 1.1rem; display: flex; align-items: center; gap: 1rem;
       margin-bottom: 1.75rem; font-size: .82rem;
     }
-    .gh-bar.connected { border-color: #1e3a6b; background: rgba(61,90,241,.08); }
+    .gh-bar.connected { border-color: rgba(232,93,4,.4); background: rgba(232,93,4,.07); }
     .gh-status { flex: 1; color: var(--muted); }
-    .gh-bar.connected .gh-status { color: #7b9cf8; }
-    .gh-bar.connected .dot { background: #3D5AF1; }
+    .gh-bar.connected .gh-status { color: var(--text); }
+    .gh-bar.connected .dot { background: var(--accent); }
     .gh-token-input {
       background: var(--dark); border: 1px solid var(--border); border-radius: 4px;
       color: var(--text); font-family: 'Space Mono', monospace; font-size: .72rem;
       padding: .38rem .7rem; width: 220px; outline: none;
     }
-    .gh-token-input:focus { border-color: #3D5AF1; }
+    .gh-token-input:focus { border-color: var(--accent); }
 
     .section-divider {
       display: flex; align-items: center; gap: 1rem;
@@ -617,7 +616,7 @@ function tagRowHTML(text, type) {
     <input type="text" value="${escH(text)}" placeholder="Tag label">
     <select class="tag-type-select">
       <option value="o"${type==='o'?' selected':''}>Orange</option>
-      <option value="b"${type==='b'?' selected':''}>Blue</option>
+      <option value="b"${type==='b'?' selected':''}>Gray</option>
     </select>
     <button class="remove-btn remove-tag">✕</button>
   </div>`;

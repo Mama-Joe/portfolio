@@ -299,7 +299,7 @@ const DEFAULTS = [
     description: 'The bracket holding the robotic arm to the rover chassis. FEA showed the original sheet-metal plate deflecting too far under load, so I redesigned it as a 3D print with triangulated ribs and fiber routed along the load path. It snaps in for fast tool swaps at competition.',
     tags: [{text:'Additive Mfg',type:'o'},{text:'FEA',type:'b'},{text:'URC 2026',type:'o'}],
     chips: ['0.133 mm Deflection','<5 min Install','Continuous Fiber'],
-    gallery: ['Images/urc-arm-mount.jpg','Images/urc-arm-mount-before.jpg',''],
+    gallery: ['Images/urc-arm-full.jpg','Images/urc-rover-field.jpg','Images/urc-arm-fea.jpg'],
   },
 ];
 
@@ -792,9 +792,27 @@ const CURR_DEFAULTS = [
     chips: ['550 lb · FoS > 5','~15 min Stow','$780 BOM'],
     gallery: ['','',''],
   },
+  {
+    img: '', badge: 'Active · Senior Capstone',
+    title: 'Multi-Use Drone System',
+    description: 'My senior capstone: a drone platform designed to carry more than one mission. Kicked off this term, so the work right now is requirements definition and scoping the payload interface before anything gets built.',
+    purpose: 'For senior capstone',
+    tags: [{text:'Active',type:'o'},{text:'Capstone',type:'b'},{text:'Systems',type:'o'}],
+    chips: ['Requirements','Multi-Payload','Class of 2027'],
+    gallery: ['','',''],
+  },
+  {
+    img: '', badge: 'Active · Design for Additive Mfg',
+    title: 'Topology Optimization Study',
+    description: 'A coursework study in Design for Additive Manufacturing: driving mass out of a loaded part with topology optimization, then working the result back into something a printer can actually produce. Just underway.',
+    purpose: 'For Design for Additive Manufacturing',
+    tags: [{text:'Active',type:'o'},{text:'DFAM',type:'b'},{text:'FEA',type:'o'}],
+    chips: ['Topology Optimization','Coursework','Print-Ready Design'],
+    gallery: ['','',''],
+  },
 ];
 
-const CURR_LABELS = ['Featured · Rover Platform'];
+const CURR_LABELS = ['Featured · Rover Platform', 'Card 01 · Drone Capstone', 'Card 02 · Topology Study'];
 
 let currState = JSON.parse(localStorage.getItem('rf_curr_projects') || 'null')
   || cloneCurrDefaults();

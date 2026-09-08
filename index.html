@@ -572,7 +572,8 @@
         linear-gradient(90deg, rgba(232,93,4,.08) 1px, transparent 1px);
       background-size: 28px 28px;
     }
-    .curr-rover-svg { position: relative; z-index: 1; width: 160px; height: 160px; opacity: .75; }
+    .curr-featured-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #1b1714; z-index: 1; }
+    .curr-featured-visual::before { z-index: 2; }
     .curr-featured-body {
       padding: 2.5rem 2.25rem;
       display: flex; flex-direction: column; gap: 1rem; justify-content: center;
@@ -968,7 +969,7 @@
     </div>
 
     <!-- 4. Faucet Pad -->
-    <div class="proj-card reveal" role="button" tabindex="0" aria-label="View project: Touchless Faucet Pad" data-modal-desc="A pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and a shutoff delay. Every one of those choices came out of stakeholder interviews and an analysis of how people actually move through a restroom." data-g1="Images/s-blob-v1-IMAGE-SwN9w-CvFEA.jpg" data-g2="Images/s-blob-v1-IMAGE-KJ3Fn3hioWU.jpg" data-g3="Images/s-blob-v1-IMAGE-NXBKr9pJDMM.jpg">
+    <div class="proj-card reveal" role="button" tabindex="0" aria-label="View project: Touchless Faucet Pad" data-modal-desc="A pressure-pad reimagining of the touchless faucet. Copper plate contacts, silicone rebound, temperature control, and a shutoff delay. Every one of those choices came out of stakeholder interviews and an analysis of how people actually move through a restroom." data-g1="Images/s-blob-v1-IMAGE-tIRYWJKTFaY.jpg" data-g2="Images/s-blob-v1-IMAGE-KJ3Fn3hioWU.jpg" data-g3="Images/s-blob-v1-IMAGE-NvEjpGLmDq0.jpg">
       <div class="flip-inner">
         <div class="flip-front">
           <div class="proj-thumb">
@@ -1057,29 +1058,9 @@
       data-modal-purpose="For the Mines RoSE Lab"
     data-modal-tags='[{"text":"Active","type":"o"},{"text":"RoSE Lab","type":"b"},{"text":"Mechanisms","type":"o"}]'
     data-modal-chips='["550 lb · FoS > 5","~15 min Stow","$780 BOM"]'
-    data-g1="" data-g2="" data-g3="">
+    data-img="Images/wtp-gantry.jpg" data-g1="Images/wtp-gantry.jpg" data-g2="" data-g3="">
     <div class="curr-featured-visual">
-      <svg class="curr-rover-svg" viewBox="0 0 160 160" fill="none">
-        <circle class="orbit-ring" cx="80" cy="80" r="62" stroke="#E85D04" stroke-width=".8" stroke-dasharray="8 6" opacity=".3"/>
-        <circle cx="80" cy="80" r="42" stroke="#E85D04" stroke-width=".6" stroke-dasharray="4 8" opacity=".2"/>
-        <rect x="44" y="58" width="72" height="44" rx="4" fill="none" stroke="#E85D04" stroke-width="1.4" opacity=".8"/>
-        <circle cx="36"  cy="102" r="10" stroke="#E85D04" stroke-width="1.2" fill="none" opacity=".7"/>
-        <circle cx="124" cy="102" r="10" stroke="#E85D04" stroke-width="1.2" fill="none" opacity=".7"/>
-        <circle cx="36"  cy="102" r="4" fill="#E85D04" opacity=".5"/>
-        <circle cx="124" cy="102" r="4" fill="#E85D04" opacity=".5"/>
-        <line x1="44"  y1="102" x2="54"  y2="102" stroke="#E85D04" stroke-width="1.2" opacity=".6"/>
-        <line x1="106" y1="102" x2="116" y2="102" stroke="#E85D04" stroke-width="1.2" opacity=".6"/>
-        <line x1="80" y1="58" x2="80"  y2="34" stroke="#E85D04" stroke-width="1.4" opacity=".7"/>
-        <line x1="80" y1="34" x2="102" y2="24" stroke="#E85D04" stroke-width="1.2" opacity=".6"/>
-        <circle cx="102" cy="24" r="3.5" fill="#E85D04" opacity=".8"/>
-        <circle cx="80"  cy="80" r="6"   fill="#E85D04" opacity=".9"/>
-        <line x1="64" y1="58"  x2="64"  y2="102" stroke="#E85D04" stroke-width=".5" opacity=".2"/>
-        <line x1="96" y1="58"  x2="96"  y2="102" stroke="#E85D04" stroke-width=".5" opacity=".2"/>
-        <line x1="44" y1="80"  x2="116" y2="80"  stroke="#E85D04" stroke-width=".5" opacity=".2"/>
-        <circle cx="142" cy="80" r="3" fill="#E85D04" opacity=".7"/>
-        <circle cx="18"  cy="80" r="3" fill="#E85D04" opacity=".5"/>
-        <circle cx="80"  cy="18" r="3" fill="#E85D04" opacity=".6"/>
-      </svg>
+      <img class="curr-featured-img" src="Images/wtp-gantry.jpg" alt="Isometric render of the overhead storage and lift gantry above the RoSE Lab test bed">
     </div>
     <div class="curr-featured-body">
       <div class="curr-badge"><div class="curr-badge-dot"></div>Active · Mines RoSE Lab</div>
